@@ -10,9 +10,9 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "measure")
-public class Measure extends BaseEntity {
+@Table(name = "role")
+public class RoleEntity extends BaseEntity {
 
-    @Column(name = "m_name", unique = true, nullable = false, length = 50)
-    private String measureName;
+    @Column(name = "name", unique = true, nullable = false, length = 50)
+    private String name;
 }

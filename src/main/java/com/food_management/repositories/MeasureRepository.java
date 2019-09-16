@@ -1,16 +1,20 @@
 package com.food_management.repositories;
 
-import com.food_management.entities.Measure;
+import com.food_management.entities.MeasureEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MeasureRepository extends JpaRepository<Measure, Long> {
-    List<Measure> findAll();
+@Transactional(propagation = Propagation.MANDATORY)
+public interface MeasureRepository extends JpaRepository<MeasureEntity, Long> {
 
-    @Override
-    Optional<Measure> findById(Long id);
+    List<MeasureEntity> findAll();
+
+    Optional<MeasureEntity> findById(Long id);
 }

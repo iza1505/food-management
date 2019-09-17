@@ -50,7 +50,7 @@ public class RoleController extends BaseController<RoleEntity, RoleDto> {
 
     @Override
     //@PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody RoleDto dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }

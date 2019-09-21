@@ -6,6 +6,7 @@ import com.food_management.services.interfaces.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +24,7 @@ public class UserController extends BaseController<UserEntity, UserDto> {
     }
 
     @Override
-    //@PreAuthorize("hasAuthority('" + Constants.ADMINISTRATOR + "')")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<UserDto>> findAll() {
         return super.findAll();

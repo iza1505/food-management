@@ -15,4 +15,6 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
     Optional<RoleEntity> findById(Long id);
 
+    RoleEntity findByName(String name);
+
 }

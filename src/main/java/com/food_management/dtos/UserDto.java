@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"id", "version", "login", "email", "passwordHash", "role", "userDetails"})
+@JsonPropertyOrder({"id", "version", "login", "email", "passwordHash", "role"})
 public class UserDto {
 
     public Long id;

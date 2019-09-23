@@ -62,7 +62,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     @Override
     public  UserDto update(Long id, UserDto dto) {
         UserEntity userToUpdate = repository.getOne(id);
-        //userToUpdate.setName(dto.getName());
+        userToUpdate.setEmail(dto.getEmail());
         userToUpdate = repository.saveAndFlush(userToUpdate);
         return  convertToDto(userToUpdate);
     }
@@ -90,25 +90,28 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
             throw new EmptyFieldException("Password cannot be null");
         }
 
+        if(user.getLogin() == null){
+            throw new EmptyFieldException("Login cannot be null");
+        }
+
+        if(user.getEmail() == null){
+            throw new EmptyFieldException("Email cannot be null");
+        }
+
         UserEntity userEntity = convertToEntity(user);
 
         String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
-
-        userEntity.setLogin(user.getLogin());
-        userEntity.setEmail(user.getEmail());
         userEntity.setPasswordHash(hashedPassword);
+
         userEntity.setVersion(0L);
-        userEntity.setRole(roleRepository.findByName("USER"));
 
-        System.out.println(userEntity);
+        if(user.getRole()==null){
+            userEntity.setRole(roleRepository.findByName("USER"));
+        }
+        else{
+            userEntity.setRole(roleRepository.findByName(user.getRole().getName()));
+        }
 
-        //repository.saveAndFlush(userEntity);
-
-        user.setPasswordHash(hashedPassword);
-        user.setVersion(0L);
-        //repository.save(convertToEntity(user));
-        //user.setRole(roleService.convertToDto(roleRepository.findByName("USER")));
-        //UserEntity userEntity = repository.save(convertToEntity(user));
         return convertToDto(repository.saveAndFlush(userEntity));
     }
 

@@ -17,4 +17,6 @@ public interface MeasureRepository extends JpaRepository<MeasureEntity, Long> {
     List<MeasureEntity> findAll();
 
     Optional<MeasureEntity> findById(Long id);
+
+    boolean existsByMeasureName(String login);
 }

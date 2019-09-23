@@ -13,6 +13,6 @@ import javax.persistence.Table;
 @Table(name = "measure")
 public class MeasureEntity extends BaseEntity {
 
-    @Column(name = "m_name", unique = true, nullable = false, length = 50)
+    @Column(name = "measure_name", unique = true, nullable = false, length = 50)
     private String measureName;
 }

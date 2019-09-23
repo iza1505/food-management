@@ -4,12 +4,14 @@ import com.food_management.entities.BaseEntity;
 import com.food_management.services.interfaces.BaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BaseServiceImpl
+@Transactional
+public abstract class BaseServiceImpl
         <TRepository extends JpaRepository<TModel, Long>, TModel extends BaseEntity, UDto>
         implements BaseService<TModel, UDto> {
 

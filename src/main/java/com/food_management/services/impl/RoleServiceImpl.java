@@ -32,6 +32,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleEntity,
     @Override
     public  RoleDto update(Long id, RoleDto dto) {
         RoleEntity roleToUpdate = repository.getOne(id);
+        Validator.validateVersion(roleToUpdate,dto.getVersion());
+
         roleToUpdate.setName(dto.getName());
         roleToUpdate = repository.saveAndFlush(roleToUpdate);
         return  convertToDto(roleToUpdate);

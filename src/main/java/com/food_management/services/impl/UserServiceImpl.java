@@ -62,6 +62,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     @Override
     public  UserDto update(Long id, UserDto dto) {
         UserEntity userToUpdate = repository.getOne(id);
+        Validator.validateVersion(userToUpdate,dto.getVersion());
+
         userToUpdate.setEmail(dto.getEmail());
         userToUpdate = repository.saveAndFlush(userToUpdate);
         return  convertToDto(userToUpdate);

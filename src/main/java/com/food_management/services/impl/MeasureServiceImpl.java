@@ -50,6 +50,8 @@ public class MeasureServiceImpl extends BaseServiceImpl<MeasureRepository, Measu
     @Override
     public  MeasureDto update(Long id, MeasureDto dto) {
         MeasureEntity measureToUpdate = repository.getOne(id);
+        Validator.validateVersion(measureToUpdate,dto.getVersion());
+
         measureToUpdate.setMeasureName(dto.getMeasureName());
         measureToUpdate = repository.saveAndFlush(measureToUpdate);
         return  convertToDto(measureToUpdate);

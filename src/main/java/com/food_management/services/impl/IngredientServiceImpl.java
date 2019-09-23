@@ -3,6 +3,7 @@ package com.food_management.services.impl;
 import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
 import com.food_management.entities.MeasureEntity;
+import com.food_management.exceptions.BadVersionException;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.repositories.IngredientRepository;
@@ -55,8 +56,11 @@ public class IngredientServiceImpl extends BaseServiceImpl<IngredientRepository,
     @Override
     public  IngredientDto update(Long id, IngredientDto dto) {
         IngredientEntity ingredientToUpdate = repository.getOne(id);
-        ingredientToUpdate.setIngredientName(dto.getIngredientName());
+        Validator.validateVersion(ingredientToUpdate,dto.getVersion());
         MeasureEntity measureEntity = measureRepository.getOne(dto.getMeasure().getId());
+        Validator.validateVersion(measureEntity,dto.getMeasure().getVersion());
+
+        ingredientToUpdate.setIngredientName(dto.getIngredientName());
         ingredientToUpdate.setMeasure(measureEntity);
         ingredientToUpdate = repository.saveAndFlush(ingredientToUpdate);
         return  convertToDto(ingredientToUpdate);

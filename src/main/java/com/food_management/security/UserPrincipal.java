@@ -32,9 +32,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static UserPrincipal create(UserEntity user) {
-        System.out.println(user);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
-        System.out.println(authority);
         List<SimpleGrantedAuthority> authoritiesList = new ArrayList<>();
         authoritiesList.add(authority);
 

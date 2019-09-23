@@ -1,7 +1,6 @@
 package com.food_management.repositories;
 
 import com.food_management.entities.MeasureEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.transaction.annotation.Propagation;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface MeasureRepository extends JpaRepository<MeasureEntity, Long> {
+public interface MeasureRepository extends MyJpaRepository<MeasureEntity, Long> {
 
     List<MeasureEntity> findAll();
 

@@ -20,6 +20,8 @@ insert into ingredient (version, ingredient_name, measure_id) values (0, 'broth'
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'champignon', 2);
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'parsley leaves', 2);
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'sour cream 18%', 1);
+
+insert into fridge (version, user_id, ingredient_id, amount) values (0, 2, 2, 3);
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );

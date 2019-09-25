@@ -3,7 +3,6 @@ package com.food_management.services.impl;
 import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
 import com.food_management.entities.MeasureEntity;
-import com.food_management.exceptions.BadVersionException;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.repositories.IngredientRepository;
@@ -13,6 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -34,6 +36,11 @@ public class IngredientServiceImpl extends BaseServiceImpl<IngredientRepository,
     @Override
     public IngredientEntity convertToEntity(IngredientDto dto) {
         return modelMapper.map(dto, IngredientEntity.class);
+    }
+
+    public IngredientEntity findByIdEntity(Long id) {
+        Optional<IngredientEntity> ingredientOptional = repository.findById(id);
+        return ingredientOptional.orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found."));
     }
 
     @Override

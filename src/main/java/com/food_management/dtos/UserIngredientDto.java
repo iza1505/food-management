@@ -4,11 +4,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"ingredient", "amount", "version"})
-public class UserFood {
+@JsonPropertyOrder({"version", "user", "ingredient", "amount"})
+public class UserIngredientDto {
+
+    private Long version;
+
+    private UserDto user;
+
     private IngredientDto ingredient;
 
     private Double amount;
 
-    private Long version;
+
 }

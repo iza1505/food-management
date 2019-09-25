@@ -5,7 +5,6 @@ import com.food_management.security.JwtTokenProvider;
 import com.food_management.security.LoginRequest;
 import com.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,7 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthController(@Lazy UserService userService, JwtTokenProvider tokenProvider) {
+    public AuthController(UserService userService, JwtTokenProvider tokenProvider) {
         this.userService = userService;
         this.tokenProvider = tokenProvider;
     }

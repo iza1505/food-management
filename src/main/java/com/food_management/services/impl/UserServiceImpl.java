@@ -1,8 +1,6 @@
 package com.food_management.services.impl;
 
-import com.food_management.dtos.RoleDto;
 import com.food_management.dtos.UserDto;
-import com.food_management.entities.RoleEntity;
 import com.food_management.entities.UserEntity;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
@@ -12,7 +10,6 @@ import com.food_management.services.interfaces.RoleService;
 import com.food_management.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,19 +28,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private RoleService roleService;
 
     @Autowired
     public UserServiceImpl(
             UserRepository repository,
             RoleRepository roleRepository,
             ModelMapper modelMapper,
-            @Lazy AuthenticationManager authenticationManager,
+            AuthenticationManager authenticationManager,
             UserRepository userRepository,
-            RoleService roleService,
             PasswordEncoder passwordEncoder) {
         super(repository, modelMapper);
-        this.roleService = roleService;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -74,6 +69,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
         return repository.findByLogin(login)
                 .orElseThrow(() -> new EntityNotFoundException("User with login " + login + " not found."));
     }
+
+    public UserEntity findByIdEntity(Long id) {
+        Optional<UserEntity> userOptional = repository.findById(id);
+        return userOptional.orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+        }
 
     @Override
     public Authentication authenticate(String login, String password) {

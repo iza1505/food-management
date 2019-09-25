@@ -81,4 +81,5 @@ public abstract class BaseServiceImpl
     public UDto update(Long id, UDto dto) {
         throw new UnsupportedOperationException("Method must be implemented in super class");
     }
+
 }

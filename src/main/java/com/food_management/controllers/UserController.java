@@ -3,7 +3,6 @@ package com.food_management.controllers;
 import com.food_management.dtos.UserDto;
 import com.food_management.entities.UserEntity;
 import com.food_management.services.interfaces.UserService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +17,7 @@ public class UserController extends BaseController<UserEntity, UserDto> {
 
     private UserService userService;
 
-    public UserController(@Lazy UserService service) {
+    public UserController(UserService service) {
         super(service);
         this.userService = service;
     }

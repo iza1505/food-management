@@ -1,11 +1,14 @@
 package com.food_management.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
@@ -21,7 +24,9 @@ public class UserEntity extends BaseEntity {
     private String passwordHash;
 
     @ManyToOne
-    @JoinColumn(name = "role_id",
-            foreignKey = @ForeignKey(name = "FK__user_role_id"))
+    @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @OneToMany(mappedBy = "userIngredientKey.userId")
+    private List<UserIngredientEntity> userIngredients = new ArrayList<>();
 }

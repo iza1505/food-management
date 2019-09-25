@@ -3,7 +3,6 @@ package com.food_management.controllers;
 import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
 import com.food_management.services.interfaces.IngredientService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +17,7 @@ public class IngredientController extends BaseController<IngredientEntity, Ingre
 
     private IngredientService ingredientService;
 
-    public IngredientController(@Lazy IngredientService service) {
+    public IngredientController(IngredientService service) {
         super(service);
         this.ingredientService = service;
     }

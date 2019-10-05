@@ -38,11 +38,6 @@ public class IngredientServiceImpl extends BaseServiceImpl<IngredientRepository,
         return modelMapper.map(dto, IngredientEntity.class);
     }
 
-    public IngredientEntity findByIdEntity(Long id) {
-        Optional<IngredientEntity> ingredientOptional = repository.findById(id);
-        return ingredientOptional.orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found."));
-    }
-
     @Override
     public IngredientDto add(IngredientDto ingredient) {
         if (repository.existsByIngredientName(ingredient.getIngredientName())) {
@@ -61,8 +56,8 @@ public class IngredientServiceImpl extends BaseServiceImpl<IngredientRepository,
     }
 
     @Override
-    public  IngredientDto update(Long id, IngredientDto dto) {
-        IngredientEntity ingredientToUpdate = repository.getOne(id);
+    public  IngredientDto update(IngredientDto dto) {
+        IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(ingredientToUpdate,dto.getVersion());
         MeasureEntity measureEntity = measureRepository.getOne(dto.getMeasure().getId());
         Validator.validateVersion(measureEntity,dto.getMeasure().getVersion());

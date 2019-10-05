@@ -10,11 +10,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class UserIngredientKey implements Serializable {
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id", nullable = false)
+    private IngredientEntity ingredient;
 
-    @Column(nullable = false)
-    private Long ingredientId;
 
 }

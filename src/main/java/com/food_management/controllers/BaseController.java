@@ -33,7 +33,7 @@ public class BaseController<TModel, UDto> {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     ResponseEntity<UDto> getById(@PathVariable Long id) {
-        UDto result = service.findById(id);
+        UDto result = service.convertToDto(service.findById(id));
         return ResponseEntity.ok(result);
     }
 
@@ -46,6 +46,6 @@ public class BaseController<TModel, UDto> {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UDto dto) {
         service.update(id, dto);
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.convertToDto(service.findById(id)));
     }
 }

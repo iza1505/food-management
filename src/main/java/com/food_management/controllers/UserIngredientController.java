@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -38,4 +35,18 @@ public class UserIngredientController {
         IngredientInFridgeDto created = service.add(dto);
         return new ResponseEntity<IngredientInFridgeDto>(created, HttpStatus.CREATED);
     }
+
+    @PreAuthorize("hasAnyAuthority('USER')")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    ResponseEntity delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER')")
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity update(@Valid @RequestBody IngredientInFridgeDto dto) {
+        return ResponseEntity.ok(service.update(dto));
+    }
+
 }

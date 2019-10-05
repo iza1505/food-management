@@ -37,15 +37,15 @@ public class UserController extends BaseController<UserEntity, UserDto> {
         return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);
     }
 
-    @Override
-    //@PreAuthorize("hasAuthority('" + Constants.ADMINISTRATOR + "')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    ResponseEntity<UserDto> getById(@PathVariable Long id) {
-        return super.getById(id);
-    }
+//    @Override
+//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//    ResponseEntity<UserDto> getById(@PathVariable Long id) {
+//        return super.getById(id);
+//    }
 
     @Override
-    //@PreAuthorize("hasAuthority('" + Constants.ADMINISTRATOR + "')")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     ResponseEntity delete(@PathVariable Long id) {
         return super.delete(id);
@@ -54,7 +54,7 @@ public class UserController extends BaseController<UserEntity, UserDto> {
     @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(service.update(dto));
     }
 
 }

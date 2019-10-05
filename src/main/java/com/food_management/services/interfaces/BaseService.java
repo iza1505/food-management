@@ -8,15 +8,14 @@ public interface BaseService<TModel, UDto> {
 
     UDto add(UDto dto);
 
-    UDto update(Long id, UDto dto);
+    UDto update(UDto dto);
 
     void deleteById(Long id);
 
-    UDto findById(Long id);
+    TModel findById(Long id);
 
     TModel convertToEntity(UDto dto);
 
     UDto convertToDto(TModel entity);
-
 
 }

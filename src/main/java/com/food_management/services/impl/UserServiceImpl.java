@@ -4,7 +4,6 @@ import com.food_management.dtos.UserDto;
 import com.food_management.entities.UserEntity;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
-import com.food_management.repositories.RoleRepository;
 import com.food_management.repositories.UserRepository;
 import com.food_management.services.interfaces.RoleService;
 import com.food_management.services.interfaces.UserService;
@@ -24,24 +23,23 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity, UserDto> implements UserService {
 
-    private RoleRepository roleRepository;
+    private RoleService roleService;
     private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
+    private UserRepository repository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(
             UserRepository repository,
-            RoleRepository roleRepository,
+            RoleService roleService,
             ModelMapper modelMapper,
             AuthenticationManager authenticationManager,
-            UserRepository userRepository,
             PasswordEncoder passwordEncoder) {
         super(repository, modelMapper);
-        this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -55,8 +53,45 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     }
 
     @Override
-    public  UserDto update(Long id, UserDto dto) {
-        UserEntity userToUpdate = repository.getOne(id);
+    public UserDto add(UserDto user) {
+        if (repository.existsByLogin(user.getLogin())) {
+            throw new EntityAlreadyExistsException("User with login " + user.getLogin() + " already exists.");
+        }
+        if (repository.existsByEmail(user.getEmail())) {
+            throw new EntityAlreadyExistsException("User with email " + user.getEmail() + " already exists.");
+        }
+        if(user.getPasswordHash() == null){
+            throw new EmptyFieldException("Password cannot be null");
+        }
+
+        if(user.getLogin() == null){
+            throw new EmptyFieldException("Login cannot be null");
+        }
+
+        if(user.getEmail() == null){
+            throw new EmptyFieldException("Email cannot be null");
+        }
+
+        UserEntity userEntity = convertToEntity(user);
+
+        String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
+        userEntity.setPasswordHash(hashedPassword);
+
+        userEntity.setVersion(0L);
+
+        if(user.getRole()==null){
+            userEntity.setRole(roleService.findByName("USER"));
+        }
+        else{
+            userEntity.setRole(roleService.findByName(user.getRole().getName()));
+        }
+
+        return convertToDto(repository.saveAndFlush(userEntity));
+    }
+
+    @Override
+    public  UserDto update(UserDto dto) {
+        UserEntity userToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(userToUpdate,dto.getVersion());
 
         userToUpdate.setEmail(dto.getEmail());
@@ -80,41 +115,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
     }
 
-    @Override
-    public UserDto add(UserDto user) {
-        if (userRepository.existsByLogin(user.getLogin())) {
-            throw new EntityAlreadyExistsException("User with login " + user.getLogin() + " already exists.");
-        }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException("User with email " + user.getEmail() + " already exists.");
-        }
-        if(user.getPasswordHash() == null){
-            throw new EmptyFieldException("Password cannot be null");
-        }
 
-        if(user.getLogin() == null){
-            throw new EmptyFieldException("Login cannot be null");
-        }
-
-        if(user.getEmail() == null){
-            throw new EmptyFieldException("Email cannot be null");
-        }
-
-        UserEntity userEntity = convertToEntity(user);
-
-        String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
-        userEntity.setPasswordHash(hashedPassword);
-
-        userEntity.setVersion(0L);
-
-        if(user.getRole()==null){
-            userEntity.setRole(roleRepository.findByName("USER"));
-        }
-        else{
-            userEntity.setRole(roleRepository.findByName(user.getRole().getName()));
-        }
-
-        return convertToDto(repository.saveAndFlush(userEntity));
-    }
 
 }

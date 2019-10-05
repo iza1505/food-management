@@ -1,6 +1,7 @@
 package com.food_management.services.impl;
 
 import com.food_management.entities.BaseEntity;
+import com.food_management.repositories.MyJpaRepository;
 import com.food_management.services.interfaces.BaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Transactional
 public abstract class BaseServiceImpl
-        <TRepository extends JpaRepository<TModel, Long>, TModel extends BaseEntity, UDto>
+        <TRepository extends MyJpaRepository<TModel, Long>, TModel extends BaseEntity, UDto>
         implements BaseService<TModel, UDto> {
 
     protected TRepository repository;
@@ -60,12 +61,28 @@ public abstract class BaseServiceImpl
     }
 
     @Override
-    public UDto findById(Long id) {
-        TModel model = repository
-                .findById(id)
-                .orElseThrow(() -> entityNotFoundException(id, "Entity"));
-        return convertToDto(model);
+    public TModel findById(Long id) {
+        System.out.println("Id: " + id);
+        return repository.findById(id).get();
     }
+
+//    @Override
+//    public TModel findById(Long id) {
+//        //System.out.println("Id z dto: " + id);
+//        TModel model = repository
+//                .findById(id).get();
+//        //.orElseThrow(() -> entityNotFoundException(id, "Entity"));
+//        //return convertToDto(model);
+//        return model;
+//    }
+
+//    public TModel findByIdEntity(Long id) {
+//        System.out.println("Id z entity: " + id);
+//        TModel model = repository
+//                .findById(id)
+//                .orElseThrow(() -> entityNotFoundException(id, "Entity"));
+//        return model;
+//    }
 
     @Override
     public TModel convertToEntity(UDto dto) {
@@ -78,7 +95,7 @@ public abstract class BaseServiceImpl
     }
 
     @Override
-    public UDto update(Long id, UDto dto) {
+    public UDto update(UDto dto) {
         throw new UnsupportedOperationException("Method must be implemented in super class");
     }
 

@@ -2,9 +2,12 @@ package com.food_management.services.impl;
 
 import com.food_management.dtos.IngredientInFridgeDto;
 import com.food_management.dtos.UserIngredientDto;
+import com.food_management.entities.IngredientEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.entities.UserIngredientKey;
 import com.food_management.entities.UserEntity;
+import com.food_management.exceptions.EntityAlreadyExistsException;
+import com.food_management.repositories.IngredientRepository;
 import com.food_management.repositories.UserIngredientRepository;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.IngredientService;
@@ -23,12 +26,13 @@ import java.util.List;
 public class UserIngredientServiceImpl {
 
     protected UserIngredientRepository repository;
-    protected ModelMapper modelMapper;
-    protected UserSessionService userSessionService;
-    protected IngredientServiceImpl ingredientService;
+    private ModelMapper modelMapper;
+    private UserSessionService userSessionService;
+    private IngredientService ingredientService;
 
     @Autowired
-    public UserIngredientServiceImpl(IngredientServiceImpl ingredientService, UserIngredientRepository repository, ModelMapper modelMapper, UserSessionService userSessionService) {
+    public UserIngredientServiceImpl(UserIngredientRepository repository, ModelMapper modelMapper, UserSessionService userSessionService,IngredientService ingredientService
+    ) {
         this.repository = repository;
         this.modelMapper = modelMapper;
         this.userSessionService = userSessionService;
@@ -44,7 +48,7 @@ public class UserIngredientServiceImpl {
     }
 
     protected EntityNotFoundException entityNotFoundException(UserIngredientKey id, String name) {
-        return new EntityNotFoundException(name + " with id user " + id.getUserId() + ", id ingredient " + id.getIngredientId() + "  not found.");
+        return new EntityNotFoundException(name + " with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() + "  not found.");
     }
 
     public List<IngredientInFridgeDto> findAll() {
@@ -63,37 +67,67 @@ public class UserIngredientServiceImpl {
         return ingredientsInFridge;
     }
 
+    public IngredientInFridgeDto update(IngredientInFridgeDto dto){
+        int i = 0;
+        UserEntity userEntity = userSessionService.getUser();
+
+        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if(userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()){
+                i++;
+                UserIngredientEntity savedEntity = repository.getOne(userIngredient.getUserIngredientKey());
+                savedEntity.setAmount(dto.getAmount());
+                UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
+                dto.setIngredient(ingredientService.convertToDto(newEntity.getUserIngredientKey().getIngredient()));
+                dto.setVersion(newEntity.getVersion());
+                dto.setAmount(newEntity.getAmount());
+                break;
+            }
+        }
+        if(i == 0){
+            throw new EntityAlreadyExistsException("Brak z id " + dto.getIngredient().getId() + " w lodowce"); }
+            else
+                return dto;
+    }
+
+    public void delete(Long id){
+        int i = 0;
+        UserEntity userEntity = userSessionService.getUser();
+
+        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if(userIngredient.getUserIngredientKey().getIngredient().getId() == id){
+                i++;
+                repository.deleteById(userIngredient.getUserIngredientKey());
+                break;
+            }
+        }
+        if(i == 0){
+            throw new EntityAlreadyExistsException("Brak z id " + id); }
+    }
+
     public IngredientInFridgeDto add(IngredientInFridgeDto dto){
         UserEntity userEntity = userSessionService.getUser();
+
+        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if(userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()){
+                throw new EntityAlreadyExistsException("Produkt juz w lodowce");
+            }
+        }
+
         UserIngredientEntity savedEntity = new UserIngredientEntity();
+
         savedEntity.setVersion(0L);
         savedEntity.setAmount(dto.getAmount());
 
         UserIngredientKey userIngredientKey = new UserIngredientKey();
-        userIngredientKey.setIngredientId(dto.getIngredient().getId());
-        userIngredientKey.setUserId(userEntity.getId());
-
-        savedEntity.setUser(userEntity);
-        savedEntity.setIngredient(ingredientService.findByIdEntity(dto.getIngredient().getId()));
-
+        userIngredientKey.setIngredient(ingredientService.findById(dto.getIngredient().getId()));
+        userIngredientKey.setUser(userEntity);
         savedEntity.setUserIngredientKey(userIngredientKey);
 
-        UserIngredientEntity userIngredientEntityNew = repository.saveAndFlush(savedEntity);
+        UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
 
-        IngredientInFridgeDto ingredientInFridgeDtoNew = new IngredientInFridgeDto();
-        ingredientInFridgeDtoNew.setVersion(userIngredientEntityNew.getVersion());
-        ingredientInFridgeDtoNew.setAmount(userIngredientEntityNew.getAmount());
-        ingredientInFridgeDtoNew.setIngredient(ingredientService.convertToDto(userIngredientEntityNew.getIngredient()));
+        dto.setVersion(newEntity.getVersion());
 
-        return ingredientInFridgeDtoNew;
-    }
-
-
-    public void deleteById(UserIngredientKey id){
-        if (!repository.existsById(id)) {
-            throw entityNotFoundException(id,"Entity");
-        }
-        repository.deleteById(id);
+        return dto;
     }
 
     public UserIngredientDto findById(UserIngredientKey id) {

@@ -4,4 +4,6 @@ import com.food_management.dtos.RoleDto;
 import com.food_management.entities.RoleEntity;
 
 public interface RoleService extends BaseService<RoleEntity, RoleDto> {
+
+    RoleEntity findByName(String name);
 }

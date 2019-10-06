@@ -1,13 +1,11 @@
 package com.food_management.services.impl;
 
-import com.food_management.dtos.IngredientInFridgeDto;
+import com.food_management.dtos.IngredientInFridgeAndRecipeDto;
 import com.food_management.dtos.UserIngredientDto;
-import com.food_management.entities.IngredientEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.entities.UserIngredientKey;
 import com.food_management.entities.UserEntity;
 import com.food_management.exceptions.EntityAlreadyExistsException;
-import com.food_management.repositories.IngredientRepository;
 import com.food_management.repositories.UserIngredientRepository;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.IngredientService;
@@ -51,14 +49,14 @@ public class UserIngredientServiceImpl {
         return new EntityNotFoundException(name + " with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() + "  not found.");
     }
 
-    public List<IngredientInFridgeDto> findAll() {
+    public List<IngredientInFridgeAndRecipeDto> findAll() {
         UserEntity userEntity = userSessionService.getUser();
 
         List<UserIngredientEntity> modelList = userEntity.getUserIngredients();
-        List<IngredientInFridgeDto> ingredientsInFridge = new ArrayList<>();
+        List<IngredientInFridgeAndRecipeDto> ingredientsInFridge = new ArrayList<>();
 
         for (int i = 0; i < modelList.size(); i++){
-            ingredientsInFridge.add(new IngredientInFridgeDto());
+            ingredientsInFridge.add(new IngredientInFridgeAndRecipeDto());
             ingredientsInFridge.get(i).setAmount(modelList.get(i).getAmount());
             ingredientsInFridge.get(i).setIngredient(convertToDto(modelList.get(i)).getIngredient());
             ingredientsInFridge.get(i).setVersion(modelList.get(i).getVersion());
@@ -67,7 +65,7 @@ public class UserIngredientServiceImpl {
         return ingredientsInFridge;
     }
 
-    public IngredientInFridgeDto update(IngredientInFridgeDto dto){
+    public IngredientInFridgeAndRecipeDto update(IngredientInFridgeAndRecipeDto dto){
         int i = 0;
         UserEntity userEntity = userSessionService.getUser();
 
@@ -104,7 +102,7 @@ public class UserIngredientServiceImpl {
             throw new EntityAlreadyExistsException("Brak z id " + id); }
     }
 
-    public IngredientInFridgeDto add(IngredientInFridgeDto dto){
+    public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto){
         UserEntity userEntity = userSessionService.getUser();
 
         for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {

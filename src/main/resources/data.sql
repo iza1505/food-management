@@ -28,7 +28,7 @@ insert into user_ingredient (version, user_id, ingredient_id, amount) values (0,
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 4, 3);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 5, 50);
 
-insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'nalesniki',30, 'opis nalesnikow',0,1,1);
+insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'nalesniki',30, 'opis nalesnikow',0,0,2);
 --insert into recipe (title, preparation_mins, description, active, waitingForAccept) values ('nalesniki',30, 'opis nalesnikow',0,1);
 
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,1,250);

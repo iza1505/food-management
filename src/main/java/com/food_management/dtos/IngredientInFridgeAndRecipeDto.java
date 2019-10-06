@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonPropertyOrder({"ingredient", "amount", "version"})
-public class IngredientInFridgeDto {
+public class IngredientInFridgeAndRecipeDto {
 
     private IngredientDto ingredient;
 

@@ -21,7 +21,7 @@ public class RecipeDto {
 
     public UserDto user;
 
-    public List<IngredientInFridgeDto> ingredients;
+    public List<IngredientInFridgeAndRecipeDto> ingredients;
 
     public Boolean active;
 

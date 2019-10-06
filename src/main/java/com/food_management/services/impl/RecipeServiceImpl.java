@@ -1,5 +1,6 @@
 package com.food_management.services.impl;
 
+import com.food_management.dtos.RecipeChangeStatusDto;
 import com.food_management.dtos.RecipeDto;
 import com.food_management.dtos.RecipeHeader;
 import com.food_management.dtos.RecipeHeaderAdmin;
@@ -52,18 +53,41 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         List<RecipeEntity> recipeEntities = repository.findAll();
         List<RecipeHeaderAdmin> recipeHeaders = new ArrayList<>();
         for (RecipeEntity recipeEntity : recipeEntities){
-            if(recipeEntity.getActive()){
+            if(!recipeEntity.getActive() && !recipeEntity.getUser().getRole().getName().equals("ADMINISTRATOR")){
                 recipeHeaders.add(new RecipeHeaderAdmin());
-                recipeHeaders.get(recipeHeaders.size()).setActive(recipeEntity.getActive());
-                recipeHeaders.get(recipeHeaders.size()).setId(recipeEntity.getId());
-                recipeHeaders.get(recipeHeaders.size()).setTitle(recipeEntity.getTitle());
-                recipeHeaders.get(recipeHeaders.size()).setUser(userService.convertToDto(recipeEntity.getUser()));
-                recipeHeaders.get(recipeHeaders.size()).setVersion(recipeEntity.getVersion());
-                recipeHeaders.get(recipeHeaders.size()).setWaitingForAccept(recipeEntity.getWaitingForAccept());
+                recipeHeaders.get(recipeHeaders.size()-1).setActive(recipeEntity.getActive());
+                recipeHeaders.get(recipeHeaders.size()-1).setId(recipeEntity.getId());
+                recipeHeaders.get(recipeHeaders.size()-1).setTitle(recipeEntity.getTitle());
+                recipeHeaders.get(recipeHeaders.size()-1).setUser(userService.convertToDto(recipeEntity.getUser()));
+                recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
+                recipeHeaders.get(recipeHeaders.size()-1).setWaitingForAccept(recipeEntity.getWaitingForAccept());
+                recipeHeaders.get(recipeHeaders.size()-1).setToImprove(recipeEntity.getToImprove());
             }
         }
         return recipeHeaders;
     }
 
+    @Override
+    public void updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
+
+        if(dto.getActive() && dto.getWaitingForAccept()){
+            throw new Exception("Nie mozna aktywnego i czekajacego");
+        }
+        else {
+            RecipeEntity recipeEntity = repository.getOne(id);
+            recipeEntity.setActive(dto.getActive());
+            recipeEntity.setWaitingForAccept(dto.getWaitingForAccept());
+            if(dto.getActive()){
+                System.out.println("ustawiam pustke"); //TODO: usuac te dopiski
+                recipeEntity.setToImprove("");
+            } else {
+                System.out.println("ustawiam opis " + dto.getToImprove());
+                recipeEntity.setToImprove(dto.getToImprove());
+            }
+
+            repository.save(recipeEntity);
+        }
+
+    }
 
 }

@@ -115,6 +115,4 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
     }
 
-
-
 }

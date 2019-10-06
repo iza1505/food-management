@@ -41,4 +41,7 @@ public class RecipeEntity extends BaseEntity  {
     @Column(name = "waiting_for_accept", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean waitingForAccept;
+
+    @Column(name = "to_improve")
+    private String toImprove;
 }

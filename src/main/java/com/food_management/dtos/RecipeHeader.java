@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"id", "version", "title", "active", "waitingForAccept"})
+@JsonPropertyOrder({"id", "version", "title", "active", "waitingForAccept", "toImprove"})
 public class RecipeHeader {
 
     public Long id;
@@ -16,4 +16,6 @@ public class RecipeHeader {
     public Integer missingIngredientsAmount;
 
     public Double percentageToCook;
+
+    public String toImprove;
 }

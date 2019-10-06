@@ -1,6 +1,6 @@
 package com.food_management.controllers;
 
-import com.food_management.dtos.IngredientInFridgeDto;
+import com.food_management.dtos.IngredientInFridgeAndRecipeDto;
 import com.food_management.services.impl.UserIngredientServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +24,16 @@ public class UserIngredientController {
 
     @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<IngredientInFridgeDto>> findAll() {
-        List<IngredientInFridgeDto> dtoList = service.findAll();
+    ResponseEntity<List<IngredientInFridgeAndRecipeDto>> findAll() {
+        List<IngredientInFridgeAndRecipeDto> dtoList = service.findAll();
         return ResponseEntity.ok(dtoList);
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity add(@Valid @RequestBody IngredientInFridgeDto dto) {
-        IngredientInFridgeDto created = service.add(dto);
-        return new ResponseEntity<IngredientInFridgeDto>(created, HttpStatus.CREATED);
+    ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
+        IngredientInFridgeAndRecipeDto created = service.add(dto);
+        return new ResponseEntity<IngredientInFridgeAndRecipeDto>(created, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
@@ -45,7 +45,7 @@ public class UserIngredientController {
 
     @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity update(@Valid @RequestBody IngredientInFridgeDto dto) {
+    ResponseEntity update(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
         return ResponseEntity.ok(service.update(dto));
     }
 

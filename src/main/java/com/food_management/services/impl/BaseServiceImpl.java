@@ -62,7 +62,6 @@ public abstract class BaseServiceImpl
 
     @Override
     public TModel findById(Long id) {
-        System.out.println("Id: " + id);
         return repository.findById(id).get();
     }
 
@@ -96,6 +95,11 @@ public abstract class BaseServiceImpl
 
     @Override
     public UDto update(UDto dto) {
+        throw new UnsupportedOperationException("Method must be implemented in super class");
+    }
+
+    @Override
+    public Boolean checkIfActive(Long id){
         throw new UnsupportedOperationException("Method must be implemented in super class");
     }
 

@@ -18,4 +18,5 @@ public interface BaseService<TModel, UDto> {
 
     UDto convertToDto(TModel entity);
 
+    Boolean checkIfActive(Long id);
 }

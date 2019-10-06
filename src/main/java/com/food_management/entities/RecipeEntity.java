@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,4 +33,12 @@ public class RecipeEntity extends BaseEntity  {
 
     @OneToMany(mappedBy = "recipeIngredientKey.recipe")
     private List<RecipeIngredientEntity> recipeIngredients = new ArrayList<>();
+
+    @Column(name = "active", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean active;
+
+    @Column(name = "waiting_for_accept", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean waitingForAccept;
 }

@@ -45,7 +45,7 @@ public class BaseController<TModel, UDto> {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UDto dto) {
-        service.update(id, dto);
+        service.update(dto);
         return ResponseEntity.ok(service.convertToDto(service.findById(id)));
     }
 }

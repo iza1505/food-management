@@ -56,6 +56,6 @@ public class IngredientController extends BaseController<IngredientEntity, Ingre
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody IngredientDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(service.update(dto));
     }
 }

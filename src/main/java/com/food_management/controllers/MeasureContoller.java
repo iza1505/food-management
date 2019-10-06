@@ -45,7 +45,7 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody MeasureDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(service.update(dto));
     }
 
 }

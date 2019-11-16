@@ -21,7 +21,7 @@ public class RecipeEntity extends BaseEntity  {
     @Column(name = "title", nullable = false, unique = true, length = 200)
     private String title;
 
-    @Column(name = "preparation_mins", nullable = false, unique = true, length = 50)
+    @Column(name = "preparation_mins", nullable = false, length = 50)
     private Integer preparationMins;
 
     @Column(name = "description", nullable = false, unique = true)

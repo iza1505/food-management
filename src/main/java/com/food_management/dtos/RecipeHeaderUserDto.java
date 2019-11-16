@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonPropertyOrder({"id", "version", "title", "active", "waitingForAccept", "toImprove"})
-public class RecipeHeader {
+public class RecipeHeaderUserDto {
 
     public Long id;
 
@@ -15,7 +15,6 @@ public class RecipeHeader {
 
     public Integer missingIngredientsAmount;
 
-    public Double percentageToCook;
+    public Integer percentageToCook;
 
-    public String toImprove;
 }

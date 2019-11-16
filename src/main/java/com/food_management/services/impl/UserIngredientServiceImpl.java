@@ -2,6 +2,7 @@ package com.food_management.services.impl;
 
 import com.food_management.dtos.IngredientInFridgeAndRecipeDto;
 import com.food_management.dtos.UserIngredientDto;
+import com.food_management.entities.IngredientEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.entities.UserIngredientKey;
 import com.food_management.entities.UserEntity;

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonPropertyOrder({"id", "version", "title", "user", "active", "waitingForAccept", "toImprove"})
-public class RecipeHeaderAdmin {
+public class RecipeHeaderAdminDto {
 
     public Long id;
 

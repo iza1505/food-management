@@ -2,6 +2,7 @@ package com.food_management.services.impl;
 
 import com.food_management.dtos.UserDto;
 import com.food_management.entities.UserEntity;
+import com.food_management.entities.UserIngredientEntity;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.repositories.UserRepository;
@@ -108,7 +109,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     public UserEntity findByIdEntity(Long id) {
         Optional<UserEntity> userOptional = repository.findById(id);
         return userOptional.orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
-        }
+    }
+
 
     @Override
     public Authentication authenticate(String login, String password) {

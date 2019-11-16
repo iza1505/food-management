@@ -21,21 +21,35 @@ insert into ingredient (version, ingredient_name, measure_id) values (0, 'broth'
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'champignon', 2);
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'parsley leaves', 2);
 insert into ingredient (version, ingredient_name, measure_id) values (0, 'sour cream 18%', 1);
+-- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
 
-insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 1, 250);
+insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 1, 25);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 2, 2);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 3, 250);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 4, 3);
-insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 5, 50);
+--insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 5, 50);
 
-insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'nalesniki',30, 'opis nalesnikow',0,0,2);
---insert into recipe (title, preparation_mins, description, active, waitingForAccept) values ('nalesniki',30, 'opis nalesnikow',0,1);
-
+insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'nalesniki',30, 'opis nalesnikow',1,0,2);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,1,250);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,2,2);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,3,250);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,4,3);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,5,50);
+
+insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'maka + mleko',30, 'maka z mlekiem',1,0,2);
+insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 2, 1, 10);
+insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 2, 3, 10);
+--insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, , , );
+
+
+insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'sol i jajka',30, 'sol z jajkiem',1,0,2);
+insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 3, 2, 2);
+insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 3, 4, 1);
+
+--insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'',30, '',0,0,2);
+--insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, , , );
+
+
 --insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 3, 5);
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );

@@ -1,9 +1,6 @@
 package com.food_management.controllers;
 
-import com.food_management.dtos.RecipeChangeStatusDto;
-import com.food_management.dtos.RecipeDto;
-import com.food_management.dtos.RecipeHeaderAdminDto;
-import com.food_management.dtos.RecipeHeaderUserDto;
+import com.food_management.dtos.*;
 import com.food_management.entities.RecipeEntity;
 import com.food_management.services.interfaces.RecipeService;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +28,22 @@ public class RecipeController extends BaseController<RecipeEntity, RecipeDto> {
 //        service.findAllHeaders();
 //    }
     @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping(value = "/all",method = RequestMethod.GET)
-    ResponseEntity<List<RecipeHeaderUserDto>> findAllForUser() {
-        Integer dop = 5;
-        return ResponseEntity.ok(service.findAllForUser(dop));
+    @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"possibleMissingIngredientsAmount", "elementsOnPage", "currentPage"})
+    ResponseEntity<RecipeHeadersDto> findAllForUser(@RequestParam(value = "possibleMissingIngredientsAmount") Integer possibleMissingIngredientsAmount,
+                                                    @RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+                                                    @RequestParam(value = "currentPage") Integer currentPage,
+                                                    @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                    @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        return ResponseEntity.ok(service.findAllForUser(possibleMissingIngredientsAmount, elementsOnPage, currentPage, sortBy, ascendingSort));
+    }
+
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"elementsOnPage", "currentPage"})
+    ResponseEntity<RecipeHeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+                                                    @RequestParam(value = "currentPage") Integer currentPage,
+                                                     @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                     @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
 

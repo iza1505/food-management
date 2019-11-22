@@ -1,9 +1,6 @@
 package com.food_management.services.interfaces;
 
-import com.food_management.dtos.RecipeChangeStatusDto;
-import com.food_management.dtos.RecipeDto;
-import com.food_management.dtos.RecipeHeaderAdminDto;
-import com.food_management.dtos.RecipeHeaderUserDto;
+import com.food_management.dtos.*;
 import com.food_management.entities.RecipeEntity;
 
 import java.util.List;
@@ -15,7 +12,9 @@ public interface RecipeService extends BaseService<RecipeEntity, RecipeDto> {
 
     List<RecipeEntity> findAllActive();
 
-    List<RecipeHeaderUserDto> findAllForUser(Integer possibleMissingIngredientsAmount);
+    RecipeHeadersDto findAllForUser(Integer possibleMissingIngredientsAmount, Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
+
+    RecipeHeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
     void updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception;
 }

@@ -4,15 +4,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"userLogin", "active", "waitingForAccept", "toImprove"})
-public class RecipeHeaderAdminDto extends RecipeHeaderDto {
-
-    public String userLogin;
+@JsonPropertyOrder({"active", "waitingForAccept", "toImprove"})
+public class RecipeHeaderForAuthorDto extends RecipeHeaderDto {
 
     public Boolean active;
 
     public Boolean waitingForAccept;
 
     public String toImprove;
-
 }

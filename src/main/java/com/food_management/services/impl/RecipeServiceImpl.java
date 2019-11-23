@@ -7,6 +7,7 @@ import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.IngredientService;
 import com.food_management.services.interfaces.RecipeService;
 import com.food_management.services.interfaces.UserService;
+import lombok.Builder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
@@ -26,6 +27,7 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
     private UserService userService;
     private UserSessionService userSessionService;
     private IngredientService ingredientService;
+    private RecipeIngredientServiceImpl recipeIngredientService; //TODO: zmienic z impl na bez
 
     @Autowired
     public RecipeServiceImpl(RecipeRepository repository, ModelMapper modelMapper, UserService userService, UserSessionService userSessionService, IngredientService ingredientService) {
@@ -47,13 +49,11 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         return modelMapper.map(dto, RecipeEntity.class);
     }
 
-    @Override
-    public Boolean checkIfActive(Long id){
-        RecipeEntity recipeEntity = repository.getOne(id);
-        return recipeEntity.getActive();
-        //TODO: logika sprawdzanai aktywnosci
-        //return true;
-    }
+//    @Override
+//    public Boolean checkIfActive(Long id){
+//        RecipeEntity recipeEntity = repository.getOne(id);
+//        return recipeEntity.getActive();
+//    }
 
     @Override
     public List<RecipeHeaderAdminDto> findAllNoActive(){
@@ -106,7 +106,6 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
 
             if(sortBy != null){
                 if(ascendingSort != null){
-                    System.out.println("sortuje sobie");
                     pageHolder = new PagedListHolder<>(recipeHeaders, new MutableSortDefinition("title",true, ascendingSort));
                 } else {
                     pageHolder = new PagedListHolder<>(recipeHeaders, new MutableSortDefinition(sortBy,true, true));
@@ -136,7 +135,6 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
     public RecipeHeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         List<RecipeEntity> recipeEntities = repository.findAll();
         List<RecipeHeaderAdminDto> recipeHeaders = new ArrayList<>();
-        RecipeHeadersDto recipeHeadersDto = new RecipeHeadersDto();
 
         for(RecipeEntity recipeEntity : recipeEntities){
             recipeHeaders.add(new RecipeHeaderAdminDto());
@@ -196,37 +194,32 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
 
             }
 
-       // RecipeHeadersDto recipeHeadersDto = new RecipeHeadersDto();
-//        if(recipeHeaders.size()>0){
-//            PagedListHolder<RecipeHeaderUserDto> pageHolder;
-//
-//            pageHolder = new PagedListHolder<>(recipeHeaders);
-//            pageHolder.setPageSize(elementsOnPage);
-//            pageHolder.setPage(currentPage-1);
-//            Integer pageCount = pageHolder.getPageCount();
-//
-//            List<RecipeHeaderUserDto> recipeHeadersOnPage = pageHolder.getPageList();
-//            recipeHeadersDto.setRecipeHeaders(recipeHeadersOnPage);
-//            recipeHeadersDto.setPageCount(pageCount);
-//
-//            return recipeHeadersDto;
-//        }
-//        else {
-//            recipeHeadersDto.setRecipeHeaders(recipeHeaders);
-//            recipeHeadersDto.setPageCount(1);
-//            return recipeHeadersDto;
-//        }
         return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
-//        if (sortowanieWlaczone) {
-//            pageHolder = new PagedListHolder(list, new MutableSortDefinition(nazwaPola, true, is_ascending);
-//        } else {
-//            pageHolder = new PagedListHolder(list);
-//        }
-//                ?page=1&pageSize=10&sortParam=name&sortOrder=asc
+
     }
 
     @Override
-    public void updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
+    public RecipeHeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
+        UserEntity userEntity = userSessionService.getUser();
+        List<RecipeEntity> recipeEntities = repository.findAll();
+        List<RecipeHeaderForAuthorDto> recipeHeaders = new ArrayList<>();
+
+        for(RecipeEntity recipeEntity : recipeEntities){
+            if(recipeEntity.getUser().getId().equals(userEntity.getId())){
+                recipeHeaders.add(new RecipeHeaderForAuthorDto());
+                recipeHeaders.get(recipeHeaders.size()-1).setActive(recipeEntity.getActive());
+                recipeHeaders.get(recipeHeaders.size()-1).setToImprove(recipeEntity.getToImprove());
+                recipeHeaders.get(recipeHeaders.size()-1).setWaitingForAccept(recipeEntity.getWaitingForAccept());
+                recipeHeaders.get(recipeHeaders.size()-1).setId(recipeEntity.getId());
+                recipeHeaders.get(recipeHeaders.size()-1).setTitle(recipeEntity.getTitle());
+                recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
+            }
+        }
+        return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
+    }
+
+        @Override
+    public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
 
         if(dto.getActive() && dto.getWaitingForAccept()){
             throw new Exception("Nie mozna aktywnego i czekajacego");
@@ -243,9 +236,10 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
                 recipeEntity.setToImprove(dto.getToImprove());
             }
 
-            repository.save(recipeEntity);
-        }
+            recipeEntity = repository.saveAndFlush(recipeEntity);
 
+            return convertToDto(recipeEntity);
+        }
     }
 
 }

@@ -16,5 +16,7 @@ public interface RecipeService extends BaseService<RecipeEntity, RecipeDto> {
 
     RecipeHeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
-    void updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception;
+    RecipeHeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
+
+    RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception;
 }

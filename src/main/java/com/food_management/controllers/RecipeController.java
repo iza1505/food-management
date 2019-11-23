@@ -40,38 +40,53 @@ public class RecipeController extends BaseController<RecipeEntity, RecipeDto> {
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"elementsOnPage", "currentPage"})
     ResponseEntity<RecipeHeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
-                                                    @RequestParam(value = "currentPage") Integer currentPage,
+                                                     @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
                                                      @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
         return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/NoActive",method = RequestMethod.GET)
-    ResponseEntity<List<RecipeHeaderAdminDto>> findAllNoActive() {
-        //recipeService.findAllNoActive()
-       // return service.findAllNoActive();
-        return ResponseEntity.ok(service.findAllNoActive());
+    @RequestMapping(value = "/my",method = RequestMethod.GET)
+    ResponseEntity<RecipeHeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+                                                     @RequestParam(value = "currentPage") Integer currentPage,
+                                                     @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                     @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        return ResponseEntity.ok(service.findAllForAuthor(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/NoActive/{id}",method = RequestMethod.GET)
-    ResponseEntity<RecipeDto> findNoActive(@PathVariable Long id) throws Exception {
-        if(service.checkIfActive(id)){
-            throw new Exception("Aktywny przepis");
-        }
-            return ResponseEntity.ok(service.convertToDto(service.findById(id)));
-    }
+
+//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+//    @RequestMapping(value = "/NoActive",method = RequestMethod.GET)
+//    ResponseEntity<List<RecipeHeaderAdminDto>> findAllNoActive() {
+//        //recipeService.findAllNoActive()
+//       // return service.findAllNoActive();
+//        return ResponseEntity.ok(service.findAllNoActive());
+//    }
+//
+//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+//    @RequestMapping(value = "/NoActive/{id}",method = RequestMethod.GET)
+//    ResponseEntity<RecipeDto> findNoActive(@PathVariable Long id) throws Exception {
+//        if(service.checkIfActive(id)){
+//            throw new Exception("Aktywny przepis");
+//        }
+//            return ResponseEntity.ok(service.convertToDto(service.findById(id)));
+//    }
 
     //TODO: zrobic tez z /{id}/updateRecipe dla poprawek dla wlasciciela przepisu
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}/updateStatus",method = RequestMethod.PUT)
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id, @RequestBody RecipeChangeStatusDto dto) throws Exception {
-        if(service.checkIfActive(id)){
-            throw new Exception("Aktywny przepis");
-        }
-        service.updateStatus(id, dto);
+//        if(service.checkIfActive(id)){
+//            throw new Exception("Aktywny przepis");
+//        }
+        //service.updateStatus(id, dto);
+        return ResponseEntity.ok(service.updateStatus(id, dto));
+    }
+
+    @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT)
+    ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeChangeStatusDto dto) {
+
+        //service.updateRecipe(id, dto); //TODO: zrobic update recipe dla wlasciciela
         return ResponseEntity.ok(service.convertToDto(service.findById(id)));
     }
 

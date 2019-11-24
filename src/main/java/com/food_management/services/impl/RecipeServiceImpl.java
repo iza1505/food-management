@@ -27,7 +27,6 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
     private UserService userService;
     private UserSessionService userSessionService;
     private IngredientService ingredientService;
-    private RecipeIngredientServiceImpl recipeIngredientService; //TODO: zmienic z impl na bez
 
     @Autowired
     public RecipeServiceImpl(RecipeRepository repository, ModelMapper modelMapper, UserService userService, UserSessionService userSessionService, IngredientService ingredientService) {
@@ -131,6 +130,29 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         return recipeHeadersDto;
     }
 
+    //@Override
+    public RecipeUpdateDto createRecipeUpdateDto(RecipeEntity recipeEntity){
+        RecipeUpdateDto recipeUpdateDto = new RecipeUpdateDto();
+
+        recipeUpdateDto.setDescription(recipeEntity.getDescription());
+        recipeUpdateDto.setId(recipeEntity.getId());
+        recipeUpdateDto.setPreparationMins(recipeEntity.getPreparationMins());
+        recipeUpdateDto.setTitle(recipeEntity.getTitle());
+        recipeUpdateDto.setVersion(recipeEntity.getVersion());
+
+        int i = 0;
+        for(RecipeIngredientEntity ingredients : recipeEntity.getRecipeIngredients()){
+            recipeUpdateDto.getIngredients().add(new IngredientInFridgeAndRecipeDto());
+            recipeUpdateDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(ingredients.getRecipeIngredientKey().getIngredient()));
+            recipeUpdateDto.getIngredients().get(i).setAmount(ingredients.getAmount());
+            recipeUpdateDto.getIngredients().get(i).setVersion(ingredients.getVersion());
+            i++;
+        }
+
+        return recipeUpdateDto;
+    }
+
+
     @Override
     public RecipeHeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         List<RecipeEntity> recipeEntities = repository.findAll();
@@ -198,6 +220,41 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
 
     }
 
+    //@Override
+    public RecipeUpdateDto updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception {
+        if(id != recipeUpdateDto.getId()){
+            throw new Exception("Id innego przepisu w update recipe");
+        }
+        RecipeEntity recipeEntity = repository.getOne(id);
+
+        UserEntity userEntity = userSessionService.getUser();
+        if(recipeEntity.getUser().getId() != userEntity.getId()){
+            throw new Exception("Id innego usera niz autora w update recipe");
+        }
+
+        recipeEntity.setToImprove("");
+        recipeEntity.setWaitingForAccept(true);
+        recipeEntity.setActive(false);
+
+        recipeEntity.setDescription(recipeUpdateDto.getDescription());
+        recipeEntity.setPreparationMins(recipeUpdateDto.getPreparationMins());
+        recipeEntity.setTitle(recipeUpdateDto.getTitle());
+        recipeEntity.getRecipeIngredients().clear();
+        int i = 0;
+        for (IngredientInFridgeAndRecipeDto ingredient : recipeUpdateDto.getIngredients()){
+            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
+            recipeEntity.getRecipeIngredients().get(i).setAmount(recipeUpdateDto.getIngredients().get(i).getAmount());
+            recipeEntity.getRecipeIngredients().get(i).setVersion(recipeUpdateDto.getIngredients().get(i).getVersion());
+            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.convertToEntity(recipeUpdateDto.getIngredients().get(i).getIngredient()));
+            i++;
+        }
+
+        RecipeEntity updatedRecipeEntity = repository.saveAndFlush(recipeEntity);
+
+        return createRecipeUpdateDto(updatedRecipeEntity);
+
+    }
+
     @Override
     public RecipeHeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         UserEntity userEntity = userSessionService.getUser();
@@ -222,7 +279,7 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
 
         if(dto.getActive() && dto.getWaitingForAccept()){
-            throw new Exception("Nie mozna aktywnego i czekajacego");
+            throw new Exception("Nie mozna aktywnego i czekajacego"); //TODO: exception do update status
         }
         else {
             RecipeEntity recipeEntity = repository.getOne(id);

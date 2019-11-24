@@ -3,7 +3,6 @@ package com.food_management.dtos;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -22,7 +21,7 @@ public class RecipeUserDto {
 
     public String userName;
 
-    public Map<IngredientInFridgeAndRecipeDto, Integer> ingredients;
+    public Map<IngredientInFridgeAndRecipeDto, Integer> ingredients; // ten integer to % mozliwy do ugotowania, przy get dla usera
 
 }
 

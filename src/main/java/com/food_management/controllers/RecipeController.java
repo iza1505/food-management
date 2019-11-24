@@ -84,7 +84,7 @@ public class RecipeController extends BaseController<RecipeEntity, RecipeDto> {
     }
 
     @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT)
-    ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeChangeStatusDto dto) {
+    ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) {
 
         //service.updateRecipe(id, dto); //TODO: zrobic update recipe dla wlasciciela
         return ResponseEntity.ok(service.convertToDto(service.findById(id)));

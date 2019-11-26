@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -115,6 +116,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     @Override
     public Authentication authenticate(String login, String password) {
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+    }
+
+    @Override
+    public Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients){
+        for(UserIngredientEntity ingredient: userIngredients){
+            if(ingredient.getUserIngredientKey().getIngredient().getId().equals(id)){
+                return ingredient.getAmount().intValue();
+            }
+        }
+        return 0;
+
     }
 
 }

@@ -6,9 +6,6 @@ import com.food_management.entities.RecipeEntity;
 import java.util.List;
 
 public interface RecipeService extends BaseService<RecipeEntity, RecipeDto> {
-    //Boolean checkIfActive(Long id);
-
-    List<RecipeHeaderAdminDto> findAllNoActive();
 
     List<RecipeEntity> findAllActive();
 
@@ -19,4 +16,10 @@ public interface RecipeService extends BaseService<RecipeEntity, RecipeDto> {
     RecipeHeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
     RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception;
+
+    RecipeDto getRecipeAdmin(Long id);
+
+    RecipeGetUserDto getRecipeUser(Long id);
+
+    RecipeUpdateDto updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception;
 }

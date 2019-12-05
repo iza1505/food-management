@@ -24,7 +24,6 @@ public class RecipeController {
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     ResponseEntity<?> getById(@PathVariable Long id) throws Exception {
         String role = userSessionService.getUser().getRole().getName();
-        System.out.println("rola " + role);
         if(role.equals("ADMINISTRATOR")){
             return ResponseEntity.ok(service.getRecipeAdmin(id));
         }
@@ -71,8 +70,9 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT) // upadte robi update dla wlasciciela
-    ResponseEntity<RecipeUpdateDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
-        return ResponseEntity.ok(service.updateRecipe(id, dto));
+    ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
+        service.updateRecipe(id,dto);
+        return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
     }
 
 }

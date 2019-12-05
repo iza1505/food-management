@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Data
-@JsonPropertyOrder({"id", "version", "title", "preparationMins", "description", "ingredients", })
+@JsonPropertyOrder({"id", "version", "title", "preparationMins", "description", "ingredients", "userName" })
 public class RecipeUpdateDto {
 
     public Long id;
@@ -19,6 +19,8 @@ public class RecipeUpdateDto {
     public Integer preparationMins;
 
     public String description;
+
+    public String userName;
 
     public List<IngredientInFridgeAndRecipeDto> ingredients;
 

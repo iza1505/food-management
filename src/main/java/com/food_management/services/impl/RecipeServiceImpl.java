@@ -81,7 +81,9 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         for(int i = 0; i < recipeEntity.getRecipeIngredients().size(); i++){
             recipeDto.getIngredients().add(new IngredientAndPercentageDto());
             recipeDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient()));
-            recipeDto.getIngredients().get(i).setPercentage(userService.getIngredientPercentage(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient().getId(),userEntity.getUserIngredients()).intValue());
+            recipeDto.getIngredients().get(i).setHasGot(userService.getIngredientPercentage(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient().getId(),userEntity.getUserIngredients()).intValue());
+            recipeDto.getIngredients().get(i).setAmount(recipeEntity.getRecipeIngredients().get(i).getAmount());
+            recipeDto.getIngredients().get(i).setVersion(recipeEntity.getRecipeIngredients().get(i).getVersion());
         }
 
         return recipeDto;
@@ -139,13 +141,17 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         recipeUpdateDto.setPreparationMins(recipeEntity.getPreparationMins());
         recipeUpdateDto.setTitle(recipeEntity.getTitle());
         recipeUpdateDto.setVersion(recipeEntity.getVersion());
+        recipeUpdateDto.setIngredients(new ArrayList<>());
+        recipeUpdateDto.setUserName(recipeEntity.getUser().getLogin());
 
         int i = 0;
-        for(RecipeIngredientEntity ingredients : recipeEntity.getRecipeIngredients()){
+        for(RecipeIngredientEntity ingredient : recipeEntity.getRecipeIngredients()){
             recipeUpdateDto.getIngredients().add(new IngredientInFridgeAndRecipeDto());
-            recipeUpdateDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(ingredients.getRecipeIngredientKey().getIngredient()));
-            recipeUpdateDto.getIngredients().get(i).setAmount(ingredients.getAmount());
-            recipeUpdateDto.getIngredients().get(i).setVersion(ingredients.getVersion());
+            System.out.println("ing " + ingredient.getRecipeIngredientKey().getIngredient());
+            System.out.println("ingconv " + ingredientService.convertToDto(ingredient.getRecipeIngredientKey().getIngredient()));
+           // recipeUpdateDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(ingredients.getRecipeIngredientKey().getIngredient()));
+            recipeUpdateDto.getIngredients().get(i).setAmount(ingredient.getAmount());
+            recipeUpdateDto.getIngredients().get(i).setVersion(ingredient.getVersion());
             i++;
         }
 
@@ -221,37 +227,49 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
     }
 
     @Override
-    public RecipeUpdateDto updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception {
+    public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception { //TODO: zeby nie zwracal przepisu bo i tak przeniesie na str recipes/my
         if(id != recipeUpdateDto.getId()){
             throw new Exception("Id innego przepisu w update recipe");
         }
+
         RecipeEntity recipeEntity = repository.getOne(id);
 
         UserEntity userEntity = userSessionService.getUser();
+
         if(recipeEntity.getUser().getId() != userEntity.getId()){
             throw new Exception("Id innego usera niz autora w update recipe");
         }
 
-        recipeEntity.setToImprove("");
-        recipeEntity.setWaitingForAccept(true);
-        recipeEntity.setActive(false);
+        if(userEntity.getRole().getName().equals("USER")){
+            recipeEntity.setWaitingForAccept(true);
+            recipeEntity.setActive(false);
+        }
+        else {
+            recipeEntity.setWaitingForAccept(false);
+            recipeEntity.setActive(true);
+        }
+
 
         recipeEntity.setDescription(recipeUpdateDto.getDescription());
         recipeEntity.setPreparationMins(recipeUpdateDto.getPreparationMins());
         recipeEntity.setTitle(recipeUpdateDto.getTitle());
-        recipeEntity.getRecipeIngredients().clear();
+        recipeEntity.setUser(userEntity);
+
         int i = 0;
         for (IngredientInFridgeAndRecipeDto ingredient : recipeUpdateDto.getIngredients()){
             recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
-            recipeEntity.getRecipeIngredients().get(i).setAmount(recipeUpdateDto.getIngredients().get(i).getAmount());
-            recipeEntity.getRecipeIngredients().get(i).setVersion(recipeUpdateDto.getIngredients().get(i).getVersion());
-            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.convertToEntity(recipeUpdateDto.getIngredients().get(i).getIngredient()));
-            i++;
+            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
+            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
+            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
+            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
+            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
+           i++;
         }
 
-        RecipeEntity updatedRecipeEntity = repository.saveAndFlush(recipeEntity);
 
-        return createRecipeUpdateDto(updatedRecipeEntity);
+        repository.save(recipeEntity);
+
+        //return createRecipeUpdateDto(updatedRecipeEntity);
 
     }
 
@@ -286,10 +304,8 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
             recipeEntity.setActive(dto.getActive());
             recipeEntity.setWaitingForAccept(dto.getWaitingForAccept());
             if(dto.getActive()){
-                System.out.println("ustawiam pustke"); //TODO: usuac te dopiski
                 recipeEntity.setToImprove("");
             } else {
-                System.out.println("ustawiam opis " + dto.getToImprove());
                 recipeEntity.setToImprove(dto.getToImprove());
             }
 

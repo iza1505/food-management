@@ -1,6 +1,7 @@
 package com.food_management.entities;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -18,4 +19,8 @@ public class IngredientEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "measure_id")
     private MeasureEntity measure;
+
+    @Column(name = "active", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean active;
 }

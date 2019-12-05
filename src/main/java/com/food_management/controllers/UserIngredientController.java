@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public class UserIngredientController {
 
-    private UserIngredientServiceImpl service;
+    private UserIngredientServiceImpl service; //TODO: usunac impl
 
     public UserIngredientController(UserIngredientServiceImpl service) {
         this.service = service;
@@ -31,7 +31,7 @@ public class UserIngredientController {
 
     @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
+    ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) throws Exception {
         IngredientInFridgeAndRecipeDto created = service.add(dto);
         return new ResponseEntity<IngredientInFridgeAndRecipeDto>(created, HttpStatus.CREATED);
     }

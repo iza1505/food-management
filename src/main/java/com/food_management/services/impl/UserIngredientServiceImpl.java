@@ -103,7 +103,7 @@ public class UserIngredientServiceImpl {
             throw new EntityAlreadyExistsException("Brak z id " + id); }
     }
 
-    public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto){
+    public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto) throws Exception {
         UserEntity userEntity = userSessionService.getUser();
 
         for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {

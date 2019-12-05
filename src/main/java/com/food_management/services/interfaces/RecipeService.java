@@ -21,5 +21,5 @@ public interface RecipeService extends BaseService<RecipeEntity, RecipeDto> {
 
     RecipeGetUserDto getRecipeUser(Long id);
 
-    RecipeUpdateDto updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception;
+    void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception;
 }

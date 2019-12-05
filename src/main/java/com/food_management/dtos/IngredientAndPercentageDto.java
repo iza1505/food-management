@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"ingredient", "amount"})
+@JsonPropertyOrder({"ingredient", "amount", "hasGot", "version"})
 public class IngredientAndPercentageDto {
 
     private IngredientDto ingredient;
 
-    private Integer amount;
+    private Double amount;
+
+    private Integer hasGot;
+
+    private Long version;
 }

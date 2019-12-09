@@ -1,8 +1,6 @@
 package com.food_management.services.impl;
 
 import com.food_management.dtos.IngredientDto;
-import com.food_management.dtos.IngredientForUserDto;
-import com.food_management.dtos.UserIngredientDto;
 import com.food_management.entities.*;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
@@ -13,14 +11,10 @@ import com.food_management.services.interfaces.IngredientService;
 import com.food_management.services.interfaces.MeasureService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,16 +65,15 @@ public class IngredientServiceImpl implements IngredientService {
 
         if(userEntity.getRole().getName().equals("ADMINISTRATOR")){
             ingredientEntity.setActive(true);
-            return convertToDto(repository.saveAndFlush(ingredientEntity));
         }
         else if(userEntity.getRole().getName().equals("USER")){
             ingredientEntity.setActive(false);
-            return modelMapper.map(ingredientEntity, (Type) IngredientForUserDto.class);
         }
         else {
             throw new Exception("nieznana rola");
         }
 
+        return convertToDto(repository.saveAndFlush(ingredientEntity));
     }
 
     //@Override

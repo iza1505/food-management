@@ -3,9 +3,7 @@ package com.food_management.dtos;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @JsonPropertyOrder({"id", "version", "title", "preparationMins", "description", "userName", "ingredients"})
@@ -23,7 +21,7 @@ public class RecipeGetUserDto {
 
     public String userName;
 
-    public List<IngredientAndPercentageDto> ingredients;
+    public List<IngredientAndPossessedAmountDto> ingredients;
 
     //public HashMap<IngredientInFridgeAndRecipeDto, Integer> ingredients; // ten integer to % mozliwy do ugotowania, przy get dla usera
 

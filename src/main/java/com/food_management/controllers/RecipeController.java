@@ -3,9 +3,12 @@ package com.food_management.controllers;
 import com.food_management.dtos.*;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/recipes")
@@ -73,6 +76,15 @@ public class RecipeController {
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
         service.updateRecipe(id,dto);
         return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
+    }
+
+    //@Override
+    @RequestMapping(method = RequestMethod.POST)
+    ResponseEntity add(@RequestBody RecipeDto dto) throws Exception {
+        System.out.println(dto);
+        service.add(dto);
+        return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
+        //return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);
     }
 
 }

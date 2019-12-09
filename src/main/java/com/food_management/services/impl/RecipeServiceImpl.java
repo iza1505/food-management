@@ -2,6 +2,7 @@ package com.food_management.services.impl;
 
 import com.food_management.dtos.*;
 import com.food_management.entities.*;
+import com.food_management.repositories.RecipeIngredientRepository;
 import com.food_management.repositories.RecipeRepository;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.IngredientService;
@@ -16,31 +17,35 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
+//extends BaseServiceImpl<RecipeRepository, RecipeEntity, RecipeDto>
 @Service
 @Transactional
-public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeEntity, RecipeDto> implements RecipeService {
+public class RecipeServiceImpl implements RecipeService {
 
     private UserService userService;
     private UserSessionService userSessionService;
     private IngredientService ingredientService;
+    private ModelMapper modelMapper;
+    private RecipeRepository repository;
+    private RecipeIngredientRepository recipeIngredientRepository;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository repository, ModelMapper modelMapper, UserService userService, UserSessionService userSessionService, IngredientService ingredientService) {
+    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, UserService userService, UserSessionService userSessionService, IngredientService ingredientService) {
 
-        super(repository, modelMapper);
-
+        this.repository = repository;
+        this.modelMapper = modelMapper;
         this.userService = userService;
         this.userSessionService = userSessionService;
         this.ingredientService = ingredientService;
+        this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    @Override
+    //@Override
     public RecipeDto convertToDto(RecipeEntity entity) {
         return modelMapper.map(entity, RecipeDto.class);
     }
 
-    @Override
+    //@Override
     public RecipeEntity convertToEntity(RecipeDto dto) {
         return modelMapper.map(dto, RecipeEntity.class);
     }
@@ -79,7 +84,7 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         recipeDto.setVersion(recipeEntity.getVersion());
         recipeDto.setIngredients(new ArrayList<>());
         for(int i = 0; i < recipeEntity.getRecipeIngredients().size(); i++){
-            recipeDto.getIngredients().add(new IngredientAndPercentageDto());
+            recipeDto.getIngredients().add(new IngredientAndPossessedAmountDto());
             recipeDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient()));
             recipeDto.getIngredients().get(i).setHasGot(userService.getIngredientPercentage(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient().getId(),userEntity.getUserIngredients()).intValue());
             recipeDto.getIngredients().get(i).setAmount(recipeEntity.getRecipeIngredients().get(i).getAmount());
@@ -255,22 +260,36 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         recipeEntity.setTitle(recipeUpdateDto.getTitle());
         recipeEntity.setUser(userEntity);
 
+        recipeEntity = addIngredientToRecipeEntity(recipeEntity,id,recipeUpdateDto.getIngredients());
+//        int i = 0;
+//        for (IngredientInFridgeAndRecipeDto ingredient : recipeUpdateDto.getIngredients()){
+//            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
+//            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
+//            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
+//            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
+//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
+//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
+//            recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
+//           i++;
+//        }
+        repository.save(recipeEntity);
+        //return createRecipeUpdateDto(updatedRecipeEntity);
+    }
+
+    public RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients) throws Exception {
         int i = 0;
-        for (IngredientInFridgeAndRecipeDto ingredient : recipeUpdateDto.getIngredients()){
+        for (IngredientInFridgeAndRecipeDto ingredient : ingredients){
             recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
             recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
             recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
             recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
             recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
             recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
-           i++;
+            recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
+            i++;
         }
 
-
-        repository.save(recipeEntity);
-
-        //return createRecipeUpdateDto(updatedRecipeEntity);
-
+        return recipeEntity;
     }
 
     @Override
@@ -293,6 +312,50 @@ public class RecipeServiceImpl extends BaseServiceImpl<RecipeRepository, RecipeE
         return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
     }
 
+    @Override
+    public void add(RecipeDto dto) throws Exception {
+        if(repository.existsByTitle(dto.getTitle())){
+            throw new Exception("Istnieje przepis o takim tytule");
+        }
+
+        RecipeEntity recipeEntity = convertToEntity(dto);
+
+        UserEntity userEntity = userSessionService.getUser();
+
+        if(userEntity.getRole().getName().equals("USER")){
+            recipeEntity.setWaitingForAccept(true);
+            recipeEntity.setActive(false);
+            recipeEntity.setToImprove("");
+        }
+        else {
+
+            recipeEntity.setWaitingForAccept(false);
+            recipeEntity.setActive(true);
+            recipeEntity.setToImprove("");
+        }
+
+        recipeEntity.setUser(userService.findById(userEntity.getId()));
+        recipeEntity.getRecipeIngredients().clear();
+        recipeEntity = repository.saveAndFlush(recipeEntity);
+
+        Long id = recipeEntity.getId();
+
+        recipeEntity = addIngredientToRecipeEntity(recipeEntity,id,dto.getIngredients());
+//        int i = 0;
+//        for (IngredientInFridgeAndRecipeDto ingredient : dto.getIngredients()){
+//            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
+//            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
+//            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
+//            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
+//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
+//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
+//            recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
+//            i++;
+//        }
+
+       repository.save(recipeEntity);
+
+    }
     @Override
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
 

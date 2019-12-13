@@ -31,6 +31,33 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String generatePasswordToken(String email, String hashPasswordHash) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("hashPasswordHash", hashPasswordHash);
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    public String getEmailFromJWT(String token){
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public String getHashPasswordHashFromJWT(String token){
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("hashPasswordHash", String.class);
+    }
+
     public String getUserLoginFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)

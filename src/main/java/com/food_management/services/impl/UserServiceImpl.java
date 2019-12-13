@@ -6,10 +6,13 @@ import com.food_management.entities.UserIngredientEntity;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.repositories.UserRepository;
+import com.food_management.security.EmailProvider;
+import com.food_management.security.JwtTokenProvider;
 import com.food_management.services.interfaces.RoleService;
 import com.food_management.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -29,6 +32,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
     private AuthenticationManager authenticationManager;
     private UserRepository repository;
     private PasswordEncoder passwordEncoder;
+    private EmailProvider emailProvider;
+    private final JwtTokenProvider tokenProvider;
 
     @Autowired
     public UserServiceImpl(
@@ -36,12 +41,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
             RoleService roleService,
             ModelMapper modelMapper,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            JwtTokenProvider tokenProvider,
+            EmailProvider emailProvider) {
         super(repository, modelMapper);
         this.authenticationManager = authenticationManager;
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+        this.tokenProvider = tokenProvider;
+        this.emailProvider = emailProvider;
     }
 
     @Override
@@ -107,6 +116,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
                 .orElseThrow(() -> new EntityNotFoundException("User with login " + login + " not found."));
     }
 
+    @Override
+    public UserEntity findByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found."));
+    }
+
     public UserEntity findByIdEntity(Long id) {
         Optional<UserEntity> userOptional = repository.findById(id);
         return userOptional.orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
@@ -126,6 +141,29 @@ public class UserServiceImpl extends BaseServiceImpl<UserRepository, UserEntity,
             }
         }
         return 0;
+
+    }
+
+    @Override
+    public void forgotPassword(String email){
+
+        String passwordHash = findByEmail(email).getPasswordHash();
+        String hashPasswordHash = passwordEncoder.encode(passwordHash);
+
+        String jwt = tokenProvider.generatePasswordToken(email, passwordHash);
+
+        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/forgotPassword?token=");
+        emailProvider.sendEmail(emailToSend);
+
+    }
+
+    @Override
+    public void resetPassword(String newPassword, String token){
+        String hash = tokenProvider.getHashPasswordHashFromJWT(token);
+        String userEmail = tokenProvider.getEmailFromJWT(token);
+        UserEntity userEntity = findByEmail(userEmail);
+
+        userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
 
     }
 

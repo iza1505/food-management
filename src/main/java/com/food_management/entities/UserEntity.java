@@ -9,10 +9,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @Entity
 @Table(name = "user_")
 public class UserEntity extends BaseEntity {
+
+    public UserEntity() {
+        super();
+        this.active=false;
+    }
 
     @Column(name = "login", nullable = false, unique = true, length = 50)
     private String login;
@@ -29,4 +34,7 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "userIngredientKey.user")
     private List<UserIngredientEntity> userIngredients = new ArrayList<>();
+
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 }

@@ -12,7 +12,13 @@ public interface UserService extends BaseService<UserEntity, UserDto> {
 
     UserEntity findByLogin(String login);
 
+    UserEntity findByEmail(String email);
+
     Authentication authenticate(String login, String password);
 
     Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients);
+
+    void forgotPassword(String email);
+
+    void resetPassword(String newPassword, String token);
 }

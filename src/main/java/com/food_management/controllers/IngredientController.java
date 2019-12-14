@@ -1,11 +1,9 @@
 package com.food_management.controllers;
 
 import com.food_management.dtos.IngredientDto;
-import com.food_management.entities.IngredientEntity;
 import com.food_management.exceptions.InactiveAccountException;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.impl.IngredientServiceImpl;
-import com.food_management.services.interfaces.IngredientService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +20,9 @@ public class IngredientController {
     private IngredientServiceImpl service;
     private UserSessionService userSessionService;
 
-    public IngredientController(@Lazy IngredientServiceImpl service) {
+    public IngredientController(@Lazy IngredientServiceImpl service, UserSessionService userSessionService) {
         this.service = service;
+        this.userSessionService = userSessionService;
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")

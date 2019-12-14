@@ -5,6 +5,7 @@ import com.food_management.entities.UserEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
+import com.food_management.exceptions.IncompatibilityDataException;
 import com.food_management.repositories.UserRepository;
 import com.food_management.security.EmailProvider;
 import com.food_management.security.JwtTokenProvider;
@@ -115,9 +116,6 @@ public class UserServiceImpl implements UserService {
         String hashPasswordHash = passwordEncoder.encode(hashedPassword);
         String jwt = tokenProvider.generatePasswordToken(registrationDto.getEmail(), hashPasswordHash);
         SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, registrationDto.getEmail(), "/auth/registration?token=", "Account activation", "Active your account using link");
-        System.out.println("Haslo: " + registrationDto.getPassword());
-        System.out.println("hash: " + userEntity.getPasswordHash());
-        System.out.println("hash hasha: " + hashPasswordHash);
         emailProvider.sendEmail(emailToSend);
     }
 
@@ -125,10 +123,6 @@ public class UserServiceImpl implements UserService {
     public void confirmAccount(String token) throws Exception {
         String email = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(email);
-        System.out.println("");
-        System.out.println("hash z bazy: " + userEntity.getPasswordHash());
-        System.out.println("hash z tokena (hh): " + tokenProvider.getHashPasswordHashFromJWT(token));
-        System.out.println("hash hasla z bazy: " + passwordEncoder.encode(userEntity.getPasswordHash()));
         if(userEntity != null){
             if(passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
                 if(userEntity.getActive().equals(false)){
@@ -219,10 +213,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassword(String newPassword, String token){
+    public void resetForgottenPassword(String newPassword, String token){
         String userEmail = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(userEmail);
         userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
+    }
+
+    @Override
+    public void sendChangePasswordLink(String email){
+        String passwordHash = passwordEncoder.encode(findByEmail(email).getPasswordHash());
+        String jwt = tokenProvider.generatePasswordToken(email, passwordHash);
+        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/users/myAccount/changePassword?token=", "Change Password", "Change your password using link:");
+        emailProvider.sendEmail(emailToSend);
+    }
+
+    @Override
+    public void changePassword(String newPassword, String token){
+        UserEntity userEntity = userSessionService.getUser();
+        String tokenEmail = tokenProvider.getEmailFromJWT(token);
+        if(userEntity.getEmail().equals(tokenEmail) &&
+                passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
+            String newPasswordHash = passwordEncoder.encode(newPassword);
+            userEntity.setPasswordHash(newPasswordHash);
+            repository.save(userEntity);
+        } else {
+            throw new IncompatibilityDataException("Incompatibility data.");
+        }
     }
 
     @Override

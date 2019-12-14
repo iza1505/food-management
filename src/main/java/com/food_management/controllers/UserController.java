@@ -5,13 +5,9 @@ import com.food_management.exceptions.InactiveAccountException;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.UserService;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -20,8 +16,9 @@ public class UserController {
     private UserService userService;
     private UserSessionService userSessionService;
 
-    public UserController(@Lazy UserService service) {
+    public UserController(@Lazy UserService service, UserSessionService userSessionService) {
         this.userService = service;
+        this.userSessionService = userSessionService;
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
@@ -61,6 +58,20 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userService.getMyDetails());
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PostMapping("/myAccount/changePassword")
+    public ResponseEntity sendChangePasswordLink() {
+        userService.sendChangePasswordLink(userSessionService.getUser().getEmail());
+        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @RequestMapping(value ="/myAccount/changePassword", method = RequestMethod.POST, params = {"token"})
+    public ResponseEntity changePassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
+        userService.changePassword(dto.getPassword(), token);
+        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
     }
 
 }

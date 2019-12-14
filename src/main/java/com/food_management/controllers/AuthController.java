@@ -78,12 +78,9 @@ public class AuthController {
     }
 
     @RequestMapping(value ="/forgotPassword", method = RequestMethod.POST, params = {"token"})
-    public ResponseEntity resetPassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
-        userService.resetPassword(dto.getPassword(), token);
+    public ResponseEntity resetForgottenPassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
+        userService.resetForgottenPassword(dto.getPassword(), token);
         return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
     }
 
-    //String token = UUID.randomUUID().toString();
-    //TODO: nie todo ale info ze zeby odkodowac haslo potrzebuje passwordencoder.matches(haslo, zakodowane haslo) i spr czy to to samo
-    //TODO mapping z tokenem na ktory przychodzi token (user, hash hasha) i haslo nowe: String url = applicationPath + "/forgotPassword?token=" + token;
-}//todo: biore maila i zahashowane haslo z tokenu. porownuje biore uzytkownika z tym mailem, jego zahash haslo, robie matches, jak sa takie same to wtedy hashuje haslo to nowe i podmieniam i zapisuje encje
+}

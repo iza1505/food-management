@@ -26,7 +26,8 @@ public class UserSessionService {
     public Boolean isActive(){
         UserEntity detachedUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        return detachedUser.getActive();
+        UserEntity userEntity = userService.findById(detachedUser.getId());
+        return userEntity.getActive();
     }
 
 

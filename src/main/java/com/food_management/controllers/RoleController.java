@@ -19,8 +19,9 @@ public class RoleController extends BaseController<RoleEntity, RoleDto> {
 
     private UserSessionService userSessionService;
 
-    public RoleController(RoleService service) {
+    public RoleController(RoleService service, UserSessionService userSessionService) {
         super(service);
+        this.userSessionService = userSessionService;
     }
 
     @Override

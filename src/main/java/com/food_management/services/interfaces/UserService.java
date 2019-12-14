@@ -30,7 +30,11 @@ public interface UserService {
 
     void forgotPassword(String email);
 
-    void resetPassword(String newPassword, String token);
+    void resetForgottenPassword(String newPassword, String token);
+
+    void sendChangePasswordLink(String email);
+
+    void changePassword(String newPassword, String token);
 
     MyDetailsUserDto getMyDetails();
 

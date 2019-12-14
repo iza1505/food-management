@@ -19,8 +19,9 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
 
     private UserSessionService userSessionService;
 
-    public MeasureContoller(MeasureService service) {
+    public MeasureContoller(MeasureService service, UserSessionService userSessionService) {
         super(service);
+        this.userSessionService = userSessionService;
     }
 
     @Override

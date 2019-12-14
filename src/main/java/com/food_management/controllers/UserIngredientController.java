@@ -21,7 +21,8 @@ public class UserIngredientController {
     private UserSessionService userSessionService;
     private UserIngredientServiceImpl service; //TODO: usunac impl
 
-    public UserIngredientController(UserIngredientServiceImpl service) {
+    public UserIngredientController(UserSessionService userSessionService, UserIngredientServiceImpl service) {
+        this.userSessionService = userSessionService;
         this.service = service;
     }
 

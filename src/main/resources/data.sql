@@ -21,6 +21,7 @@ insert into ingredient (version, ingredient_name, measure_id, active) values (0,
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'champignon', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'parsley leaves', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'sour cream 18%', 1, true);
+insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'inactive', 1, false);
 -- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
 
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 1, 25);

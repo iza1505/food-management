@@ -1,5 +1,6 @@
 package com.food_management.controllers;
 
+import com.food_management.dtos.HeadersDto;
 import com.food_management.dtos.IngredientDto;
 import com.food_management.exceptions.InactiveAccountException;
 import com.food_management.security.UserSessionService;
@@ -27,12 +28,15 @@ public class IngredientController {
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<IngredientDto>> findAll() {
+    ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+                                       @RequestParam(value = "currentPage") Integer currentPage,
+                                       @RequestParam(value = "sortBy", required = false) String sortBy,
+                                       @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
 
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.findAll(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
 

@@ -1,7 +1,9 @@
 package com.food_management.controllers;
 
+import com.food_management.dtos.MyDetailsUserDto;
+import com.food_management.dtos.UserDetailsToChangeDto;
 import com.food_management.dtos.UserDto;
-import com.food_management.entities.UserEntity;
+import com.food_management.dtos.UsersDetailsDto;
 import com.food_management.services.interfaces.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -14,48 +16,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UserController extends BaseController<UserEntity, UserDto> {
+public class UserController {
 
     private UserService userService;
 
     public UserController(@Lazy UserService service) {
-        super(service);
         this.userService = service;
     }
 
-    @Override
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<UserDto>> findAll() {
-        return super.findAll();
+    ResponseEntity<List<UsersDetailsDto>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
-
-    @Override
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity add(@Valid @RequestBody UserDto dto) {
-        UserDto created = service.add(dto);
+        UserDto created = userService.add(dto);
         return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);
     }
 
-//    @Override
-//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    ResponseEntity<UserDto> getById(@PathVariable Long id) {
-//        return super.getById(id);
-//    }
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    ResponseEntity delete(@PathVariable Long id) {
-        return super.delete(id);
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @RequestMapping(value = "/myAccount", method = RequestMethod.PUT)
+    ResponseEntity<UserDetailsToChangeDto> updateDetails(@RequestBody UserDetailsToChangeDto dto) {
+        return ResponseEntity.ok(userService.updateDetails(dto));
     }
 
-    @Override
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
-        return ResponseEntity.ok(service.update(dto));
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @RequestMapping(value = "/myAccount", method = RequestMethod.GET)
+    ResponseEntity<MyDetailsUserDto> getMyDetails() {
+        return ResponseEntity.ok(userService.getMyDetails());
     }
 
 }

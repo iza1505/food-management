@@ -3,17 +3,13 @@ package com.food_management.controllers;
 import com.food_management.dtos.*;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.RecipeService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
-//    public class RecipeController extends BaseController<RecipeEntity, RecipeDto> {
 
     private RecipeService service;
     private UserSessionService userSessionService;
@@ -41,7 +37,7 @@ public class RecipeController {
 
     @PreAuthorize("hasAuthority('USER')") // zwraca wszystkie aktywne przepisy
     @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"possibleMissingIngredientsAmount", "elementsOnPage", "currentPage"})
-    ResponseEntity<RecipeHeadersDto> findAllForUser(@RequestParam(value = "possibleMissingIngredientsAmount") Integer possibleMissingIngredientsAmount,
+    ResponseEntity<HeadersDto> findAllForUser(@RequestParam(value = "possibleMissingIngredientsAmount") Integer possibleMissingIngredientsAmount,
                                                     @RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                     @RequestParam(value = "currentPage") Integer currentPage,
                                                     @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -51,7 +47,7 @@ public class RecipeController {
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')") // zwraca wszystkie hedery przepisow jakie sa dla admina
     @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"elementsOnPage", "currentPage"})
-    ResponseEntity<RecipeHeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+    ResponseEntity<HeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
                                                      @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
@@ -59,7 +55,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/my",method = RequestMethod.GET) // zwraca hedery przepisow uzytkownika zalogowanego
-    ResponseEntity<RecipeHeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
+    ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
                                                      @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {

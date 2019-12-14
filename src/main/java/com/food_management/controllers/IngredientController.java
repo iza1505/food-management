@@ -4,6 +4,7 @@ import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
 import com.food_management.services.impl.IngredientServiceImpl;
 import com.food_management.services.interfaces.IngredientService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,8 +19,7 @@ public class IngredientController {
 
     private IngredientServiceImpl service;
 
-    public IngredientController(IngredientServiceImpl service) {
-        //super(service);
+    public IngredientController(@Lazy IngredientServiceImpl service) {
         this.service = service;
     }
 

@@ -12,12 +12,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-//extends BaseServiceImpl<RecipeRepository, RecipeEntity, RecipeDto>
+
 @Service
 @Transactional
 public class RecipeServiceImpl implements RecipeService {
@@ -28,9 +29,10 @@ public class RecipeServiceImpl implements RecipeService {
     private ModelMapper modelMapper;
     private RecipeRepository repository;
     private RecipeIngredientRepository recipeIngredientRepository;
+    private HeadersPagination headersPagination;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, UserService userService, UserSessionService userSessionService, IngredientService ingredientService) {
+    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, @Lazy UserService userService, UserSessionService userSessionService, IngredientService ingredientService, HeadersPagination headersPagination) {
 
         this.repository = repository;
         this.modelMapper = modelMapper;
@@ -38,6 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
         this.userSessionService = userSessionService;
         this.ingredientService = ingredientService;
         this.recipeIngredientRepository = recipeIngredientRepository;
+        this.headersPagination = headersPagination;
     }
 
     //@Override
@@ -152,9 +155,6 @@ public class RecipeServiceImpl implements RecipeService {
         int i = 0;
         for(RecipeIngredientEntity ingredient : recipeEntity.getRecipeIngredients()){
             recipeUpdateDto.getIngredients().add(new IngredientInFridgeAndRecipeDto());
-            System.out.println("ing " + ingredient.getRecipeIngredientKey().getIngredient());
-            System.out.println("ingconv " + ingredientService.convertToDto(ingredient.getRecipeIngredientKey().getIngredient()));
-           // recipeUpdateDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(ingredients.getRecipeIngredientKey().getIngredient()));
             recipeUpdateDto.getIngredients().get(i).setAmount(ingredient.getAmount());
             recipeUpdateDto.getIngredients().get(i).setVersion(ingredient.getVersion());
             i++;
@@ -165,7 +165,7 @@ public class RecipeServiceImpl implements RecipeService {
 
 
     @Override
-    public RecipeHeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
+    public HeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         List<RecipeEntity> recipeEntities = repository.findAll();
         List<RecipeHeaderAdminDto> recipeHeaders = new ArrayList<>();
 
@@ -180,13 +180,11 @@ public class RecipeServiceImpl implements RecipeService {
             recipeHeaders.get(recipeHeaders.size()-1).setToImprove(recipeEntity.getToImprove());
 
         }
-
-        return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
-
+        return headersPagination.createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
     }
 
     @Override
-    public RecipeHeadersDto findAllForUser(Integer possibleMissingIngredientsAmount, Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
+    public HeadersDto findAllForUser(Integer possibleMissingIngredientsAmount, Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         UserEntity userEntity = userSessionService.getUser();
         List<RecipeEntity> recipeEntities = findAllActive();
         List<RecipeHeaderUserDto> recipeHeaders = new ArrayList<>();
@@ -227,8 +225,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             }
 
-        return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
-
+          return headersPagination.createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
     }
 
     @Override
@@ -261,19 +258,8 @@ public class RecipeServiceImpl implements RecipeService {
         recipeEntity.setUser(userEntity);
 
         recipeEntity = addIngredientToRecipeEntity(recipeEntity,id,recipeUpdateDto.getIngredients());
-//        int i = 0;
-//        for (IngredientInFridgeAndRecipeDto ingredient : recipeUpdateDto.getIngredients()){
-//            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
-//            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
-//            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
-//            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
-//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
-//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
-//            recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
-//           i++;
-//        }
+
         repository.save(recipeEntity);
-        //return createRecipeUpdateDto(updatedRecipeEntity);
     }
 
     public RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients) throws Exception {
@@ -293,7 +279,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeHeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
+    public HeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         UserEntity userEntity = userSessionService.getUser();
         List<RecipeEntity> recipeEntities = repository.findAll();
         List<RecipeHeaderForAuthorDto> recipeHeaders = new ArrayList<>();
@@ -309,7 +295,8 @@ public class RecipeServiceImpl implements RecipeService {
                 recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
             }
         }
-        return createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
+
+        return headersPagination.createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
     }
 
     @Override
@@ -341,17 +328,6 @@ public class RecipeServiceImpl implements RecipeService {
         Long id = recipeEntity.getId();
 
         recipeEntity = addIngredientToRecipeEntity(recipeEntity,id,dto.getIngredients());
-//        int i = 0;
-//        for (IngredientInFridgeAndRecipeDto ingredient : dto.getIngredients()){
-//            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
-//            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
-//            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
-//            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
-//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
-//            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
-//            recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
-//            i++;
-//        }
 
        repository.save(recipeEntity);
 

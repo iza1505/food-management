@@ -11,6 +11,7 @@ import com.food_management.services.interfaces.IngredientService;
 import com.food_management.services.interfaces.MeasureService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class IngredientServiceImpl implements IngredientService {
-    //public class IngredientServiceImpl extends BaseServiceImpl<IngredientRepository, IngredientEntity, IngredientDto> implements IngredientService {
 
     private ModelMapper modelMapper;
     private IngredientRepository repository;
@@ -29,7 +29,7 @@ public class IngredientServiceImpl implements IngredientService {
     private MeasureService measureService;
 
     @Autowired
-    public IngredientServiceImpl(IngredientRepository repository, MeasureService measureService, MeasureRepository measureRepository, ModelMapper modelMapper, UserSessionService userSessionService) {
+    public IngredientServiceImpl(IngredientRepository repository, MeasureService measureService, MeasureRepository measureRepository, ModelMapper modelMapper, @Lazy UserSessionService userSessionService) {
         this.modelMapper = modelMapper;
         this.repository = repository;
         this.measureRepository = measureRepository; //TODO: zmienci zeby nie bylo repo

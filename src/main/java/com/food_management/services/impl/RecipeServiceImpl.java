@@ -108,38 +108,6 @@ public class RecipeServiceImpl implements RecipeService {
         return percentageToCook;
     }
 
-    public RecipeHeadersDto createHeaderDto(Integer elementsOnPage, Integer currentPage, List<? extends RecipeHeaderDto> recipeHeaders, String sortBy, Boolean ascendingSort ){
-        RecipeHeadersDto recipeHeadersDto = new RecipeHeadersDto();
-        if(recipeHeaders.size()>0){
-            PagedListHolder<? extends RecipeHeaderDto> pageHolder;
-
-            if(sortBy != null){
-                if(ascendingSort != null){
-                    pageHolder = new PagedListHolder<>(recipeHeaders, new MutableSortDefinition("title",true, ascendingSort));
-                } else {
-                    pageHolder = new PagedListHolder<>(recipeHeaders, new MutableSortDefinition(sortBy,true, true));
-                }
-                pageHolder.resort();
-            }else {
-                pageHolder = new PagedListHolder<>(recipeHeaders);
-            }
-
-            pageHolder.setPageSize(elementsOnPage);
-            pageHolder.setPage(currentPage-1);
-            Integer pageCount = pageHolder.getPageCount();
-
-            List<? extends RecipeHeaderDto> recipeHeadersOnPage = pageHolder.getPageList();
-            recipeHeadersDto.setRecipeHeaders(recipeHeadersOnPage);
-            recipeHeadersDto.setPageCount(pageCount);
-        }
-        else {
-            recipeHeadersDto.setRecipeHeaders(recipeHeaders);
-            recipeHeadersDto.setPageCount(1);
-        }
-
-        return recipeHeadersDto;
-    }
-
     //@Override
     public RecipeUpdateDto createRecipeUpdateDto(RecipeEntity recipeEntity){
         RecipeUpdateDto recipeUpdateDto = new RecipeUpdateDto();

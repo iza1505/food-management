@@ -2,6 +2,8 @@ package com.food_management.controllers;
 
 import com.food_management.dtos.MeasureDto;
 import com.food_management.entities.MeasureEntity;
+import com.food_management.exceptions.InactiveAccountException;
+import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.MeasureService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.List;
 @RequestMapping("/measures")
 public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> {
 
+    private UserSessionService userSessionService;
+
     public MeasureContoller(MeasureService service) {
         super(service);
     }
@@ -23,6 +27,10 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<MeasureDto>> findAll() {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return super.findAll();
     }
 
@@ -30,6 +38,10 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity add(@Valid @RequestBody MeasureDto dto) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         MeasureDto created = service.add(dto);
         return new ResponseEntity<MeasureDto>(created, HttpStatus.CREATED);
     }
@@ -38,6 +50,10 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     ResponseEntity delete(@PathVariable Long id) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return super.delete(id);
     }
 
@@ -45,6 +61,10 @@ public class MeasureContoller extends BaseController<MeasureEntity, MeasureDto> 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     ResponseEntity update(@PathVariable Long id, @Valid @RequestBody MeasureDto dto) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.update(dto));
     }
 

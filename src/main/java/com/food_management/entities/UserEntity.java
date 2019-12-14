@@ -9,7 +9,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-//@NoArgsConstructor
 @Entity
 @Table(name = "user_")
 public class UserEntity extends BaseEntity {

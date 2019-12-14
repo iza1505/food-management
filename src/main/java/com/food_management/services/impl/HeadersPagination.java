@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//RecipeHeadersDto =  HeadersDto
-
 @Service
 public class HeadersPagination {
 

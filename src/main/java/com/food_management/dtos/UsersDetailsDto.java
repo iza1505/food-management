@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"role", "active", "pageCount"})
+@JsonPropertyOrder({"role", "active"})
 public class UsersDetailsDto extends MyDetailsUserDto {
 
     public String role;
 
     public Boolean active;
 
-    public Integer pageCount;
 }

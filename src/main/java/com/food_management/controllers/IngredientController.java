@@ -2,6 +2,8 @@ package com.food_management.controllers;
 
 import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
+import com.food_management.exceptions.InactiveAccountException;
+import com.food_management.security.UserSessionService;
 import com.food_management.services.impl.IngredientServiceImpl;
 import com.food_management.services.interfaces.IngredientService;
 import org.springframework.context.annotation.Lazy;
@@ -18,6 +20,7 @@ import java.util.List;
 public class IngredientController {
 
     private IngredientServiceImpl service;
+    private UserSessionService userSessionService;
 
     public IngredientController(@Lazy IngredientServiceImpl service) {
         this.service = service;
@@ -26,12 +29,20 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<IngredientDto>> findAll() {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.findAll());
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity add(@Valid @RequestBody IngredientDto dto) throws Exception {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
         IngredientDto created = service.add(dto);
         return new ResponseEntity<IngredientDto>(created, HttpStatus.CREATED);
     }
@@ -46,6 +57,9 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.DELETE, params = {"id"})
     ResponseEntity delete(@RequestParam(value = "id") Long id) throws Exception {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -54,6 +68,10 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity update(@Valid @RequestBody IngredientDto dto) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.update(dto));
     }
 }

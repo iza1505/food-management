@@ -1,6 +1,7 @@
 package com.food_management.controllers;
 
 import com.food_management.dtos.*;
+import com.food_management.exceptions.InactiveAccountException;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.RecipeService;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,13 @@ public class RecipeController {
         this.userSessionService = userSessionService;
     }
 
-    //@Override
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     ResponseEntity<?> getById(@PathVariable Long id) throws Exception {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         String role = userSessionService.getUser().getRole().getName();
         if(role.equals("ADMINISTRATOR")){
             return ResponseEntity.ok(service.getRecipeAdmin(id));
@@ -42,6 +47,9 @@ public class RecipeController {
                                                     @RequestParam(value = "currentPage") Integer currentPage,
                                                     @RequestParam(value = "sortBy", required = false) String sortBy,
                                                     @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
         return ResponseEntity.ok(service.findAllForUser(possibleMissingIngredientsAmount, elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
@@ -51,33 +59,53 @@ public class RecipeController {
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
                                                      @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(value = "/my",method = RequestMethod.GET) // zwraca hedery przepisow uzytkownika zalogowanego
     ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
                                                      @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.findAllForAuthor(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(value = "/{id}/updateStatus",method = RequestMethod.PUT)
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id, @RequestBody RecipeChangeStatusDto dto) throws Exception {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         return ResponseEntity.ok(service.updateStatus(id, dto));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT) // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
         service.updateRecipe(id,dto);
         return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
     }
 
-    //@Override
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity add(@RequestBody RecipeDto dto) throws Exception {
-        System.out.println(dto);
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
         service.add(dto);
         return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
         //return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);

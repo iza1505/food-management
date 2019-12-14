@@ -30,9 +30,9 @@ public class EmailProvider {
         this.mailSender = mailSender;
     }
 
-    public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address) {
+    public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address, String title, String message) {
         String url = applicationPath + address + token;
-        String message = "Reset your password using link:";
+        //String message = "Reset your password using link:";
         return emailConstructor("Reset Password", message + " \r\n " + url, userEmail);
     }
 

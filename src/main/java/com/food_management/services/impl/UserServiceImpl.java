@@ -1,9 +1,6 @@
 package com.food_management.services.impl;
 
-import com.food_management.dtos.MyDetailsUserDto;
-import com.food_management.dtos.UserDetailsToChangeDto;
-import com.food_management.dtos.UserDto;
-import com.food_management.dtos.UsersDetailsDto;
+import com.food_management.dtos.*;
 import com.food_management.entities.UserEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.exceptions.EmptyFieldException;
@@ -26,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private EmailProvider emailProvider;
     private final JwtTokenProvider tokenProvider;
     private ModelMapper modelMapper;
+    private HeadersPagination headersPagination;
 
     @Autowired
     public UserServiceImpl(
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService {
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper1) {
+            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPagination headersPagination) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;
@@ -60,6 +59,7 @@ public class UserServiceImpl implements UserService {
         this.tokenProvider = tokenProvider;
         this.emailProvider = emailProvider;
         this.modelMapper = modelMapper1;
+        this.headersPagination = headersPagination;
     }
 
     @Override
@@ -73,40 +73,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto add(UserDto user) {
-        if (repository.existsByLogin(user.getLogin())) {
-            throw new EntityAlreadyExistsException("User with login " + user.getLogin() + " already exists.");
+    public void add(RegistrationDto registrationDto) {
+        if (repository.existsByLogin(registrationDto.getLogin())) {
+            throw new EntityAlreadyExistsException("User with login " + registrationDto.getLogin() + " already exists.");
         }
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException("User with email " + user.getEmail() + " already exists.");
+        if (repository.existsByEmail(registrationDto.getEmail())) {
+            throw new EntityAlreadyExistsException("User with email " + registrationDto.getEmail() + " already exists.");
         }
-        if(user.getPasswordHash() == null){
+        if(registrationDto.getPassword() == null){
             throw new EmptyFieldException("Password cannot be null");
         }
 
-        if(user.getLogin() == null){
+        if(registrationDto.getLogin() == null){
             throw new EmptyFieldException("Login cannot be null");
         }
 
-        if(user.getEmail() == null){
+        if(registrationDto.getEmail() == null){
             throw new EmptyFieldException("Email cannot be null");
         }
 
-        UserEntity userEntity = convertToEntity(user);
+        UserDto userDto = new UserDto();
+        userDto.setActive(false);
+        userDto.setEmail(registrationDto.getEmail());
+        userDto.setLogin(registrationDto.getLogin());
+        String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
+        userDto.setPasswordHash(hashedPassword);
+        userDto.setVersion(0L);
 
-        String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
-        userEntity.setPasswordHash(hashedPassword);
+        UserEntity userEntity = convertToEntity(userDto);
 
-        userEntity.setVersion(0L);
-
-        if(user.getRole()==null){
+        if(registrationDto.getRole()==null){
             userEntity.setRole(roleService.findByName("USER"));
         }
         else{
-            userEntity.setRole(roleService.findByName(user.getRole().getName()));
+            userEntity.setRole(roleService.findByName(registrationDto.getRole().getName()));
         }
 
-        return convertToDto(repository.saveAndFlush(userEntity));
+        repository.save(userEntity);
+        //send mail
+
+        String hashPasswordHash = passwordEncoder.encode(hashedPassword);
+        String jwt = tokenProvider.generatePasswordToken(registrationDto.getEmail(), hashPasswordHash);
+        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, registrationDto.getEmail(), "/auth/registration?token=", "Account activation", "Active your account using link");
+        System.out.println("Haslo: " + registrationDto.getPassword());
+        System.out.println("hash: " + userEntity.getPasswordHash());
+        System.out.println("hash hasha: " + hashPasswordHash);
+        emailProvider.sendEmail(emailToSend);
+    }
+
+    @Override
+    public void confirmAccount(String token) throws Exception {
+        String email = tokenProvider.getEmailFromJWT(token);
+        UserEntity userEntity = findByEmail(email);
+        System.out.println("");
+        System.out.println("hash z bazy: " + userEntity.getPasswordHash());
+        System.out.println("hash z tokena (hh): " + tokenProvider.getHashPasswordHashFromJWT(token));
+        System.out.println("hash hasla z bazy: " + passwordEncoder.encode(userEntity.getPasswordHash()));
+        if(userEntity != null){
+            if(passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
+                if(userEntity.getActive().equals(false)){
+                    userEntity.setActive(true);
+                    repository.save(userEntity);
+                } else {
+                    throw new Exception("Uzytkownik juz aktywowany");
+                }
+            } else {
+                throw new Exception("Haslo przy zakladaniu konta i obecnie sa rozne");
+            }
+        } else {
+            throw new Exception("Brak uzytkownika o podanym mailu");
+        } //TODO: return exceptiony
     }
 
     @Override
@@ -125,9 +161,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UsersDetailsDto> findAll() {
-
-return null; //TODO: zaimplementowac
+    public HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
+       List<UserEntity> userEntities = repository.findAll();
+       List<UsersDetailsDto> dtos = new ArrayList<>();
+       for (UserEntity userEntity : userEntities){
+           dtos.add(new UsersDetailsDto());
+           dtos.get(dtos.size()-1).setActive(userEntity.getActive());
+           dtos.get(dtos.size()-1).setRole(userEntity.getRole().getName());
+           dtos.get(dtos.size()-1).setEmail(userEntity.getEmail());
+           dtos.get(dtos.size()-1).setId(userEntity.getId());
+           dtos.get(dtos.size()-1).setLogin(userEntity.getLogin());
+           dtos.get(dtos.size()-1).setVersion(userEntity.getVersion());
+       }
+        return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
     }
 
     @Override
@@ -166,9 +212,9 @@ return null; //TODO: zaimplementowac
 
     @Override
     public void forgotPassword(String email){
-        String passwordHash = findByEmail(email).getPasswordHash();
+        String passwordHash = passwordEncoder.encode(findByEmail(email).getPasswordHash());
         String jwt = tokenProvider.generatePasswordToken(email, passwordHash);
-        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/forgotPassword?token=");
+        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/forgotPassword?token=", "Reset Password", "Reset your password using link:");
         emailProvider.sendEmail(emailToSend);
     }
 

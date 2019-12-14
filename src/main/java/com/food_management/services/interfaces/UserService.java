@@ -1,9 +1,6 @@
 package com.food_management.services.interfaces;
 
-import com.food_management.dtos.MyDetailsUserDto;
-import com.food_management.dtos.UserDetailsToChangeDto;
-import com.food_management.dtos.UserDto;
-import com.food_management.dtos.UsersDetailsDto;
+import com.food_management.dtos.*;
 import com.food_management.entities.UserEntity;
 import com.food_management.entities.UserIngredientEntity;
 import org.springframework.security.core.Authentication;
@@ -17,7 +14,9 @@ public interface UserService {
 
     UserDto convertToDto(UserEntity entity);
 
-    UserDto add(UserDto user);
+    void add(RegistrationDto registrationDto);
+
+    void confirmAccount(String token) throws Exception;
 
     UserEntity findByLogin(String login);
 
@@ -37,5 +36,5 @@ public interface UserService {
 
     UserDetailsToChangeDto updateDetails(UserDetailsToChangeDto dto);
 
-    List<UsersDetailsDto> findAll();
+    HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 }

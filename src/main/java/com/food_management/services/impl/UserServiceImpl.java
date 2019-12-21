@@ -7,6 +7,7 @@ import com.food_management.exceptions.ConfirmedAccountException;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.exceptions.IncompatibilityDataException;
+import com.food_management.repositories.UserIngredientRepository;
 import com.food_management.repositories.UserRepository;
 import com.food_management.security.EmailProvider;
 import com.food_management.security.JwtTokenProvider;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider tokenProvider;
     private ModelMapper modelMapper;
     private HeadersPaginationImpl headersPagination;
+    private UserIngredientRepository userIngredientRepository;
 
     @Autowired
     public UserServiceImpl(
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService {
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination) {
+            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;
@@ -63,6 +65,7 @@ public class UserServiceImpl implements UserService {
         this.emailProvider = emailProvider;
         this.modelMapper = modelMapper1;
         this.headersPagination = headersPagination;
+        this.userIngredientRepository = userIngredientRepository;
     }
 
     @Override
@@ -113,11 +116,19 @@ public class UserServiceImpl implements UserService {
         }
 
         repository.save(userEntity);
-        //send mail
 
+        sendActivationEmail(hashedPassword, registrationDto.getEmail());
+
+//        String hashPasswordHash = passwordEncoder.encode(hashedPassword);
+//        String jwt = tokenProvider.generatePasswordToken(registrationDto.getEmail(), hashPasswordHash);
+//        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, registrationDto.getEmail(), "/auth/registration?token=", "Account activation", "Active your account using link");
+//        emailProvider.sendEmail(emailToSend);
+    }
+
+    public void sendActivationEmail(String hashedPassword, String email){
         String hashPasswordHash = passwordEncoder.encode(hashedPassword);
-        String jwt = tokenProvider.generatePasswordToken(registrationDto.getEmail(), hashPasswordHash);
-        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, registrationDto.getEmail(), "/auth/registration?token=", "Account activation", "Active your account using link");
+        String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
+        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation", "Active your account using link");
         emailProvider.sendEmail(emailToSend);
     }
 
@@ -211,7 +222,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void forgotPassword(ForgotPasswordDto dto){
+    public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto){
         UserEntity userEntity = findByLogin(dto.getLogin());
         if (userEntity.getEmail().equals(dto.getEmail())) {
             String passwordHash = passwordEncoder.encode(findByEmail(dto.getEmail()).getPasswordHash());
@@ -268,6 +279,25 @@ public class UserServiceImpl implements UserService {
         dto.setActive(userEntity.getActive());
         //TODO: dorobic spr wersji
         return dto;
+    }
+
+    @Override
+    public void deactivateAccount() {
+        UserEntity userEntity = userSessionService.getUser();
+        userEntity.setActive(false);
+        userEntity.setConfrimationDate(null);
+        userIngredientRepository.deleteAllByUserIngredientKey_UserId(userEntity.getId());
+        repository.save(userEntity);
+    }
+
+    @Override
+    public void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto) {
+        UserEntity userEntity = findByLogin(dto.getLogin());
+        if(userEntity.getEmail().equals(dto.getEmail())){
+            sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
+        } else {
+            throw new IncompatibilityDataException("User with this login and email not exists.");
+        }
     }
 
 }

@@ -93,12 +93,12 @@ public class RecipeController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT) // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
-        service.updateRecipe(id,dto);
-        return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
+        service.updateRecipe(id, dto);
+        return ResponseEntity.ok("Recipe has been updated.");
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
@@ -108,8 +108,17 @@ public class RecipeController {
             throw new InactiveAccountException("Inactive account.");
         }
         service.add(dto);
-        return ResponseEntity.ok().build(); //TODO: zwrot info ze update wykonany
-        //return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);
+        return ResponseEntity.ok("Recipe has been added.");
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @RequestMapping(method = RequestMethod.DELETE)
+    ResponseEntity delete(@RequestParam(value = "id", required = false) Long id) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+        service.delete(id);
+        return ResponseEntity.ok("Recipe has been deleted.");
     }
 
 }

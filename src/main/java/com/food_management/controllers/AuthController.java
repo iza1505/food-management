@@ -1,6 +1,6 @@
 package com.food_management.controllers;
 
-import com.food_management.dtos.ForgotPasswordDto;
+import com.food_management.dtos.ForgotPasswordOrResendConfirmationEmailDto;
 import com.food_management.dtos.NewPasswordDto;
 import com.food_management.dtos.RegistrationDto;
 import com.food_management.entities.UserEntity;
@@ -9,7 +9,6 @@ import com.food_management.security.*;
 import com.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.Date;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -76,7 +74,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgotPassword")
-    public ResponseEntity forgotPassword(@RequestBody ForgotPasswordDto dto) {
+    public ResponseEntity forgotPassword(@RequestBody ForgotPasswordOrResendConfirmationEmailDto dto) {
         userService.forgotPassword(dto);
         return ResponseEntity.ok("Reset passsword email was sent.");
     }
@@ -85,6 +83,12 @@ public class AuthController {
     public ResponseEntity resetForgottenPassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
         userService.resetForgottenPassword(dto.getPassword(), token);
         return ResponseEntity.ok("Password has been changed.");
+    }
+
+    @PostMapping("/resendConfirmationEmail")
+    public ResponseEntity resendConfirmationEmail(@RequestBody ForgotPasswordOrResendConfirmationEmailDto dto) {
+        userService.resendConfirmationEmail(dto);
+        return ResponseEntity.ok("Reset passsword email was sent.");
     }
 
 }

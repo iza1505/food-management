@@ -71,4 +71,11 @@ public class UserController {
         return ResponseEntity.ok("Password has been changed.");
     }
 
+    @PreAuthorize("hasAnyAuthority('USER')")
+    @RequestMapping(value ="/myAccount/inactiveAccount", method = RequestMethod.DELETE)
+    public ResponseEntity deactivateAccount() {
+        userService.deactivateAccount();
+        return ResponseEntity.ok("Account has been deactivated.");
+    }
+
 }

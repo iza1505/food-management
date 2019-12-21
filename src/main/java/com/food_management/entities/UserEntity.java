@@ -32,7 +32,7 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
-    @OneToMany(mappedBy = "userIngredientKey.user")
+    @OneToMany(mappedBy = "userIngredientKey.user", cascade = CascadeType.ALL)
     private List<UserIngredientEntity> userIngredients = new ArrayList<>();
 
     @Column(name = "active", nullable = false)

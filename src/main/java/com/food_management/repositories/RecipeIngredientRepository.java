@@ -10,4 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface RecipeIngredientRepository extends MyJpaRepository<RecipeIngredientEntity, RecipeIngredientKey> {
 
+    void deleteAllByRecipeIngredientKey_RecipeId(Long id);
 }

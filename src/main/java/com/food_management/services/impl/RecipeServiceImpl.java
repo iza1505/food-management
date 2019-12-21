@@ -204,10 +204,10 @@ public class RecipeServiceImpl implements RecipeService {
 
         RecipeEntity recipeEntity = repository.getOne(id);
 
-        UserEntity userEntity = userSessionService.getUser();
 
+        UserEntity userEntity = userSessionService.getUser();
         if(recipeEntity.getUser().getId() != userEntity.getId()){
-            throw new IncompatibilityDataException("Incompatible data: id recipe's author is diffrent with your.");
+            throw new IncompatibilityDataException("Incompatible data: id recipe's author is different with your.");
         }
 
         if(userEntity.getRole().getName().equals("USER")){
@@ -225,6 +225,8 @@ public class RecipeServiceImpl implements RecipeService {
         recipeEntity.setTitle(recipeUpdateDto.getTitle());
         recipeEntity.setUser(userEntity);
 
+        recipeIngredientRepository.deleteAllByRecipeIngredientKey_RecipeId(recipeEntity.getId());
+        recipeEntity = repository.saveAndFlush(recipeEntity);
         recipeEntity = addIngredientToRecipeEntity(recipeEntity,id,recipeUpdateDto.getIngredients());
 
         repository.save(recipeEntity);
@@ -322,4 +324,11 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    @Override
+    public void delete(Long id) {
+        RecipeEntity recipeEntity = repository.getOne(id);
+        if(recipeEntity!= null){
+            repository.deleteById(id);
+        }
+    }
 }

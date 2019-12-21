@@ -31,7 +31,7 @@ public class RecipeEntity extends BaseEntity  {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "recipeIngredientKey.recipe")
+    @OneToMany(mappedBy = "recipeIngredientKey.recipe", cascade = CascadeType.REMOVE)
     private List<RecipeIngredientEntity> recipeIngredients = new ArrayList<>();
 
     @Column(name = "active", nullable = false)

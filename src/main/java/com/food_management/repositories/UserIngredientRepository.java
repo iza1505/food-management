@@ -17,4 +17,6 @@ public interface UserIngredientRepository extends MyJpaRepository<UserIngredient
     boolean existsById(UserIngredientKey id);
 
     void deleteById(UserIngredientKey id);
+
+    void deleteAllByUserIngredientKey_UserId(Long id);
 }

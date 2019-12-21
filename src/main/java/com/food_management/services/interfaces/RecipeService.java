@@ -24,4 +24,6 @@ public interface RecipeService  {
     RecipeGetUserDto getRecipeUser(Long id);
 
     void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception;
+
+    void delete(Long id);
 }

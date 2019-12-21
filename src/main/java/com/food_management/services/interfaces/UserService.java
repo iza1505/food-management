@@ -28,7 +28,7 @@ public interface UserService {
 
     Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients);
 
-    void forgotPassword(ForgotPasswordDto dto);
+    void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto);
 
     void resetForgottenPassword(String newPassword, String token);
 
@@ -41,5 +41,9 @@ public interface UserService {
     HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
     ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto);
+
+    void deactivateAccount();
+
+    void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto);
 
 }

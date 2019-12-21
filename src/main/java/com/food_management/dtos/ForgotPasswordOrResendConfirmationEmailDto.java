@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ForgotPasswordDto {
+public class ForgotPasswordOrResendConfirmationEmailDto {
 
     public String login;
 

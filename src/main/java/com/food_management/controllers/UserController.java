@@ -61,16 +61,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @PostMapping("/myAccount/changePassword")
-    public ResponseEntity sendChangePasswordLink() {
-        userService.sendChangePasswordLink(userSessionService.getUser().getEmail());
-        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value ="/myAccount/changePassword", method = RequestMethod.POST, params = {"token"})
-    public ResponseEntity changePassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
-        userService.changePassword(dto.getPassword(), token);
+    @RequestMapping(value ="/myAccount/changePassword", method = RequestMethod.POST)
+    public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
+        userService.changePassword(dto);
         return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
     }
 

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -36,4 +37,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    @Column(name = "confirmation_date")
+    private Date confrimationDate;
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/auth")

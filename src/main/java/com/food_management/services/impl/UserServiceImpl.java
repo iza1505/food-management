@@ -3,6 +3,7 @@ package com.food_management.services.impl;
 import com.food_management.dtos.*;
 import com.food_management.entities.UserEntity;
 import com.food_management.entities.UserIngredientEntity;
+import com.food_management.exceptions.ConfirmedAccountException;
 import com.food_management.exceptions.EmptyFieldException;
 import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.exceptions.IncompatibilityDataException;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,23 +122,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void confirmAccount(String token) throws Exception {
+    public void confirmAccount(String token) {
         String email = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(email);
         if(userEntity != null){
+            if(userEntity.getConfrimationDate()!=null){
+                throw new ConfirmedAccountException("Account is confirmed");
+            }
             if(passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
                 if(userEntity.getActive().equals(false)){
                     userEntity.setActive(true);
+                    userEntity.setConfrimationDate(new Date(System.currentTimeMillis()));
                     repository.save(userEntity);
                 } else {
-                    throw new Exception("Uzytkownik juz aktywowany");
+                    throw new ConfirmedAccountException("Account is activated.");
                 }
             } else {
-                throw new Exception("Haslo przy zakladaniu konta i obecnie sa rozne");
+                throw new ConfirmedAccountException("Registration password is different with current password.");
             }
         } else {
-            throw new Exception("Brak uzytkownika o podanym mailu");
-        } //TODO: return exceptiony
+            throw new EntityNotFoundException("User with email " + email + " not exists.");
+        }
     }
 
     @Override
@@ -220,24 +226,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendChangePasswordLink(String email){
-        String passwordHash = passwordEncoder.encode(findByEmail(email).getPasswordHash());
-        String jwt = tokenProvider.generatePasswordToken(email, passwordHash);
-        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/users/myAccount/changePassword?token=", "Change Password", "Change your password using link:");
-        emailProvider.sendEmail(emailToSend);
-    }
-
-    @Override
-    public void changePassword(String newPassword, String token){
+    public void changePassword(ChangePasswordDto dto){
         UserEntity userEntity = userSessionService.getUser();
-        String tokenEmail = tokenProvider.getEmailFromJWT(token);
-        if(userEntity.getEmail().equals(tokenEmail) &&
-                passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
-            String newPasswordHash = passwordEncoder.encode(newPassword);
+        if(passwordEncoder.matches(dto.getOldPassword(),userEntity.getPasswordHash())){
+            String newPasswordHash = passwordEncoder.encode(dto.getNewPassword());
             userEntity.setPasswordHash(newPasswordHash);
             repository.save(userEntity);
         } else {
-            throw new IncompatibilityDataException("Incompatibility data.");
+            throw new IncompatibilityDataException("Your old password is incorrect.");
         }
     }
 

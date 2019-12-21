@@ -197,7 +197,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception { //TODO: zeby nie zwracal przepisu bo i tak przeniesie na str recipes/my
+    public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception {
         if(id != recipeUpdateDto.getId()){
             throw new Exception("Id innego przepisu w update recipe");
         }

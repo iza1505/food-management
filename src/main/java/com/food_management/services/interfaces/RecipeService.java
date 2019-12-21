@@ -4,7 +4,7 @@ import com.food_management.dtos.*;
 import com.food_management.entities.RecipeEntity;
 
 import java.util.List;
-//extends BaseService<RecipeEntity, RecipeDto>
+
 public interface RecipeService  {
 
     void add(RecipeDto dto) throws Exception;

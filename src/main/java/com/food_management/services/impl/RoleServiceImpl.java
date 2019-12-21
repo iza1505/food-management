@@ -9,14 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleEntity, RoleDto> implements RoleService {
+public class RoleServiceImpl implements RoleService {
+
+    private RoleRepository repository;
+    private ModelMapper modelMapper;
 
     @Autowired
     public RoleServiceImpl(RoleRepository repository, ModelMapper modelMapper) {
-        super(repository, modelMapper);
+        this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -39,6 +45,17 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleEntity,
         return  convertToDto(roleToUpdate);
     }
 
+    @Override
+    public List<RoleDto> findAll() {
+        List<RoleEntity> modelList = repository.findAll();
+        return modelList
+                .stream()
+                .map(entity ->
+                        convertToDto(entity))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public RoleEntity findByName(String name) {
         return repository.findByName(name);
     }

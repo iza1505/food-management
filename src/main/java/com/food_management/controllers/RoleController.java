@@ -15,16 +15,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/roles")
-public class RoleController extends BaseController<RoleEntity, RoleDto> {
+public class RoleController {
 
     private UserSessionService userSessionService;
+    private RoleService service;
 
     public RoleController(RoleService service, UserSessionService userSessionService) {
-        super(service);
+        this.service = service;
         this.userSessionService = userSessionService;
     }
 
-    @Override
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<RoleDto>> findAll() {
@@ -32,52 +32,7 @@ public class RoleController extends BaseController<RoleEntity, RoleDto> {
             throw new InactiveAccountException("Inactive account.");
         }
 
-        return super.findAll();
+        return ResponseEntity.ok(service.findAll());
     }
 
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity add(@Valid @RequestBody RoleDto dto) {
-        if(!userSessionService.isActive()){
-            throw new InactiveAccountException("Inactive account.");
-        }
-
-        RoleDto created = service.add(dto);
-        return new ResponseEntity<RoleDto>(created, HttpStatus.CREATED);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    ResponseEntity<RoleDto> getById(@PathVariable Long id) {
-        if(!userSessionService.isActive()){
-            throw new InactiveAccountException("Inactive account.");
-        }
-
-        return super.getById(id);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    ResponseEntity delete(@PathVariable Long id) {
-        if(!userSessionService.isActive()){
-            throw new InactiveAccountException("Inactive account.");
-        }
-
-        return super.delete(id);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    ResponseEntity update(@PathVariable Long id, @Valid @RequestBody RoleDto dto) {
-        if(!userSessionService.isActive()){
-            throw new InactiveAccountException("Inactive account.");
-        }
-
-        return ResponseEntity.ok(service.update(dto));
-    }
 }

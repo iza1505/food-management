@@ -35,38 +35,4 @@ public class MeasureContoller {
         return ResponseEntity.ok(service.findAll());
     }
 
-//    @Override
-//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-//    @RequestMapping(method = RequestMethod.POST)
-//    ResponseEntity add(@Valid @RequestBody MeasureDto dto) {
-//        if(!userSessionService.isActive()){
-//            throw new InactiveAccountException("Inactive account.");
-//        }
-//
-//        MeasureDto created = service.add(dto);
-//        return new ResponseEntity<MeasureDto>(created, HttpStatus.CREATED);
-//    }
-//
-//    @Override
-//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    ResponseEntity delete(@PathVariable Long id) {
-//        if(!userSessionService.isActive()){
-//            throw new InactiveAccountException("Inactive account.");
-//        }
-//
-//        return super.delete(id);
-//    }
-//
-//    @Override
-//    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-//    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//    ResponseEntity update(@PathVariable Long id, @Valid @RequestBody MeasureDto dto) {
-//        if(!userSessionService.isActive()){
-//            throw new InactiveAccountException("Inactive account.");
-//        }
-//
-//        return ResponseEntity.ok(service.update(dto));
-//    }
-
 }

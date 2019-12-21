@@ -28,7 +28,7 @@ public interface UserService {
 
     Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients);
 
-    void forgotPassword(String email);
+    void forgotPassword(ForgotPasswordDto dto);
 
     void resetForgottenPassword(String newPassword, String token);
 

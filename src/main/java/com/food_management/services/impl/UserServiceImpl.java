@@ -211,11 +211,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void forgotPassword(String email){
-        String passwordHash = passwordEncoder.encode(findByEmail(email).getPasswordHash());
-        String jwt = tokenProvider.generatePasswordToken(email, passwordHash);
-        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/forgotPassword?token=", "Reset Password", "Reset your password using link:");
-        emailProvider.sendEmail(emailToSend);
+    public void forgotPassword(ForgotPasswordDto dto){
+        UserEntity userEntity = findByLogin(dto.getLogin());
+        if (userEntity.getEmail().equals(dto.getEmail())) {
+            String passwordHash = passwordEncoder.encode(findByEmail(dto.getEmail()).getPasswordHash());
+            String jwt = tokenProvider.generatePasswordToken(dto.getEmail(), passwordHash);
+            SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, dto.getEmail(), "/auth/forgotPassword?token=", "Reset Password", "Reset your password using link:");
+            emailProvider.sendEmail(emailToSend);
+        } else {
+            throw new IncompatibilityDataException("User with this login and email not exists.");
+        }
+
     }
 
     @Override

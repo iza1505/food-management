@@ -74,7 +74,7 @@ public class AuthController {
 
     @PostMapping("/forgotPassword")
     public ResponseEntity forgotPassword(@RequestBody ForgotPasswordDto dto) {
-        userService.forgotPassword(dto.getEmail());
+        userService.forgotPassword(dto);
         return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
     }
 

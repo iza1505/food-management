@@ -3,6 +3,7 @@ package com.food_management.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "login", nullable = false, unique = true, length = 50)
     private String login;
 
+    @Email
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 

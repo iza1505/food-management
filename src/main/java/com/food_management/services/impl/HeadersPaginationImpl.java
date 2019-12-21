@@ -1,6 +1,7 @@
 package com.food_management.services.impl;
 
 import com.food_management.dtos.HeadersDto;
+import com.food_management.services.interfaces.HeadersPagination;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HeadersPagination {
+public class HeadersPaginationImpl implements HeadersPagination {
 
     public HeadersDto createHeaderDto(Integer elementsOnPage, Integer currentPage, List<?> headers, String sortBy, Boolean ascendingSort ){
         HeadersDto headersDto = new HeadersDto();

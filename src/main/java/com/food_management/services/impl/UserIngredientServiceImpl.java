@@ -83,7 +83,7 @@ public class UserIngredientServiceImpl {
             }
         }
         if(i == 0){
-            throw new EntityAlreadyExistsException("Brak z id " + dto.getIngredient().getId() + " w lodowce"); }
+            throw new EntityAlreadyExistsException("Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge."); }
             else
                 return dto;
     }
@@ -100,7 +100,7 @@ public class UserIngredientServiceImpl {
             }
         }
         if(i == 0){
-            throw new EntityAlreadyExistsException("Brak z id " + id); }
+            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists."); }
     }
 
     public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto) throws Exception {
@@ -108,7 +108,7 @@ public class UserIngredientServiceImpl {
 
         for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
             if(userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()){
-                throw new EntityAlreadyExistsException("Produkt juz w lodowce");
+                throw new EntityAlreadyExistsException("Ingredient exists in fridge.");
             }
         }
 

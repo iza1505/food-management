@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private EmailProvider emailProvider;
     private final JwtTokenProvider tokenProvider;
     private ModelMapper modelMapper;
-    private HeadersPagination headersPagination;
+    private HeadersPaginationImpl headersPagination;
 
     @Autowired
     public UserServiceImpl(
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPagination headersPagination) {
+            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;

@@ -2,6 +2,8 @@ package com.food_management.services.impl;
 
 import com.food_management.dtos.*;
 import com.food_management.entities.*;
+import com.food_management.exceptions.EntityAlreadyExistsException;
+import com.food_management.exceptions.IncompatibilityDataException;
 import com.food_management.repositories.RecipeIngredientRepository;
 import com.food_management.repositories.RecipeRepository;
 import com.food_management.security.UserSessionService;
@@ -10,8 +12,6 @@ import com.food_management.services.interfaces.RecipeService;
 import com.food_management.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +29,10 @@ public class RecipeServiceImpl implements RecipeService {
     private ModelMapper modelMapper;
     private RecipeRepository repository;
     private RecipeIngredientRepository recipeIngredientRepository;
-    private HeadersPagination headersPagination;
+    private HeadersPaginationImpl headersPagination;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, @Lazy UserService userService, UserSessionService userSessionService, IngredientService ingredientService, HeadersPagination headersPagination) {
+    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, @Lazy UserService userService, UserSessionService userSessionService, IngredientService ingredientService, HeadersPaginationImpl headersPagination) {
 
         this.repository = repository;
         this.modelMapper = modelMapper;
@@ -199,7 +199,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception {
         if(id != recipeUpdateDto.getId()){
-            throw new Exception("Id innego przepisu w update recipe");
+            throw new IncompatibilityDataException("Incompatible recipe data.");
         }
 
         RecipeEntity recipeEntity = repository.getOne(id);
@@ -207,7 +207,7 @@ public class RecipeServiceImpl implements RecipeService {
         UserEntity userEntity = userSessionService.getUser();
 
         if(recipeEntity.getUser().getId() != userEntity.getId()){
-            throw new Exception("Id innego usera niz autora w update recipe");
+            throw new IncompatibilityDataException("Incompatible data: id recipe's author is diffrent with your.");
         }
 
         if(userEntity.getRole().getName().equals("USER")){
@@ -270,7 +270,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void add(RecipeDto dto) throws Exception {
         if(repository.existsByTitle(dto.getTitle())){
-            throw new Exception("Istnieje przepis o takim tytule");
+            throw new EntityAlreadyExistsException("Recipe with title  " + dto.getTitle() + " already exists.");
         }
 
         RecipeEntity recipeEntity = convertToEntity(dto);
@@ -301,10 +301,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     }
     @Override
-    public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception {
+    public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) {
 
         if(dto.getActive() && dto.getWaitingForAccept()){
-            throw new Exception("Nie mozna aktywnego i czekajacego"); //TODO: exception do update status
+            throw new IncompatibilityDataException("Can't set active and waiting recipe.");
         }
         else {
             RecipeEntity recipeEntity = repository.getOne(id);

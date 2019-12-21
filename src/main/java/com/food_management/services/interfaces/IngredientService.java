@@ -10,7 +10,13 @@ public interface IngredientService  {
 
     IngredientDto convertToDto(IngredientEntity entity);
 
-    IngredientEntity findById(Long id) throws Exception;
+    IngredientDto add(IngredientDto ingredient);
+
+    IngredientDto update(IngredientDto dto);
 
     HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
+
+    IngredientEntity findById(Long id);
+
+    void deleteById(Long id);
 }

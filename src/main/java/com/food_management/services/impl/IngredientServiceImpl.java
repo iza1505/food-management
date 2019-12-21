@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +31,10 @@ public class IngredientServiceImpl implements IngredientService {
     private MeasureRepository measureRepository;
     private UserSessionService userSessionService;
     private MeasureService measureService;
-    private HeadersPagination headersPagination;
+    private HeadersPaginationImpl headersPagination;
 
     @Autowired
-    public IngredientServiceImpl(IngredientRepository repository, MeasureService measureService, MeasureRepository measureRepository, ModelMapper modelMapper, @Lazy UserSessionService userSessionService, HeadersPagination headersPagination) {
+    public IngredientServiceImpl(IngredientRepository repository, MeasureService measureService, MeasureRepository measureRepository, ModelMapper modelMapper, @Lazy UserSessionService userSessionService, HeadersPaginationImpl headersPagination) {
         this.modelMapper = modelMapper;
         this.repository = repository;
         this.measureRepository = measureRepository; //TODO: zmienci zeby nie bylo repo
@@ -42,18 +43,18 @@ public class IngredientServiceImpl implements IngredientService {
         this.headersPagination = headersPagination;
     }
 
-   // @Override
+    @Override
     public IngredientDto convertToDto(IngredientEntity entity) {
         return modelMapper.map(entity, IngredientDto.class);
     }
 
-    //@Override
+    @Override
     public IngredientEntity convertToEntity(IngredientDto dto) {
         return modelMapper.map(dto, IngredientEntity.class);
     }
 
-
-    public IngredientDto add(IngredientDto ingredient) throws Exception {
+    @Override
+    public IngredientDto add(IngredientDto ingredient) {
         if (repository.existsByIngredientName(ingredient.getIngredientName())) {
             throw new EntityAlreadyExistsException("Ingredient with name " + ingredient.getIngredientName() + " already exists.");
         }
@@ -75,13 +76,13 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientEntity.setActive(false);
         }
         else {
-            throw new Exception("nieznana rola");
+            throw new UnknowRoleException("Unknow role.");
         }
 
         return convertToDto(repository.saveAndFlush(ingredientEntity));
     }
 
-    //@Override
+    @Override
     public  IngredientDto update(IngredientDto dto) {
         IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(ingredientToUpdate,dto.getVersion());
@@ -122,17 +123,19 @@ public class IngredientServiceImpl implements IngredientService {
         }
     }
 
-    public void deleteById(Long id) throws Exception {
-        if (!repository.existsById(id)) {
-            throw new Exception("brak skladnika z tym id ");
-        }
-        repository.deleteById(id);
-    }
-
-    public IngredientEntity findById(Long id) throws Exception {
+    @Override
+    public IngredientEntity findById(Long id) {
         IngredientEntity model = repository
                 .findById(id)
-                .orElseThrow(() -> new Exception("brak skladnika z tym id "));
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not exists."));
         return model;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new EntityNotFoundException("Ingredient with id " + id + " not exists.");
+        }
+        repository.deleteById(id);
     }
 }

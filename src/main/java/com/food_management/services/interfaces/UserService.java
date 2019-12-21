@@ -39,4 +39,7 @@ public interface UserService {
     UserDetailsToChangeDto updateDetails(UserDetailsToChangeDto dto);
 
     HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
+
+    ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto);
+
 }

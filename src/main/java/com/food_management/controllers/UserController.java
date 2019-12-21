@@ -34,11 +34,15 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-//    @RequestMapping(method = RequestMethod.POST)
-//    ResponseEntity add(@Valid @RequestBody UserDto dto) {
-//        UserDto created = userService.add(dto);
-//        return new ResponseEntity<UserDto>(created, HttpStatus.CREATED);
-//    }
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<ChangeActiveStatusDto> updateActiveStatus(@RequestBody ChangeActiveStatusDto dto) {
+        if(!userSessionService.isActive()){
+            throw new InactiveAccountException("Inactive account.");
+        }
+
+        return ResponseEntity.ok(userService.updateActiveStatus(dto));
+    }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(value = "/myAccount", method = RequestMethod.PUT)

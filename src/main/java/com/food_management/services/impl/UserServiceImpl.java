@@ -250,4 +250,18 @@ public class UserServiceImpl implements UserService {
         return newDto;
     }
 
+    @Override
+    public ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto) {
+        UserEntity userEntitySession = userSessionService.getUser();
+        if(userEntitySession.getId().equals(dto.getId())){
+            throw new IncompatibilityDataException("You can't change the status of your account.");
+        }
+        UserEntity userEntity = repository.getOne(dto.getId());
+        userEntity.setActive(dto.getActive());
+        userEntity = repository.saveAndFlush(userEntity);
+        dto.setActive(userEntity.getActive());
+        //TODO: dorobic spr wersji
+        return dto;
+    }
+
 }

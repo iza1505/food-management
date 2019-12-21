@@ -68,7 +68,7 @@ public class UserController {
     @RequestMapping(value ="/myAccount/changePassword", method = RequestMethod.POST)
     public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
         userService.changePassword(dto);
-        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
+        return ResponseEntity.ok("Password has been changed.");
     }
 
 }

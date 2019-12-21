@@ -9,6 +9,7 @@ import com.food_management.security.*;
 import com.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Date;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,13 +44,13 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity registration(@RequestBody RegistrationDto registrationDto){
         userService.add(registrationDto);
-        return ResponseEntity.ok().build();// TODO: info ze wyslano maila
+        return ResponseEntity.ok("Confirmation email was sent.");
     }
 
     @RequestMapping(value ="/registration", method = RequestMethod.POST, params = {"token"})
     public ResponseEntity registration(@RequestParam(value = "token") String token) throws Exception {
         userService.confirmAccount(token);
-        return ResponseEntity.ok().build();// TODO: info ze wyslano maila
+        return ResponseEntity.ok("Account has been confirmed.");
     }
 
     @PostMapping("/login")
@@ -75,13 +78,13 @@ public class AuthController {
     @PostMapping("/forgotPassword")
     public ResponseEntity forgotPassword(@RequestBody ForgotPasswordDto dto) {
         userService.forgotPassword(dto);
-        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
+        return ResponseEntity.ok("Reset passsword email was sent.");
     }
 
     @RequestMapping(value ="/forgotPassword", method = RequestMethod.POST, params = {"token"})
     public ResponseEntity resetForgottenPassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
         userService.resetForgottenPassword(dto.getPassword(), token);
-        return ResponseEntity.ok().build();// TODO: info ze wyslana wiadomosc
+        return ResponseEntity.ok("Password has been changed.");
     }
 
 }

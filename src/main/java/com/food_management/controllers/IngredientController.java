@@ -42,7 +42,7 @@ public class IngredientController {
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity add(@Valid @RequestBody IngredientDto dto) throws Exception {
+    ResponseEntity add(@Valid @RequestBody IngredientDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
@@ -50,21 +50,14 @@ public class IngredientController {
         return new ResponseEntity<IngredientDto>(created, HttpStatus.CREATED);
     }
 
-//    @Override
-//    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    ResponseEntity<IngredientDto> getById(@PathVariable Long id) {
-//        return super.getById(id);
-//    }
-
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @RequestMapping(method = RequestMethod.DELETE, params = {"id"})
-    ResponseEntity delete(@RequestParam(value = "id") Long id) throws Exception {
+    ResponseEntity delete(@RequestParam(value = "id") Long id) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Ingredient has been deleted.");
     }
 
 

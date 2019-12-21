@@ -56,7 +56,7 @@ public class UserIngredientController {
         }
 
         service.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Product has been deleted.");
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")

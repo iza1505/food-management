@@ -2,6 +2,7 @@ package com.food_management.controllers;
 
 import com.food_management.dtos.*;
 import com.food_management.exceptions.InactiveAccountException;
+import com.food_management.exceptions.UnknowRoleException;
 import com.food_management.security.UserSessionService;
 import com.food_management.services.interfaces.RecipeService;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class RecipeController {
             return ResponseEntity.ok(service.getRecipeUser(id));
         }
         else {
-            throw new Exception("nieznana rola");
+            throw new UnknowRoleException("Unknow role.");
         }
 
     }

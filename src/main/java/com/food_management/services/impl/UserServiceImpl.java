@@ -9,9 +9,7 @@ import com.food_management.exceptions.EntityAlreadyExistsException;
 import com.food_management.exceptions.IncompatibilityDataException;
 import com.food_management.repositories.UserIngredientRepository;
 import com.food_management.repositories.UserRepository;
-import com.food_management.security.EmailProvider;
-import com.food_management.security.JwtTokenProvider;
-import com.food_management.security.UserSessionService;
+import com.food_management.security.*;
 import com.food_management.services.interfaces.RoleService;
 import com.food_management.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
@@ -45,6 +43,8 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
     private HeadersPaginationImpl headersPagination;
     private UserIngredientRepository userIngredientRepository;
+    private LoginValidator loginValidator;
+    private PasswordValidator passwordValidator;
 
     @Autowired
     public UserServiceImpl(
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository) {
+            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository, LoginValidator loginValidator, PasswordValidator passwordValidator) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;
@@ -66,6 +66,8 @@ public class UserServiceImpl implements UserService {
         this.modelMapper = modelMapper1;
         this.headersPagination = headersPagination;
         this.userIngredientRepository = userIngredientRepository;
+        this.loginValidator = loginValidator;
+        this.passwordValidator = passwordValidator;
     }
 
     @Override
@@ -80,24 +82,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(RegistrationDto registrationDto) {
-        if (repository.existsByLogin(registrationDto.getLogin())) {
-            throw new EntityAlreadyExistsException("User with login " + registrationDto.getLogin() + " already exists.");
-        }
-        if (repository.existsByEmail(registrationDto.getEmail())) {
-            throw new EntityAlreadyExistsException("User with email " + registrationDto.getEmail() + " already exists.");
-        }
-        if(registrationDto.getPassword() == null){
-            throw new EmptyFieldException("Password cannot be null");
-        }
-
         if(registrationDto.getLogin() == null){
             throw new EmptyFieldException("Login cannot be null");
+        }
+
+        if (repository.existsByLogin(registrationDto.getLogin())) {
+            throw new EntityAlreadyExistsException("User with login " + registrationDto.getLogin() + " already exists.");
+        } else {
+            loginValidator.checkBasicConditions(registrationDto.getLogin());
         }
 
         if(registrationDto.getEmail() == null){
             throw new EmptyFieldException("Email cannot be null");
         }
+        if (repository.existsByEmail(registrationDto.getEmail())) {
+            throw new EntityAlreadyExistsException("User with email " + registrationDto.getEmail() + " already exists.");
+        }
 
+        if(registrationDto.getPassword() == null){
+            throw new EmptyFieldException("Password cannot be null");
+        } else {
+            passwordValidator.checkBasicConditions(registrationDto.getPassword());
+        }
+
+        
         UserDto userDto = new UserDto();
         userDto.setActive(false);
         userDto.setEmail(registrationDto.getEmail());
@@ -118,11 +126,6 @@ public class UserServiceImpl implements UserService {
         repository.save(userEntity);
 
         sendActivationEmail(hashedPassword, registrationDto.getEmail());
-
-//        String hashPasswordHash = passwordEncoder.encode(hashedPassword);
-//        String jwt = tokenProvider.generatePasswordToken(registrationDto.getEmail(), hashPasswordHash);
-//        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, registrationDto.getEmail(), "/auth/registration?token=", "Account activation", "Active your account using link");
-//        emailProvider.sendEmail(emailToSend);
     }
 
     public void sendActivationEmail(String hashedPassword, String email){

@@ -90,7 +90,7 @@ public class RecipeController {
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping(value = "/{id}/updateStatus")
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id,
-                                           @RequestBody RecipeChangeStatusDto dto) throws Exception {
+                                           @RequestBody RecipeChangeStatusDto dto){
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }

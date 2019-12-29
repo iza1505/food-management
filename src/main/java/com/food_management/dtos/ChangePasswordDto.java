@@ -10,4 +10,6 @@ public class ChangePasswordDto {
     public String oldPassword;
 
     public String newPassword;
+
+    public Long version;
 }

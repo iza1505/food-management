@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @PostMapping(value = "/myAccount/changePassword")
+    @PutMapping(value = "/myAccount/changePassword")
     public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
         userService.changePassword(dto);
         return ResponseEntity.ok("Password has been changed.");

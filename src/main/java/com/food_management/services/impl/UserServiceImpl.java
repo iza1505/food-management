@@ -172,9 +172,7 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setEmail(dto.getEmail());
         userToUpdate = repository.saveAndFlush(userToUpdate);
 
-        UserDetailsToChangeDto newDto = new UserDetailsToChangeDto(userToUpdate.getEmail(), userToUpdate.getVersion());
-
-        return newDto;
+        return new UserDetailsToChangeDto(userToUpdate.getEmail(), userToUpdate.getVersion());
     }
 
     @Override
@@ -250,6 +248,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(ChangePasswordDto dto) {
         UserEntity userEntity = userSessionService.getUser();
+        Validator.validateVersion(userEntity, dto.getVersion());
+        
         if (passwordEncoder.matches(dto.getOldPassword(), userEntity.getPasswordHash())) {
             String newPasswordHash = passwordEncoder.encode(dto.getNewPassword());
             userEntity.setPasswordHash(newPasswordHash);
@@ -273,10 +273,11 @@ public class UserServiceImpl implements UserService {
             throw new IncompatibilityDataException("You can't change the status of your account.");
         }
         UserEntity userEntity = repository.getOne(dto.getId());
+        Validator.validateVersion(userEntity, dto.getVersion());
+
         userEntity.setActive(dto.getActive());
         userEntity = repository.saveAndFlush(userEntity);
         dto.setActive(userEntity.getActive());
-        //TODO: dorobic spr wersji
         return dto;
     }
 

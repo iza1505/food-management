@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({"active", "waitingForAccept", "toImprove"})
+@JsonPropertyOrder({"active", "waitingForAccept", "toImprove", "version"})
 public class RecipeChangeStatusDto {
 
     public Boolean active;
@@ -12,5 +12,7 @@ public class RecipeChangeStatusDto {
     public Boolean waitingForAccept;
 
     public String toImprove;
+
+    public Long version;
 
 }

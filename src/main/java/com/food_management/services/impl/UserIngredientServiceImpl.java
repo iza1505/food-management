@@ -78,6 +78,7 @@ public class UserIngredientServiceImpl implements UserIngredientService {
             if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
                 i++;
                 UserIngredientEntity savedEntity = repository.getOne(userIngredient.getUserIngredientKey());
+                Validator.validateVersionUserIngredientEntity(savedEntity, dto.getVersion());
                 savedEntity.setAmount(dto.getAmount());
                 UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
                 updatedDto.setIngredient(

@@ -188,6 +188,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         RecipeEntity recipeEntity = repository.getOne(id);
 
+        Validator.validateVersion(recipeEntity, recipeUpdateDto.getVersion());
 
         UserEntity userEntity = userSessionService.getUser();
         if (!recipeEntity.getUser().getId().equals(userEntity.getId())) {
@@ -285,11 +286,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) {
+        RecipeEntity recipeEntity = repository.getOne(id);
+        Validator.validateVersion(recipeEntity, dto.getVersion());
 
         if (dto.getActive() && dto.getWaitingForAccept()) {
             throw new IncompatibilityDataException("Can't set active and waiting recipe.");
         } else {
-            RecipeEntity recipeEntity = repository.getOne(id);
+
             recipeEntity.setActive(dto.getActive());
             recipeEntity.setWaitingForAccept(dto.getWaitingForAccept());
             if (dto.getActive()) {

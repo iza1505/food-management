@@ -89,7 +89,6 @@ public class IngredientServiceImpl implements IngredientService {
         IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(ingredientToUpdate, dto.getVersion());
         MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
-        //measureRepository.getOne(dto.getMeasure().getId());
 
         ingredientToUpdate.setIngredientName(dto.getIngredientName());
         ingredientToUpdate.setMeasure(measureEntity);

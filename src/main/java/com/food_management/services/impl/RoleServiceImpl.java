@@ -36,16 +36,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDto update(RoleDto dto) {
-        RoleEntity roleToUpdate = repository.getOne(dto.getId());
-        Validator.validateVersion(roleToUpdate, dto.getVersion());
-
-        roleToUpdate.setName(dto.getName());
-        roleToUpdate = repository.saveAndFlush(roleToUpdate);
-        return convertToDto(roleToUpdate);
-    }
-
-    @Override
     public List<RoleDto> findAll() {
         List<RoleEntity> modelList = repository.findAll();
         return modelList

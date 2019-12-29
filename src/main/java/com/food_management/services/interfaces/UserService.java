@@ -9,7 +9,6 @@ import java.util.List;
 
 
 public interface UserService {
-
     UserEntity convertToEntity(UserDto dto);
 
     UserDto convertToDto(UserEntity entity);
@@ -47,5 +46,6 @@ public interface UserService {
     void deactivateAccount();
 
     void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto);
+
 
 }

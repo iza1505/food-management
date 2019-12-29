@@ -25,7 +25,7 @@ public class MeasureController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @GetMapping
     ResponseEntity<List<MeasureDto>> findAll() {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
         return ResponseEntity.ok(service.findAll());

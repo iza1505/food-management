@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 @Component
@@ -40,7 +41,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getEmailFromJWT(String token){
+    public String getEmailFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -49,7 +50,7 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    public String getHashPasswordHashFromJWT(String token){
+    public String getHashPasswordHashFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)

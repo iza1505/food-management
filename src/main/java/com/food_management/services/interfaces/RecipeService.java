@@ -7,7 +7,7 @@ import com.food_management.entities.UserEntity;
 
 import java.util.List;
 
-public interface RecipeService  {
+public interface RecipeService {
 
     RecipeDto convertToDto(RecipeEntity entity);
 
@@ -17,7 +17,8 @@ public interface RecipeService  {
 
     List<RecipeEntity> findAllActive();
 
-    HeadersDto findAllForUser(Integer possibleMissingIngredientsAmount, Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
+    HeadersDto findAllForUser(Integer possibleMissingIngredientsAmount, Integer elementsOnPage, Integer currentPage,
+                              String sortBy, Boolean ascendingSort);
 
     HeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
@@ -29,11 +30,13 @@ public interface RecipeService  {
 
     RecipeGetUserDto getRecipeUser(Long id);
 
-    Integer checkIfIngredientInFridgeAndReturnPercentageToCook(UserEntity userEntity, RecipeIngredientEntity recipeIngredientEntity);
+    Integer checkIfIngredientInFridgeAndReturnPercentageToCook(UserEntity userEntity,
+                                                               RecipeIngredientEntity recipeIngredientEntity);
 
     void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto);
 
-    RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients);
+    RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id,
+                                             List<IngredientInFridgeAndRecipeDto> ingredients);
 
     void delete(Long id);
 }

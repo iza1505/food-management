@@ -4,7 +4,7 @@ import com.food_management.dtos.HeadersDto;
 import com.food_management.dtos.IngredientDto;
 import com.food_management.entities.IngredientEntity;
 
-public interface IngredientService  {
+public interface IngredientService {
 
     IngredientEntity convertToEntity(IngredientDto dto);
 

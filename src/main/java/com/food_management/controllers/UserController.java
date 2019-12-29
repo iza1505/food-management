@@ -29,7 +29,7 @@ public class UserController {
                                        @RequestParam(value = "currentPage") Integer currentPage,
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
                                        @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -39,7 +39,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @PutMapping
     ResponseEntity<ChangeActiveStatusDto> updateActiveStatus(@RequestBody ChangeActiveStatusDto dto) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -49,7 +49,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @PutMapping(value = "/myAccount")
     ResponseEntity<UserDetailsToChangeDto> updateDetails(@RequestBody UserDetailsToChangeDto dto) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -59,7 +59,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @GetMapping(value = "/myAccount")
     ResponseEntity<MyDetailsUserDto> getMyDetails() {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -67,14 +67,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @PostMapping(value ="/myAccount/changePassword")
+    @PostMapping(value = "/myAccount/changePassword")
     public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
         userService.changePassword(dto);
         return ResponseEntity.ok("Password has been changed.");
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @DeleteMapping(value ="/myAccount/inactiveAccount")
+    @DeleteMapping(value = "/myAccount/inactiveAccount")
     public ResponseEntity deactivateAccount() {
         userService.deactivateAccount();
         return ResponseEntity.ok("Account has been deactivated.");

@@ -48,7 +48,7 @@ public class MeasureServiceImpl implements MeasureService {
         return modelList
                 .stream()
                 .map(entity ->
-                        convertToDto(entity))
+                             convertToDto(entity))
                 .collect(Collectors.toList());
     }
 

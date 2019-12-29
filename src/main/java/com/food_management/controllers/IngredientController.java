@@ -33,7 +33,7 @@ public class IngredientController {
                                        @RequestParam(value = "currentPage") Integer currentPage,
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
                                        @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -44,7 +44,7 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @PostMapping
     ResponseEntity add(@Valid @RequestBody IngredientDto dto) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
         IngredientDto created = service.add(dto);
@@ -54,7 +54,7 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @DeleteMapping(params = {"id"})
     ResponseEntity delete(@RequestParam(value = "id") Long id) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
         service.deleteById(id);
@@ -65,7 +65,7 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientDto dto) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
         return ResponseEntity.ok(service.update(dto));

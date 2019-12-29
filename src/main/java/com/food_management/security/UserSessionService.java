@@ -23,13 +23,12 @@ public class UserSessionService {
         return userService.findById(detachedUser.getId());
     }
 
-    public Boolean isActive(){
+    public Boolean isActive() {
         UserEntity detachedUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         UserEntity userEntity = userService.findById(detachedUser.getId());
         return userEntity.getActive();
     }
-
 
 
 }

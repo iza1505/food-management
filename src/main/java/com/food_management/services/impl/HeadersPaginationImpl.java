@@ -12,31 +12,32 @@ import java.util.List;
 @Service
 public class HeadersPaginationImpl implements HeadersPagination {
 
-    public HeadersDto createHeaderDto(Integer elementsOnPage, Integer currentPage, List<?> headers, String sortBy, Boolean ascendingSort ){
+    public HeadersDto createHeaderDto(Integer elementsOnPage, Integer currentPage, List<?> headers, String sortBy,
+                                      Boolean ascendingSort) {
         HeadersDto headersDto = new HeadersDto();
-        if(headers.size()>0){
+        if (headers.size() > 0) {
             PagedListHolder<?> pageHolder;
 
-            if(sortBy != null){
-                if(ascendingSort != null){
-                    pageHolder = new PagedListHolder<>(headers, new MutableSortDefinition("title",true, ascendingSort));
+            if (sortBy != null) {
+                if (ascendingSort != null) {
+                    pageHolder =
+                            new PagedListHolder<>(headers, new MutableSortDefinition("title", true, ascendingSort));
                 } else {
-                    pageHolder = new PagedListHolder<>(headers, new MutableSortDefinition(sortBy,true, true));
+                    pageHolder = new PagedListHolder<>(headers, new MutableSortDefinition(sortBy, true, true));
                 }
                 pageHolder.resort();
-            }else {
+            } else {
                 pageHolder = new PagedListHolder<>(headers);
             }
 
             pageHolder.setPageSize(elementsOnPage);
-            pageHolder.setPage(currentPage-1);
+            pageHolder.setPage(currentPage - 1);
             Integer pageCount = pageHolder.getPageCount();
 
             List<?> recipeHeadersOnPage = pageHolder.getPageList();
             headersDto.setHeaders(recipeHeadersOnPage);
             headersDto.setPageCount(pageCount);
-        }
-        else {
+        } else {
             headersDto.setHeaders(headers);
             headersDto.setPageCount(1);
         }

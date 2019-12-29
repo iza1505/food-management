@@ -34,13 +34,13 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private final JwtTokenProvider tokenProvider;
     private UserSessionService userSessionService;
     private RoleService roleService;
     private AuthenticationManager authenticationManager;
     private UserRepository repository;
     private PasswordEncoder passwordEncoder;
     private EmailProvider emailProvider;
-    private final JwtTokenProvider tokenProvider;
     private ModelMapper modelMapper;
     private HeadersPaginationImpl headersPagination;
     private UserIngredientRepository userIngredientRepository;
@@ -55,7 +55,9 @@ public class UserServiceImpl implements UserService {
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository, LoginValidator loginValidator, PasswordValidator passwordValidator) {
+            EmailProvider emailProvider, ModelMapper modelMapper, HeadersPaginationImpl headersPagination,
+            UserIngredientRepository userIngredientRepository, LoginValidator loginValidator,
+            PasswordValidator passwordValidator) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;
@@ -82,38 +84,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(RegistrationDto registrationDto) {
-        if(registrationDto.getLogin() == null){
+        if (registrationDto.getLogin() == null) {
             throw new EmptyFieldException("Login cannot be null");
         }
 
         if (repository.existsByLogin(registrationDto.getLogin())) {
-            throw new EntityAlreadyExistsException("User with login " + registrationDto.getLogin() + " already exists.");
+            throw new EntityAlreadyExistsException(
+                    "User with login " + registrationDto.getLogin() + " already exists.");
         } else {
             loginValidator.checkBasicConditions(registrationDto.getLogin());
         }
 
-        if(registrationDto.getEmail() == null){
+        if (registrationDto.getEmail() == null) {
             throw new EmptyFieldException("Email cannot be null");
         }
         if (repository.existsByEmail(registrationDto.getEmail())) {
-            throw new EntityAlreadyExistsException("User with email " + registrationDto.getEmail() + " already exists.");
+            throw new EntityAlreadyExistsException(
+                    "User with email " + registrationDto.getEmail() + " already exists.");
         }
 
-        if(registrationDto.getPassword() == null){
+        if (registrationDto.getPassword() == null) {
             throw new EmptyFieldException("Password cannot be null");
         } else {
             passwordValidator.checkBasicConditions(registrationDto.getPassword());
         }
 
         String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
-        UserDto userDto = new UserDto(null,0L,registrationDto.getLogin(),registrationDto.getEmail(),hashedPassword,null, false);
+        UserDto userDto =
+                new UserDto(null, 0L, registrationDto.getLogin(), registrationDto.getEmail(), hashedPassword, null,
+                            false
+                );
 
         UserEntity userEntity = convertToEntity(userDto);
 
-        if(registrationDto.getRole()==null){
+        if (registrationDto.getRole() == null) {
             userEntity.setRole(roleService.findByName("USER"));
-        }
-        else{
+        } else {
             userEntity.setRole(roleService.findByName(registrationDto.getRole().getName()));
         }
 
@@ -123,10 +129,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendActivationEmail(String hashedPassword, String email){
+    public void sendActivationEmail(String hashedPassword, String email) {
         String hashPasswordHash = passwordEncoder.encode(hashedPassword);
         String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
-        SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation", "Active your account using link");
+        SimpleMailMessage emailToSend = emailProvider
+                .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
+                                             "Active your account using link"
+                                            );
         emailProvider.sendEmail(emailToSend);
     }
 
@@ -134,12 +143,13 @@ public class UserServiceImpl implements UserService {
     public void confirmAccount(String token) {
         String email = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(email);
-        if(userEntity != null){
-            if(userEntity.getConfrimationDate()!=null){
+        if (userEntity != null) {
+            if (userEntity.getConfrimationDate() != null) {
                 throw new ConfirmedAccountException("Account is confirmed");
             }
-            if(passwordEncoder.matches(userEntity.getPasswordHash(),tokenProvider.getHashPasswordHashFromJWT(token))){
-                if(userEntity.getActive().equals(false)){
+            if (passwordEncoder
+                    .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
+                if (userEntity.getActive().equals(false)) {
                     userEntity.setActive(true);
                     userEntity.setConfrimationDate(new Date(System.currentTimeMillis()));
                     repository.save(userEntity);
@@ -157,23 +167,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailsToChangeDto updateDetails(UserDetailsToChangeDto dto) {
         UserEntity userToUpdate = findByEmail(dto.getEmail());
-        Validator.validateVersion(userToUpdate,dto.getVersion());
+        Validator.validateVersion(userToUpdate, dto.getVersion());
 
         userToUpdate.setEmail(dto.getEmail());
         userToUpdate = repository.saveAndFlush(userToUpdate);
 
-        UserDetailsToChangeDto newDto = new UserDetailsToChangeDto(userToUpdate.getEmail(),userToUpdate.getVersion());
+        UserDetailsToChangeDto newDto = new UserDetailsToChangeDto(userToUpdate.getEmail(), userToUpdate.getVersion());
 
-        return  newDto;
+        return newDto;
     }
 
     @Override
     public HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
-       List<UserEntity> userEntities = repository.findAll();
-       List<UsersDetailsDto> dtos = new ArrayList<>();
-       for (UserEntity userEntity : userEntities){
-           dtos.add(new UsersDetailsDto(userEntity.getId(),userEntity.getVersion(),userEntity.getLogin(),userEntity.getEmail(),userEntity.getRole().getName(),userEntity.getActive()));
-       }
+        List<UserEntity> userEntities = repository.findAll();
+        List<UsersDetailsDto> dtos = new ArrayList<>();
+        for (UserEntity userEntity : userEntities) {
+            dtos.add(new UsersDetailsDto(userEntity.getId(), userEntity.getVersion(), userEntity.getLogin(),
+                                         userEntity.getEmail(), userEntity.getRole().getName(),
+                                         userEntity.getActive()));
+        }
         return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
     }
 
@@ -201,9 +213,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients){
-        for(UserIngredientEntity ingredient: userIngredients){
-            if(ingredient.getUserIngredientKey().getIngredient().getId().equals(id)){
+    public Integer getIngredientPercentage(Long id, List<UserIngredientEntity> userIngredients) {
+        for (UserIngredientEntity ingredient : userIngredients) {
+            if (ingredient.getUserIngredientKey().getIngredient().getId().equals(id)) {
                 return ingredient.getAmount().intValue();
             }
         }
@@ -212,12 +224,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto){
+    public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByLogin(dto.getLogin());
         if (userEntity.getEmail().equals(dto.getEmail())) {
             String passwordHash = passwordEncoder.encode(findByEmail(dto.getEmail()).getPasswordHash());
             String jwt = tokenProvider.generatePasswordToken(dto.getEmail(), passwordHash);
-            SimpleMailMessage emailToSend = emailProvider.constructResetPasswordEmail(jwt, dto.getEmail(), "/auth/forgotPassword?token=", "Reset Password", "Reset your password using link:");
+            SimpleMailMessage emailToSend = emailProvider
+                    .constructResetPasswordEmail(jwt, dto.getEmail(), "/auth/forgotPassword?token=", "Reset Password",
+                                                 "Reset your password using link:"
+                                                );
             emailProvider.sendEmail(emailToSend);
         } else {
             throw new IncompatibilityDataException("User with this login and email not exists.");
@@ -226,16 +241,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetForgottenPassword(String newPassword, String token){
+    public void resetForgottenPassword(String newPassword, String token) {
         String userEmail = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(userEmail);
         userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
     }
 
     @Override
-    public void changePassword(ChangePasswordDto dto){
+    public void changePassword(ChangePasswordDto dto) {
         UserEntity userEntity = userSessionService.getUser();
-        if(passwordEncoder.matches(dto.getOldPassword(),userEntity.getPasswordHash())){
+        if (passwordEncoder.matches(dto.getOldPassword(), userEntity.getPasswordHash())) {
             String newPasswordHash = passwordEncoder.encode(dto.getNewPassword());
             userEntity.setPasswordHash(newPasswordHash);
             repository.save(userEntity);
@@ -245,15 +260,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyDetailsUserDto getMyDetails(){
+    public MyDetailsUserDto getMyDetails() {
         UserEntity userEntity = userSessionService.getUser();
-        return new MyDetailsUserDto(userEntity.getId(),userEntity.getVersion(),userEntity.getLogin(),userEntity.getEmail());
+        return new MyDetailsUserDto(userEntity.getId(), userEntity.getVersion(), userEntity.getLogin(),
+                                    userEntity.getEmail());
     }
 
     @Override
     public ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto) {
         UserEntity userEntitySession = userSessionService.getUser();
-        if(userEntitySession.getId().equals(dto.getId())){
+        if (userEntitySession.getId().equals(dto.getId())) {
             throw new IncompatibilityDataException("You can't change the status of your account.");
         }
         UserEntity userEntity = repository.getOne(dto.getId());
@@ -276,7 +292,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByLogin(dto.getLogin());
-        if(userEntity.getEmail().equals(dto.getEmail())){
+        if (userEntity.getEmail().equals(dto.getEmail())) {
             sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
         } else {
             throw new IncompatibilityDataException("User with this login and email not exists.");

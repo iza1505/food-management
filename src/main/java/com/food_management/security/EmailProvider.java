@@ -10,27 +10,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailProvider {
+    private final JavaMailSender mailSender;
     @Value("${support.mail}")
     private String mail;
-
     @Value("${custom.frontend.path}")
     private String applicationPath;
 
-    private final JavaMailSender mailSender;
-
     @Autowired
     public EmailProvider(
-            JavaMailSender mailSender)
-    {
+            JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address, String title, String message) {
+    public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address, String title,
+                                                         String message) {
         String url = applicationPath + address + token;
         return emailConstructor(title, message + " \r\n " + url, userEmail);
     }
 
-    private SimpleMailMessage emailConstructor (String title, String emailBody, String userEmail) {
+    private SimpleMailMessage emailConstructor(String title, String emailBody, String userEmail) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setSubject(title);
         email.setText(emailBody);
@@ -39,7 +37,7 @@ public class EmailProvider {
         return email;
     }
 
-    public void sendEmail(SimpleMailMessage emailToSend){
+    public void sendEmail(SimpleMailMessage emailToSend) {
         mailSender.send(emailToSend);
     }
 }

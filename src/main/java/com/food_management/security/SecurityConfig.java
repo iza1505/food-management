@@ -72,7 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
+                .antMatchers(
+                        "/",
                         "/**",
                         "/**/**",
                         "/favicon.ico",
@@ -82,7 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js").permitAll()
+                        "/**/*.js"
+                            ).permitAll()
                 .anyRequest().authenticated();
 
         http.requiresChannel().anyRequest().requiresSecure();

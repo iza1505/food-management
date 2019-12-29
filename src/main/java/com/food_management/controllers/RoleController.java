@@ -27,7 +27,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @GetMapping
     ResponseEntity<List<RoleDto>> findAll() {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 

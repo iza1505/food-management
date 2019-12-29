@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 public class UserPrincipal implements UserDetails {
 
-    private  Long id;
+    private Long id;
 
     private String login;
 
@@ -81,8 +81,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         UserPrincipal that = (UserPrincipal) o;
         return Objects.equals(login, that.login);
     }

@@ -36,13 +36,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public  RoleDto update(RoleDto dto) {
+    public RoleDto update(RoleDto dto) {
         RoleEntity roleToUpdate = repository.getOne(dto.getId());
-        Validator.validateVersion(roleToUpdate,dto.getVersion());
+        Validator.validateVersion(roleToUpdate, dto.getVersion());
 
         roleToUpdate.setName(dto.getName());
         roleToUpdate = repository.saveAndFlush(roleToUpdate);
-        return  convertToDto(roleToUpdate);
+        return convertToDto(roleToUpdate);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
         return modelList
                 .stream()
                 .map(entity ->
-                        convertToDto(entity))
+                             convertToDto(entity))
                 .collect(Collectors.toList());
     }
 

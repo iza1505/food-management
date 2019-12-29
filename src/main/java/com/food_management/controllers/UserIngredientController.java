@@ -29,7 +29,7 @@ public class UserIngredientController {
     @PreAuthorize("hasAnyAuthority('USER')")
     @GetMapping
     ResponseEntity<List<IngredientInFridgeAndRecipeDto>> findAll() {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -40,7 +40,7 @@ public class UserIngredientController {
     @PreAuthorize("hasAnyAuthority('USER')")
     @PostMapping
     ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) throws Exception {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -51,7 +51,7 @@ public class UserIngredientController {
     @PreAuthorize("hasAnyAuthority('USER')")
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@RequestParam(value = "id") Long id) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 
@@ -62,7 +62,7 @@ public class UserIngredientController {
     @PreAuthorize("hasAnyAuthority('USER')")
     @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
-        if(!userSessionService.isActive()){
+        if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
 

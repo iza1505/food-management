@@ -23,18 +23,20 @@ public class PasswordValidator {
                 password.length() > length_max ||
                 (uppercase && !checkUppercase(password)) ||
                 (lowercase && !checkLowercase(password) ||
-                (number && !checkNumber(password))
+                        (number && !checkNumber(password))
                 )) {
             throw new PasswordValidatorException("Password does not meet the basic conditions.");
         }
     }
 
     private boolean checkUppercase(String password) {
-        return password.chars().anyMatch(passwordChar -> Character.isLetter(passwordChar) && Character.isUpperCase(passwordChar));
+        return password.chars()
+                .anyMatch(passwordChar -> Character.isLetter(passwordChar) && Character.isUpperCase(passwordChar));
     }
 
     private boolean checkLowercase(String password) {
-        return password.chars().anyMatch(passwordChar -> Character.isLetter(passwordChar) && Character.isLowerCase(passwordChar));
+        return password.chars()
+                .anyMatch(passwordChar -> Character.isLetter(passwordChar) && Character.isLowerCase(passwordChar));
     }
 
     private boolean checkNumber(String password) {

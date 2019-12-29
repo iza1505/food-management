@@ -11,8 +11,6 @@ public interface RoleService {
 
     RoleDto convertToDto(RoleEntity entity);
 
-    RoleDto update(RoleDto dto);
-
     List<RoleDto> findAll();
 
     RoleEntity findByName(String name);

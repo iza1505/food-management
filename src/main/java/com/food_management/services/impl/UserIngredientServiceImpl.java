@@ -30,12 +30,14 @@ public class UserIngredientServiceImpl implements UserIngredientService {
     private IngredientService ingredientService;
 
     @Autowired
-    public UserIngredientServiceImpl(UserIngredientRepository repository, ModelMapper modelMapper, UserSessionService userSessionService,IngredientService ingredientService
-    ) {
+    public UserIngredientServiceImpl(UserIngredientRepository repository, ModelMapper modelMapper,
+                                     UserSessionService userSessionService, IngredientService ingredientService
+                                    ) {
         this.repository = repository;
         this.modelMapper = modelMapper;
         this.userSessionService = userSessionService;
         this.ingredientService = ingredientService;
+
     }
 
     @Override
@@ -55,78 +57,89 @@ public class UserIngredientServiceImpl implements UserIngredientService {
         List<UserIngredientEntity> modelList = userEntity.getUserIngredients();
         List<IngredientInFridgeAndRecipeDto> ingredientsInFridge = new ArrayList<>();
 
-        for (int i = 0; i < modelList.size(); i++){
-            ingredientsInFridge.add(new IngredientInFridgeAndRecipeDto(convertToDto(modelList.get(i)).getIngredient(),modelList.get(i).getAmount(),modelList.get(i).getVersion()));
+        for (int i = 0; i < modelList.size(); i++) {
+            ingredientsInFridge.add(new IngredientInFridgeAndRecipeDto(
+                    convertToDto(modelList.get(i)).getIngredient(),
+                    modelList.get(i).getAmount(),
+                    modelList.get(i).getVersion()
+            ));
         }
 
         return ingredientsInFridge;
     }
 
     @Override
-    public IngredientInFridgeAndRecipeDto update(IngredientInFridgeAndRecipeDto dto){
+    public IngredientInFridgeAndRecipeDto update(IngredientInFridgeAndRecipeDto dto) {
         int i = 0;
         UserEntity userEntity = userSessionService.getUser();
         IngredientInFridgeAndRecipeDto updatedDto = new IngredientInFridgeAndRecipeDto();
 
-        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
-            if(userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()){
+        for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
                 i++;
                 UserIngredientEntity savedEntity = repository.getOne(userIngredient.getUserIngredientKey());
                 savedEntity.setAmount(dto.getAmount());
                 UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
-                updatedDto.setIngredient(ingredientService.convertToDto(newEntity.getUserIngredientKey().getIngredient()));
+                updatedDto.setIngredient(
+                        ingredientService.convertToDto(newEntity.getUserIngredientKey().getIngredient()));
                 updatedDto.setVersion(newEntity.getVersion());
                 updatedDto.setAmount(newEntity.getAmount());
             }
         }
 
-        if(i == 0){
-            throw new EntityAlreadyExistsException("Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge."); }
-            else
-                return updatedDto;
+        if (i == 0) {
+            throw new EntityAlreadyExistsException(
+                    "Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge.");
+        } else
+            return updatedDto;
     }
 
     @Override
-    public void delete(Long id){
+    public void delete(Long id) {
         int i = 0;
         UserEntity userEntity = userSessionService.getUser();
 
-        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
-            if(userIngredient.getUserIngredientKey().getIngredient().getId() == id){
+        for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if (userIngredient.getUserIngredientKey().getIngredient().getId() == id) {
                 i++;
                 repository.deleteById(userIngredient.getUserIngredientKey());
                 break;
             }
         }
-        if(i == 0){
-            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists."); }
+        if (i == 0) {
+            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists.");
+        }
     }
 
     @Override
     public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto) {
         UserEntity userEntity = userSessionService.getUser();
 
-        for(UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
-            if(userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()){
+        for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
+            if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
                 throw new EntityAlreadyExistsException("Ingredient exists in fridge.");
             }
         }
 
-        UserIngredientKey userIngredientKey = new UserIngredientKey(userEntity,ingredientService.findById(dto.getIngredient().getId()));
+        UserIngredientKey userIngredientKey =
+                new UserIngredientKey(userEntity, ingredientService.findById(dto.getIngredient().getId()));
 
-        UserIngredientEntity savedEntity = new UserIngredientEntity(userIngredientKey,dto.getAmount(),0L);
+        UserIngredientEntity savedEntity = new UserIngredientEntity(userIngredientKey, dto.getAmount(), 0L);
         savedEntity.setUserIngredientKey(userIngredientKey);
 
         UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
 
-        return new IngredientInFridgeAndRecipeDto(ingredientService.convertToDto(newEntity.getUserIngredientKey().getIngredient()),newEntity.getAmount(),newEntity.getVersion());
+        return new IngredientInFridgeAndRecipeDto(
+                ingredientService.convertToDto(newEntity.getUserIngredientKey().getIngredient()), newEntity.getAmount(),
+                newEntity.getVersion()
+        );
     }
 
     @Override
     public UserIngredientDto findById(UserIngredientKey id) {
-        UserIngredientEntity model = repository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entity with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() + "  not found."));
+        UserIngredientEntity model = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                "Entity with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() +
+                        "  not found."));
         return convertToDto(model);
     }
 

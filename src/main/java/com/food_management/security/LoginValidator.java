@@ -20,7 +20,7 @@ public class LoginValidator {
                 login.length() > length_max ||
                 !checkLetters(login) ||
                 checkSpacesColonsQuotationMarks(login)
-                ){
+        ) {
             throw new LoginValidatorException("Login does not meet the basic conditions.");
         }
     }
@@ -29,7 +29,8 @@ public class LoginValidator {
         return login.chars().anyMatch(loginChar -> Character.isLetter(loginChar));
     }
 
-    private boolean checkSpacesColonsQuotationMarks(String login){
-        return login.chars().anyMatch(loginChar -> Character.isSpaceChar(loginChar) || (loginChar == ':') || (loginChar == '"'));
+    private boolean checkSpacesColonsQuotationMarks(String login) {
+        return login.chars()
+                .anyMatch(loginChar -> Character.isSpaceChar(loginChar) || (loginChar == ':') || (loginChar == '"'));
     }
 }

@@ -20,7 +20,7 @@ public class UserAuthServiceImpl implements UserDetailsService {
     UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String login){
+    public UserDetails loadUserByUsername(String login) {
         return UserPrincipal.create(userService.findByLogin(login));
     }
 

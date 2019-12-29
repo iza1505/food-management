@@ -59,10 +59,11 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public IngredientDto add(IngredientDto ingredient) {
         if (repository.existsByIngredientName(ingredient.getIngredientName())) {
-            throw new EntityAlreadyExistsException("Ingredient with name " + ingredient.getIngredientName() + " already exists.");
+            throw new EntityAlreadyExistsException(
+                    "Ingredient with name " + ingredient.getIngredientName() + " already exists.");
         }
 
-        if (ingredient.getMeasure() == null){
+        if (ingredient.getMeasure() == null) {
             throw new EmptyFieldException("Measure cannot be null");
         }
 
@@ -72,13 +73,11 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientEntity.setVersion(0L);
         ingredientEntity.setMeasure(measureService.findById(ingredient.getMeasure().getId()));
 
-        if(userEntity.getRole().getName().equals("ADMINISTRATOR")){
+        if (userEntity.getRole().getName().equals("ADMINISTRATOR")) {
             ingredientEntity.setActive(true);
-        }
-        else if(userEntity.getRole().getName().equals("USER")){
+        } else if (userEntity.getRole().getName().equals("USER")) {
             ingredientEntity.setActive(false);
-        }
-        else {
+        } else {
             throw new UnknowRoleException("Unknow role.");
         }
 
@@ -86,41 +85,41 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public  IngredientDto update(IngredientDto dto) {
+    public IngredientDto update(IngredientDto dto) {
         IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
-        Validator.validateVersion(ingredientToUpdate,dto.getVersion());
+        Validator.validateVersion(ingredientToUpdate, dto.getVersion());
         MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
-                //measureRepository.getOne(dto.getMeasure().getId());
+        //measureRepository.getOne(dto.getMeasure().getId());
 
         ingredientToUpdate.setIngredientName(dto.getIngredientName());
         ingredientToUpdate.setMeasure(measureEntity);
         ingredientToUpdate.setActive(dto.getActive());
         ingredientToUpdate = repository.saveAndFlush(ingredientToUpdate);
-        return  convertToDto(ingredientToUpdate);
+        return convertToDto(ingredientToUpdate);
     }
 
     @Override
     public HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         UserEntity userEntity = userSessionService.getUser();
         List<IngredientEntity> modelList = repository.findAll();
-        if(userEntity.getRole().getName().equals("ADMINISTRATOR")){
+        if (userEntity.getRole().getName().equals("ADMINISTRATOR")) {
             List<IngredientDto> dtos = modelList
                     .stream()
                     .map(entity ->
-                            convertToDto(entity))
+                                 convertToDto(entity))
                     .collect(Collectors.toList());
             return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
         } else {
-            if(userEntity.getRole().getName().equals("USER")){
+            if (userEntity.getRole().getName().equals("USER")) {
                 List<IngredientDto> dtos = new ArrayList<>();
-                for(IngredientEntity entity : modelList){
-                    if(entity.getActive()){
+                for (IngredientEntity entity : modelList) {
+                    if (entity.getActive()) {
                         dtos.add(convertToDto(entity));
                     }
                 }
                 return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
 
-            }else {
+            } else {
                 throw new UnknowRoleException("Unknow role.");
             }
         }

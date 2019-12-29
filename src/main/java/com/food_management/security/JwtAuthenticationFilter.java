@@ -35,8 +35,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 UserEntity user = userService.findByLogin(login);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
-                        login,UserPrincipal.create(userService.findByLogin(login)).getAuthorities()
-                        );
+                                                                                                             login,
+                                                                                                             UserPrincipal
+                                                                                                                     .create(userService
+                                                                                                                                     .findByLogin(
+                                                                                                                                             login))
+                                                                                                                     .getAuthorities()
+                );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

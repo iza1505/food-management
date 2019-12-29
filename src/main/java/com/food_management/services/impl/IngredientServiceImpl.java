@@ -28,16 +28,19 @@ public class IngredientServiceImpl implements IngredientService {
 
     private ModelMapper modelMapper;
     private IngredientRepository repository;
-    private MeasureRepository measureRepository;
     private UserSessionService userSessionService;
     private MeasureService measureService;
     private HeadersPaginationImpl headersPagination;
 
     @Autowired
-    public IngredientServiceImpl(IngredientRepository repository, MeasureService measureService, MeasureRepository measureRepository, ModelMapper modelMapper, @Lazy UserSessionService userSessionService, HeadersPaginationImpl headersPagination) {
+    public IngredientServiceImpl(
+            IngredientRepository repository,
+            MeasureService measureService,
+            ModelMapper modelMapper,
+            @Lazy UserSessionService userSessionService,
+            HeadersPaginationImpl headersPagination) {
         this.modelMapper = modelMapper;
         this.repository = repository;
-        this.measureRepository = measureRepository; //TODO: zmienci zeby nie bylo repo
         this.userSessionService = userSessionService;
         this.measureService = measureService;
         this.headersPagination = headersPagination;
@@ -86,8 +89,8 @@ public class IngredientServiceImpl implements IngredientService {
     public  IngredientDto update(IngredientDto dto) {
         IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(ingredientToUpdate,dto.getVersion());
-        MeasureEntity measureEntity = measureRepository.getOne(dto.getMeasure().getId());
-        Validator.validateVersion(measureEntity,dto.getMeasure().getVersion());
+        MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
+                //measureRepository.getOne(dto.getMeasure().getId());
 
         ingredientToUpdate.setIngredientName(dto.getIngredientName());
         ingredientToUpdate.setMeasure(measureEntity);

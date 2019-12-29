@@ -1,5 +1,6 @@
 package com.food_management.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class RecipeIngredientKey implements Serializable {
     @ManyToOne

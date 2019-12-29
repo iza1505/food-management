@@ -3,7 +3,7 @@ package com.food_management.controllers;
 import com.food_management.dtos.IngredientInFridgeAndRecipeDto;
 import com.food_management.exceptions.InactiveAccountException;
 import com.food_management.security.UserSessionService;
-import com.food_management.services.impl.UserIngredientServiceImpl;
+import com.food_management.services.interfaces.UserIngredientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,15 +19,15 @@ import java.util.List;
 public class UserIngredientController {
 
     private UserSessionService userSessionService;
-    private UserIngredientServiceImpl service; //TODO: usunac impl
+    private UserIngredientService service;
 
-    public UserIngredientController(UserSessionService userSessionService, UserIngredientServiceImpl service) {
+    public UserIngredientController(UserSessionService userSessionService, UserIngredientService service) {
         this.userSessionService = userSessionService;
         this.service = service;
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     ResponseEntity<List<IngredientInFridgeAndRecipeDto>> findAll() {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -38,7 +38,7 @@ public class UserIngredientController {
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) throws Exception {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -49,8 +49,8 @@ public class UserIngredientController {
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    ResponseEntity delete(@PathVariable Long id) {
+    @DeleteMapping(value = "/{id}")
+    ResponseEntity delete(@RequestParam(value = "id") Long id) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
@@ -60,7 +60,7 @@ public class UserIngredientController {
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");

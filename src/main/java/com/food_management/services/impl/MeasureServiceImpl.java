@@ -24,7 +24,9 @@ public class MeasureServiceImpl implements MeasureService {
     private MeasureRepository repository;
 
     @Autowired
-    public MeasureServiceImpl(MeasureRepository repository, ModelMapper modelMapper) {
+    public MeasureServiceImpl(
+            MeasureRepository repository,
+            ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         this.repository = repository;
 

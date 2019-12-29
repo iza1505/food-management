@@ -10,7 +10,6 @@ import com.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
-import static org.springframework.http.ResponseEntity.status;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
     private final JwtTokenProvider tokenProvider;
-    private UserSessionService userSessionService;
-    private final EmailProvider emailProvider;
-    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthController(@Lazy UserService userService, JwtTokenProvider tokenProvider, UserSessionService userSessionService, AuthenticationManager authenticationManager, EmailProvider emailProvider) {
+    public AuthController(@Lazy UserService userService, JwtTokenProvider tokenProvider) {
         this.userService = userService;
         this.tokenProvider = tokenProvider;
-        this.userSessionService = userSessionService;
-        this.authenticationManager = authenticationManager;
-        this.emailProvider=emailProvider;
     }
 
     @PostMapping("/registration")
@@ -45,7 +36,7 @@ public class AuthController {
         return ResponseEntity.ok("Confirmation email was sent.");
     }
 
-    @RequestMapping(value ="/registration", method = RequestMethod.POST, params = {"token"})
+    @PostMapping(value ="/registration", params = {"token"})
     public ResponseEntity registration(@RequestParam(value = "token") String token) throws Exception {
         userService.confirmAccount(token);
         return ResponseEntity.ok("Account has been confirmed.");
@@ -79,7 +70,7 @@ public class AuthController {
         return ResponseEntity.ok("Reset passsword email was sent.");
     }
 
-    @RequestMapping(value ="/forgotPassword", method = RequestMethod.POST, params = {"token"})
+    @PostMapping(value ="/forgotPassword", params = {"token"})
     public ResponseEntity resetForgottenPassword(@RequestParam(value = "token") String token, @RequestBody NewPasswordDto dto) {
         userService.resetForgottenPassword(dto.getPassword(), token);
         return ResponseEntity.ok("Password has been changed.");

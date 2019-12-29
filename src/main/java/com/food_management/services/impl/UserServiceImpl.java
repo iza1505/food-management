@@ -1,6 +1,7 @@
 package com.food_management.services.impl;
 
 import com.food_management.dtos.*;
+import com.food_management.entities.RoleEntity;
 import com.food_management.entities.UserEntity;
 import com.food_management.entities.UserIngredientEntity;
 import com.food_management.exceptions.ConfirmedAccountException;
@@ -51,11 +52,10 @@ public class UserServiceImpl implements UserService {
             @Lazy UserSessionService userSessionService,
             UserRepository repository,
             RoleService roleService,
-            ModelMapper modelMapper,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
-            EmailProvider emailProvider, ModelMapper modelMapper1, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository, LoginValidator loginValidator, PasswordValidator passwordValidator) {
+            EmailProvider emailProvider, ModelMapper modelMapper, HeadersPaginationImpl headersPagination, UserIngredientRepository userIngredientRepository, LoginValidator loginValidator, PasswordValidator passwordValidator) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
         this.repository = repository;
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         this.roleService = roleService;
         this.tokenProvider = tokenProvider;
         this.emailProvider = emailProvider;
-        this.modelMapper = modelMapper1;
+        this.modelMapper = modelMapper;
         this.headersPagination = headersPagination;
         this.userIngredientRepository = userIngredientRepository;
         this.loginValidator = loginValidator;
@@ -105,14 +105,8 @@ public class UserServiceImpl implements UserService {
             passwordValidator.checkBasicConditions(registrationDto.getPassword());
         }
 
-        
-        UserDto userDto = new UserDto();
-        userDto.setActive(false);
-        userDto.setEmail(registrationDto.getEmail());
-        userDto.setLogin(registrationDto.getLogin());
         String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
-        userDto.setPasswordHash(hashedPassword);
-        userDto.setVersion(0L);
+        UserDto userDto = new UserDto(null,0L,registrationDto.getLogin(),registrationDto.getEmail(),hashedPassword,null, false);
 
         UserEntity userEntity = convertToEntity(userDto);
 
@@ -128,6 +122,7 @@ public class UserServiceImpl implements UserService {
         sendActivationEmail(hashedPassword, registrationDto.getEmail());
     }
 
+    @Override
     public void sendActivationEmail(String hashedPassword, String email){
         String hashPasswordHash = passwordEncoder.encode(hashedPassword);
         String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
@@ -167,9 +162,7 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setEmail(dto.getEmail());
         userToUpdate = repository.saveAndFlush(userToUpdate);
 
-        UserDetailsToChangeDto newDto = new UserDetailsToChangeDto();
-        newDto.setEmail(userToUpdate.getEmail());
-        newDto.setVersion(userToUpdate.getVersion());
+        UserDetailsToChangeDto newDto = new UserDetailsToChangeDto(userToUpdate.getEmail(),userToUpdate.getVersion());
 
         return  newDto;
     }
@@ -179,13 +172,7 @@ public class UserServiceImpl implements UserService {
        List<UserEntity> userEntities = repository.findAll();
        List<UsersDetailsDto> dtos = new ArrayList<>();
        for (UserEntity userEntity : userEntities){
-           dtos.add(new UsersDetailsDto());
-           dtos.get(dtos.size()-1).setActive(userEntity.getActive());
-           dtos.get(dtos.size()-1).setRole(userEntity.getRole().getName());
-           dtos.get(dtos.size()-1).setEmail(userEntity.getEmail());
-           dtos.get(dtos.size()-1).setId(userEntity.getId());
-           dtos.get(dtos.size()-1).setLogin(userEntity.getLogin());
-           dtos.get(dtos.size()-1).setVersion(userEntity.getVersion());
+           dtos.add(new UsersDetailsDto(userEntity.getId(),userEntity.getVersion(),userEntity.getLogin(),userEntity.getEmail(),userEntity.getRole().getName(),userEntity.getActive()));
        }
         return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
     }
@@ -202,11 +189,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found."));
     }
 
+    @Override
     public UserEntity findById(Long id) {
         Optional<UserEntity> userOptional = repository.findById(id);
         return userOptional.orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
     }
-
 
     @Override
     public Authentication authenticate(String login, String password) {
@@ -260,14 +247,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public MyDetailsUserDto getMyDetails(){
         UserEntity userEntity = userSessionService.getUser();
-
-        MyDetailsUserDto newDto = new MyDetailsUserDto();
-        newDto.setEmail(userEntity.getEmail());
-        newDto.setId(userEntity.getId());
-        newDto.setLogin(userEntity.getLogin());
-        newDto.setVersion(userEntity.getVersion());
-
-        return newDto;
+        return new MyDetailsUserDto(userEntity.getId(),userEntity.getVersion(),userEntity.getLogin(),userEntity.getEmail());
     }
 
     @Override

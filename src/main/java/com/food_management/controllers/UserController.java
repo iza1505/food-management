@@ -16,13 +16,15 @@ public class UserController {
     private UserService userService;
     private UserSessionService userSessionService;
 
-    public UserController(@Lazy UserService service, UserSessionService userSessionService) {
+    public UserController(
+            @Lazy UserService service,
+            UserSessionService userSessionService) {
         this.userService = service;
         this.userSessionService = userSessionService;
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -35,7 +37,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity<ChangeActiveStatusDto> updateActiveStatus(@RequestBody ChangeActiveStatusDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -45,7 +47,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value = "/myAccount", method = RequestMethod.PUT)
+    @PutMapping(value = "/myAccount")
     ResponseEntity<UserDetailsToChangeDto> updateDetails(@RequestBody UserDetailsToChangeDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -55,7 +57,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value = "/myAccount", method = RequestMethod.GET)
+    @GetMapping(value = "/myAccount")
     ResponseEntity<MyDetailsUserDto> getMyDetails() {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -65,14 +67,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value ="/myAccount/changePassword", method = RequestMethod.POST)
+    @PostMapping(value ="/myAccount/changePassword")
     public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
         userService.changePassword(dto);
         return ResponseEntity.ok("Password has been changed.");
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")
-    @RequestMapping(value ="/myAccount/inactiveAccount", method = RequestMethod.DELETE)
+    @DeleteMapping(value ="/myAccount/inactiveAccount")
     public ResponseEntity deactivateAccount() {
         userService.deactivateAccount();
         return ResponseEntity.ok("Account has been deactivated.");

@@ -16,7 +16,9 @@ public interface UserService {
 
     void add(RegistrationDto registrationDto);
 
-    void confirmAccount(String token) throws Exception;
+    void sendActivationEmail(String hashedPassword, String email);
+
+    void confirmAccount(String token);
 
     UserEntity findByLogin(String login);
 

@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/ingredients")
@@ -21,13 +20,15 @@ public class IngredientController {
     private IngredientServiceImpl service;
     private UserSessionService userSessionService;
 
-    public IngredientController(@Lazy IngredientServiceImpl service, UserSessionService userSessionService) {
+    public IngredientController(
+            @Lazy IngredientServiceImpl service,
+            UserSessionService userSessionService) {
         this.service = service;
         this.userSessionService = userSessionService;
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -41,7 +42,7 @@ public class IngredientController {
 
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity add(@Valid @RequestBody IngredientDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -51,7 +52,7 @@ public class IngredientController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.DELETE, params = {"id"})
+    @DeleteMapping(params = {"id"})
     ResponseEntity delete(@RequestParam(value = "id") Long id) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -62,12 +63,11 @@ public class IngredientController {
 
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
-
         return ResponseEntity.ok(service.update(dto));
     }
 }

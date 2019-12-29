@@ -32,7 +32,14 @@ public class RecipeServiceImpl implements RecipeService {
     private HeadersPaginationImpl headersPagination;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository repository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, @Lazy UserService userService, UserSessionService userSessionService, IngredientService ingredientService, HeadersPaginationImpl headersPagination) {
+    public RecipeServiceImpl(
+            RecipeRepository repository,
+            RecipeIngredientRepository recipeIngredientRepository,
+            ModelMapper modelMapper,
+            @Lazy UserService userService,
+            UserSessionService userSessionService,
+            IngredientService ingredientService,
+            HeadersPaginationImpl headersPagination) {
 
         this.repository = repository;
         this.modelMapper = modelMapper;
@@ -43,12 +50,12 @@ public class RecipeServiceImpl implements RecipeService {
         this.headersPagination = headersPagination;
     }
 
-    //@Override
+    @Override
     public RecipeDto convertToDto(RecipeEntity entity) {
         return modelMapper.map(entity, RecipeDto.class);
     }
 
-    //@Override
+    @Override
     public RecipeEntity convertToEntity(RecipeDto dto) {
         return modelMapper.map(dto, RecipeEntity.class);
     }
@@ -69,34 +76,24 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto getRecipeAdmin(Long id){
-        RecipeEntity recipeEntity = repository.getOne(id);
-        RecipeDto recipeDto = convertToDto(recipeEntity);
-        return recipeDto;
+        return convertToDto(repository.getOne(id));
     }
 
     @Override
     public RecipeGetUserDto getRecipeUser(Long id){
         UserEntity userEntity = userSessionService.getUser();
         RecipeEntity recipeEntity = repository.getOne(id);
-        RecipeGetUserDto recipeDto = new RecipeGetUserDto();
-        recipeDto.setDescription(recipeEntity.getDescription());
-        recipeDto.setId(recipeEntity.getId());
-        recipeDto.setPreparationMins(recipeEntity.getPreparationMins());
-        recipeDto.setTitle(recipeEntity.getTitle());
-        recipeDto.setUserName(recipeEntity.getUser().getLogin());
-        recipeDto.setVersion(recipeEntity.getVersion());
-        recipeDto.setIngredients(new ArrayList<>());
+        RecipeGetUserDto recipeDto = new RecipeGetUserDto(recipeEntity.getId(),recipeEntity.getVersion(),recipeEntity.getTitle(),recipeEntity.getPreparationMins(),recipeEntity.getDescription(),recipeEntity.getUser().getLogin(),new ArrayList<>());
+
         for(int i = 0; i < recipeEntity.getRecipeIngredients().size(); i++){
-            recipeDto.getIngredients().add(new IngredientAndPossessedAmountDto());
-            recipeDto.getIngredients().get(i).setIngredient(ingredientService.convertToDto(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient()));
-            recipeDto.getIngredients().get(i).setHasGot(userService.getIngredientPercentage(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient().getId(),userEntity.getUserIngredients()).intValue());
-            recipeDto.getIngredients().get(i).setAmount(recipeEntity.getRecipeIngredients().get(i).getAmount());
-            recipeDto.getIngredients().get(i).setVersion(recipeEntity.getRecipeIngredients().get(i).getVersion());
+            recipeDto.getIngredients().add(new IngredientAndPossessedAmountDto(ingredientService.convertToDto(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient()),recipeEntity.getRecipeIngredients().get(i).getAmount(), userService.getIngredientPercentage(recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().getIngredient().getId(), userEntity.getUserIngredients()),recipeEntity.getRecipeIngredients().get(i).getVersion()));
+
         }
 
         return recipeDto;
     }
 
+    @Override
     public Integer checkIfIngredientInFridgeAndReturnPercentageToCook(UserEntity userEntity, RecipeIngredientEntity recipeIngredientEntity){
         Integer percentageToCook = -1;
         for(UserIngredientEntity userIngredientEntity : userEntity.getUserIngredients()){
@@ -108,45 +105,13 @@ public class RecipeServiceImpl implements RecipeService {
         return percentageToCook;
     }
 
-    //@Override
-    public RecipeUpdateDto createRecipeUpdateDto(RecipeEntity recipeEntity){
-        RecipeUpdateDto recipeUpdateDto = new RecipeUpdateDto();
-
-        recipeUpdateDto.setDescription(recipeEntity.getDescription());
-        recipeUpdateDto.setId(recipeEntity.getId());
-        recipeUpdateDto.setPreparationMins(recipeEntity.getPreparationMins());
-        recipeUpdateDto.setTitle(recipeEntity.getTitle());
-        recipeUpdateDto.setVersion(recipeEntity.getVersion());
-        recipeUpdateDto.setIngredients(new ArrayList<>());
-        recipeUpdateDto.setUserName(recipeEntity.getUser().getLogin());
-
-        int i = 0;
-        for(RecipeIngredientEntity ingredient : recipeEntity.getRecipeIngredients()){
-            recipeUpdateDto.getIngredients().add(new IngredientInFridgeAndRecipeDto());
-            recipeUpdateDto.getIngredients().get(i).setAmount(ingredient.getAmount());
-            recipeUpdateDto.getIngredients().get(i).setVersion(ingredient.getVersion());
-            i++;
-        }
-
-        return recipeUpdateDto;
-    }
-
-
     @Override
     public HeadersDto findAllForAdmin(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         List<RecipeEntity> recipeEntities = repository.findAll();
         List<RecipeHeaderAdminDto> recipeHeaders = new ArrayList<>();
 
         for(RecipeEntity recipeEntity : recipeEntities){
-            recipeHeaders.add(new RecipeHeaderAdminDto());
-            recipeHeaders.get(recipeHeaders.size()-1).setActive(recipeEntity.getActive());
-            recipeHeaders.get(recipeHeaders.size()-1).setId(recipeEntity.getId());
-            recipeHeaders.get(recipeHeaders.size()-1).setTitle(recipeEntity.getTitle());
-            recipeHeaders.get(recipeHeaders.size()-1).setUserLogin(recipeEntity.getUser().getLogin());
-            recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
-            recipeHeaders.get(recipeHeaders.size()-1).setWaitingForAccept(recipeEntity.getWaitingForAccept());
-            recipeHeaders.get(recipeHeaders.size()-1).setToImprove(recipeEntity.getToImprove());
-
+            recipeHeaders.add(new RecipeHeaderAdminDto(recipeEntity.getId(),recipeEntity.getVersion(),recipeEntity.getTitle(),recipeEntity.getUser().getLogin(),recipeEntity.getActive(),recipeEntity.getWaitingForAccept(),recipeEntity.getToImprove()));
         }
         return headersPagination.createHeaderDto(elementsOnPage, currentPage, recipeHeaders, sortBy, ascendingSort);
     }
@@ -156,8 +121,8 @@ public class RecipeServiceImpl implements RecipeService {
         UserEntity userEntity = userSessionService.getUser();
         List<RecipeEntity> recipeEntities = findAllActive();
         List<RecipeHeaderUserDto> recipeHeaders = new ArrayList<>();
-        Integer missingIngredientsAmount = 0;
-        Integer maxPercentageToCook = 100;
+        Integer missingIngredientsAmount;
+        Integer maxPercentageToCook;
         Integer percentageToCook = 0;
 
 
@@ -183,12 +148,7 @@ public class RecipeServiceImpl implements RecipeService {
                 }
 
                 if(missingIngredientsAmount<=possibleMissingIngredientsAmount || possibleMissingIngredientsAmount==-1){
-                    recipeHeaders.add(new RecipeHeaderUserDto());
-                    recipeHeaders.get(recipeHeaders.size()-1).setId(recipeEntity.getId());
-                    recipeHeaders.get(recipeHeaders.size()-1).setMissingIngredientsAmount(missingIngredientsAmount);
-                    recipeHeaders.get(recipeHeaders.size()-1).setPercentageToCook(maxPercentageToCook);
-                    recipeHeaders.get(recipeHeaders.size()-1).setTitle(recipeEntity.getTitle());
-                    recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
+                    recipeHeaders.add(new RecipeHeaderUserDto(recipeEntity.getId(), recipeEntity.getVersion(), recipeEntity.getTitle(),missingIngredientsAmount,maxPercentageToCook));
                 }
 
             }
@@ -197,8 +157,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception {
-        if(id != recipeUpdateDto.getId()){
+    public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) {
+        if(!id.equals(recipeUpdateDto.getId())){
             throw new IncompatibilityDataException("Incompatible recipe data.");
         }
 
@@ -206,7 +166,7 @@ public class RecipeServiceImpl implements RecipeService {
 
 
         UserEntity userEntity = userSessionService.getUser();
-        if(recipeEntity.getUser().getId() != userEntity.getId()){
+        if(!recipeEntity.getUser().getId().equals(userEntity.getId())){
             throw new IncompatibilityDataException("Incompatible data: id recipe's author is different with your.");
         }
 
@@ -218,7 +178,6 @@ public class RecipeServiceImpl implements RecipeService {
             recipeEntity.setWaitingForAccept(false);
             recipeEntity.setActive(true);
         }
-
 
         recipeEntity.setDescription(recipeUpdateDto.getDescription());
         recipeEntity.setPreparationMins(recipeUpdateDto.getPreparationMins());
@@ -232,15 +191,11 @@ public class RecipeServiceImpl implements RecipeService {
         repository.save(recipeEntity);
     }
 
-    public RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients) throws Exception {
+    @Override
+    public RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients) {
         int i = 0;
         for (IngredientInFridgeAndRecipeDto ingredient : ingredients){
-            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity());
-            recipeEntity.getRecipeIngredients().get(i).setAmount(ingredient.getAmount());
-            recipeEntity.getRecipeIngredients().get(i).setVersion(ingredient.getVersion());
-            recipeEntity.getRecipeIngredients().get(i).setRecipeIngredientKey(new RecipeIngredientKey());
-            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setIngredient(ingredientService.findById(ingredient.getIngredient().getId()));
-            recipeEntity.getRecipeIngredients().get(i).getRecipeIngredientKey().setRecipe(repository.getOne(id));
+            recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity(new RecipeIngredientKey(repository.getOne(id),ingredientService.findById(ingredient.getIngredient().getId())),ingredient.getAmount(),ingredient.getVersion()));
             recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
             i++;
         }
@@ -256,13 +211,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         for(RecipeEntity recipeEntity : recipeEntities){
             if(recipeEntity.getUser().getId().equals(userEntity.getId())){
-                recipeHeaders.add(new RecipeHeaderForAuthorDto());
-                recipeHeaders.get(recipeHeaders.size()-1).setActive(recipeEntity.getActive());
-                recipeHeaders.get(recipeHeaders.size()-1).setToImprove(recipeEntity.getToImprove());
-                recipeHeaders.get(recipeHeaders.size()-1).setWaitingForAccept(recipeEntity.getWaitingForAccept());
-                recipeHeaders.get(recipeHeaders.size()-1).setId(recipeEntity.getId());
-                recipeHeaders.get(recipeHeaders.size()-1).setTitle(recipeEntity.getTitle());
-                recipeHeaders.get(recipeHeaders.size()-1).setVersion(recipeEntity.getVersion());
+                recipeHeaders.add(new RecipeHeaderForAuthorDto(userEntity.getId(),recipeEntity.getVersion(),recipeEntity.getTitle(),recipeEntity.getActive(), recipeEntity.getWaitingForAccept(), recipeEntity.getToImprove()));
             }
         }
 
@@ -270,7 +219,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void add(RecipeDto dto) throws Exception {
+    public void add(RecipeDto dto) {
         if(repository.existsByTitle(dto.getTitle())){
             throw new EntityAlreadyExistsException("Recipe with title  " + dto.getTitle() + " already exists.");
         }
@@ -302,6 +251,7 @@ public class RecipeServiceImpl implements RecipeService {
        repository.save(recipeEntity);
 
     }
+
     @Override
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) {
 

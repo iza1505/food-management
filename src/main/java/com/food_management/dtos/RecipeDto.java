@@ -6,7 +6,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-//@JsonPropertyOrder({"id", "version", "title", "preparationMins", "description", "user", "ingredients" })
 @JsonPropertyOrder({"id", "version", "title", "preparationMins", "description", "user", "ingredients", "active", "waitingForAccept", "toImprove"})
 public class RecipeDto {
 

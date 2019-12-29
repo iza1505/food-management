@@ -2,12 +2,18 @@ package com.food_management.services.interfaces;
 
 import com.food_management.dtos.*;
 import com.food_management.entities.RecipeEntity;
+import com.food_management.entities.RecipeIngredientEntity;
+import com.food_management.entities.UserEntity;
 
 import java.util.List;
 
 public interface RecipeService  {
 
-    void add(RecipeDto dto) throws Exception;
+    RecipeDto convertToDto(RecipeEntity entity);
+
+    RecipeEntity convertToEntity(RecipeDto dto);
+
+    void add(RecipeDto dto);
 
     List<RecipeEntity> findAllActive();
 
@@ -17,13 +23,17 @@ public interface RecipeService  {
 
     HeadersDto findAllForAuthor(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort);
 
-    RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) throws Exception;
+    RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto);
 
     RecipeDto getRecipeAdmin(Long id);
 
     RecipeGetUserDto getRecipeUser(Long id);
 
-    void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) throws Exception;
+    Integer checkIfIngredientInFridgeAndReturnPercentageToCook(UserEntity userEntity, RecipeIngredientEntity recipeIngredientEntity);
+
+    void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto);
+
+    RecipeEntity addIngredientToRecipeEntity(RecipeEntity recipeEntity, Long id, List<IngredientInFridgeAndRecipeDto> ingredients);
 
     void delete(Long id);
 }

@@ -16,14 +16,16 @@ public class RecipeController {
     private RecipeService service;
     private UserSessionService userSessionService;
 
-    public RecipeController(RecipeService service, UserSessionService userSessionService) {
+    public RecipeController(
+            RecipeService service,
+            UserSessionService userSessionService) {
         this.service = service;
         this.userSessionService = userSessionService;
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
-    ResponseEntity<?> getById(@PathVariable Long id) throws Exception {
+    @GetMapping(value = "/{id}")
+    ResponseEntity<?> getById(@PathVariable Long id) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
@@ -42,7 +44,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAuthority('USER')") // zwraca wszystkie aktywne przepisy
-    @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"possibleMissingIngredientsAmount", "elementsOnPage", "currentPage"})
+    @GetMapping(value = "/all", params = {"possibleMissingIngredientsAmount", "elementsOnPage", "currentPage"})
     ResponseEntity<HeadersDto> findAllForUser(@RequestParam(value = "possibleMissingIngredientsAmount") Integer possibleMissingIngredientsAmount,
                                                     @RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                     @RequestParam(value = "currentPage") Integer currentPage,
@@ -55,7 +57,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')") // zwraca wszystkie hedery przepisow jakie sa dla admina
-    @RequestMapping(value = "/all",method = RequestMethod.GET, params = {"elementsOnPage", "currentPage"})
+    @GetMapping(value = "/all", params = {"elementsOnPage", "currentPage"})
     ResponseEntity<HeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -68,7 +70,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value = "/my",method = RequestMethod.GET) // zwraca hedery przepisow uzytkownika zalogowanego
+    @GetMapping(value = "/my") // zwraca hedery przepisow uzytkownika zalogowanego
     ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                      @RequestParam(value = "currentPage") Integer currentPage,
                                                      @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -81,7 +83,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @RequestMapping(value = "/{id}/updateStatus",method = RequestMethod.PUT)
+    @PutMapping(value = "/{id}/updateStatus")
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id, @RequestBody RecipeChangeStatusDto dto) throws Exception {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
@@ -91,7 +93,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(value = "/{id}/updateRecipe",method = RequestMethod.PUT) // upadte robi update dla wlasciciela
+    @PutMapping(value = "/{id}/updateRecipe") // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
@@ -102,8 +104,8 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity add(@RequestBody RecipeDto dto) throws Exception {
+    @PostMapping
+    ResponseEntity add(@RequestBody RecipeDto dto) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }
@@ -112,8 +114,8 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @RequestMapping(method = RequestMethod.DELETE)
-    ResponseEntity delete(@RequestParam(value = "id", required = false) Long id) {
+    @DeleteMapping
+    ResponseEntity delete(@RequestParam(value = "id") Long id) {
         if(!userSessionService.isActive()){
             throw new InactiveAccountException("Inactive account.");
         }

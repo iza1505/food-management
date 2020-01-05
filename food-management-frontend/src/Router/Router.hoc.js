@@ -1,7 +1,6 @@
 
 import React, {Component} from "react";
 import { Switch, BrowserRouter, Route } from "react-router-dom";
-import { Detector } from "react-detect-offline";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import routes from "../configuration/routes";
@@ -13,7 +12,6 @@ class Router extends Component {
           <Route
             render={({ location }) => (
               <>
-                {/* <Detector render={({ online }) => (!online ? <NetworkNotification /> : null)} /> */}
                 <TransitionGroup>
                   <CSSTransition key={location.key} timeout={300} classNames="fade">
                     <Switch location={location}>

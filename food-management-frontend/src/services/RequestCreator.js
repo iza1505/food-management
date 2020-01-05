@@ -1,11 +1,11 @@
 import { RequestActionCreator } from "./RequestActionCreator";
-import { API_URL } from "../configuration/index";
+import { API_URL } from "../configuration";
 
 class RequestServiceCreator {
   baseURL = null;
 
-  constructor() {
-    this.baseURL = API_URL;
+  constructor(args = {}) {
+    this.baseURL = args.baseURL;
   }
 
   makeCall(type, { url, method, needAuth, data, headers = {}, ...rest }, meta) {
@@ -91,5 +91,9 @@ class RequestServiceCreator {
     return new RequestServiceCreator(args);
   }
 }
+
+export const APIService = RequestServiceCreator.create({
+  baseURL: API_URL
+});
 
 export default RequestServiceCreator;

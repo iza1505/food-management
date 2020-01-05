@@ -1,6 +1,6 @@
 const userRoles = {
-    user: "User",
-    admin: "Administrator"
+    user: "USER",
+    admin: "ADMINISTRATOR"
   };
   
   const userRolesMap = {

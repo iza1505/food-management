@@ -42,6 +42,7 @@ public class AuthController {
         return ResponseEntity.ok("Account has been confirmed.");
     }
 
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         UserEntity userEntity = userService.findByLogin(loginRequest.getLogin());

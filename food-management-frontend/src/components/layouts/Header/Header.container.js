@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import { bool, func, string } from "prop-types";
 
 import Header from "./Header.component";
-//import { logoutUser } from "../../../../actions/user.actions";
-// import {
-//   getLoggedStatus,
-//   getLogin,
-//   getRoleActive
-// } from "../../../../selectors/user.selectors";
+import { logoutUser } from "./../../../actions/user.actions";
+import {
+  getLoggedStatus,
+  getLogin,
+  getRole
+} from "./../../../selectors/user.selectors";
 
 export class HeaderContainer extends Component {
   static propTypes = {
@@ -19,35 +19,30 @@ export class HeaderContainer extends Component {
   };
 
   handleLogout = () => {
-    console.log("wylogowany");
-    // this.props.logoutUser();
+    this.props.logoutUser();
   };
 
   render() {
     return (
       <Header
-        loggedStatus={true}
-        login={"henlo"}
+        loggedStatus={this.props.loggedStatus}
+        login={this.props.login}
         logout={this.handleLogout}
-        roleActive={"User"}
-        // loggedStatus={this.props.loggedStatus}
-        // login={this.props.login}
-        // logout={this.handleLogout}
-        // roleActive={this.props.roleActive}
+        roleActive={this.props.roleActive}
       />
     );
   }
 }
 
-// const mapStateToProps = state => ({
-//   loggedStatus: getLoggedStatus(state),
-//   login: getLogin(state),
-//   roleActive: getRoleActive(state)
-// });
+const mapStateToProps = state => ({
+  loggedStatus: getLoggedStatus(state),
+  login: getLogin(state),
+  roleActive: getRole(state)
+});
 
-// const mapDispatchToProps = {
-//   logoutUser
-// };
+const mapDispatchToProps = {
+  logoutUser
+};
 
-// export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);
-export default HeaderContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);
+//export default HeaderContainer;

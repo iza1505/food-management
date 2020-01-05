@@ -21,7 +21,7 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           >
             <span>{login}</span>
           </button>
-          <div className="dropdown-menu" aria-labelledby="usernavmenu">
+          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="usernavmenu">
             <Link to="/profile" className="dropdown-item">
               Profile
             </Link>

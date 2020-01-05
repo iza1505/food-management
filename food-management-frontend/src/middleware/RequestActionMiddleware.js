@@ -1,8 +1,8 @@
 import { get, isNil, omit } from "lodash";
 import axios from "axios";
 
-import { getLoggedStatus, getTokenExpDate } from "../../selectors/user.selectors";
-import { logoutUser } from "../../actions/user.actions";
+import { getLoggedStatus, getTokenExpDate } from "../selectors/user.selectors";
+import { logoutUser } from "../actions/user.actions";
 
 export const PENDING = "PENDING";
 export const FULFILLED = "FULFILLED";

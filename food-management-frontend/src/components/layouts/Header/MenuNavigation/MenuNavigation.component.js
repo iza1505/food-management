@@ -25,10 +25,10 @@ const MenuNavigation = ({ loggedStatus, roleActive }) => {
             {navItem.text}
           </button>
 
-          <div className="dropdown-menu" aria-labelledby={"nav-item-" + index}>
+          <div className="dropdown-menu" aria-labelledby={"nav-item-" + index} >
             {navItem.subItems.map(item =>
               item.canAccess.includes(roleActive) ? (
-                <Link to={item.to} className="dropdown-item" key={item.to}>
+                <Link to={item.to} className="dropdown-item " key={item.to}>
                   {item.text}
                 </Link>
               ) : null

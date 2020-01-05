@@ -1,8 +1,10 @@
 import React from "react";
+import Header from "../../components/layouts/Header";
 
 function App() {
   return (
     <div >
+      <Header />
       <header >
         <p>
           Edit <code>src/App.js</code> and save to reload.

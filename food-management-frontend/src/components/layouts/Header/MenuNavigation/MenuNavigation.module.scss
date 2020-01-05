@@ -1,0 +1,35 @@
+.item-toogle {
+  font-weight: bold;
+  background: transparent;
+  padding: 0;
+  color: green;
+  //color: var(--header-c);
+  border: none;
+  white-space: nowrap;
+  display: block;
+
+  &:after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.2em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+  }
+}
+
+.menu-nav {
+  display: flex;
+}
+
+.dropdown-menu {
+  position: relative;
+  margin-right: 30px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+

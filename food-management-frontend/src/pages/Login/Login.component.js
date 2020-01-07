@@ -1,9 +1,10 @@
 import React from "react";
-import { reduxForm, Form } from "redux-form";
-import { func, string, bool } from "prop-types";
+import { reduxForm, Form, Field } from "redux-form";
+import { func } from "prop-types";
 
-//import { validateRequired } from "../../validators/Validators";
+import { validateRequired } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
+import input from "../../components/Fields/input";
 //import Input from "../../components/Input/Input.component"; input
 //import Button from "../../components/Button/Button.component"; button
 
@@ -11,41 +12,46 @@ import LayoutMain from "../../components/layouts/MainLayout";
 import background from "../../assets/background.jpg";
 
 export const Login = props => {
-  const { handleSubmit, errors } = props;
+  const { handleSubmit } = props;
 
   return (
-    <LayoutMain title="Sign in" hideTitle fullContent >
+    <LayoutMain title="Sign in" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
-        <div className="login-container">
-          <Form onSubmit={handleSubmit} className="form-container">
-            <span style={{ color: "red" }}>{errors}</span>
-            <input
+  
+          <Form
+            onSubmit={handleSubmit}
+            className="form-container"
+            autoComplete="on"
+          >
+            <Field
+              className="form-control mb-2 mr-sm-2 autoComplete"
               name="login"
-              placeholder="Username"
-              label="Login *"
-              //validate={validateRequired}
-              component="input"
+              type="text"
+              placeholder="Login"
+              validate={validateRequired}
+              component={input}
             />
-            <input
+            <Field
+              className="form-control mb-2 mr-sm-2"
               name="password"
               placeholder="Password"
-              label="Password *"
-              //validate={validateRequired}
+              validate={validateRequired}
               type="password"
-              component="input"
+              component={input}
             />
-            <button type="submit" text="sign in" />
+            <button className="btn btn-success" type="submit">
+              {" "}
+              Sign in{" "}
+            </button>
           </Form>
-        </div>
+        
       </div>
     </LayoutMain>
   );
 };
 
 Login.propTypes = {
-  handleSubmit: func,
-  errors: string,
-  submitting: bool
+  handleSubmit: func
 };
 
 export default reduxForm({

@@ -38,7 +38,7 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           </div>
         </div>
       ) : (
-        <a href="/login" text="sign in" style={{color: 'blue'}}> sing in </a>
+        <a href="/login" text="sign in" style={{color: 'blue'}}> sign in </a>
       )}
     </div>
   );

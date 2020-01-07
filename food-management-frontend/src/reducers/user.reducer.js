@@ -36,9 +36,11 @@ const userReducer = (state = initialState, action) => {
     
     //case `${ACTIONS.REFRESH_TOKEN}_${REJECTED}`:
     case `${ACTIONS.LOGIN_USER}_${REJECTED}`:
-    case ACTIONS.LOGOUT_USER:
+    case ACTIONS.LOGOUT_USER:{
       return initialState;
-
+    }
+      
+      
     default:
       return state;
   }

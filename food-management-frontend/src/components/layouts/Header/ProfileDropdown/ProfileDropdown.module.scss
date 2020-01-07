@@ -1,36 +1,25 @@
 
-
 .logout-item {
   cursor: pointer;
 }
 
 .usernav-toogle {
-  font-weight: 400;
   background: transparent;
-  padding: 0;
   border: none;
-  white-space: nowrap;
-  font-size: 0.9375rem;
-  //color: var(--header-c);
+  font-size: 16px;
   color: green;
 
   &:after {
     display: inline-block;
-    margin-left: 0.255em;
-    vertical-align: 0.2em;
-    content: "";
-    border-top: 0.3em solid;
-    // border-top: 0.3em solid var(--header-toggle-brdc);
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
+    margin-left: 4px;
+    vertical-align: -1px;
+    content: "▼";
+    transform: scale(.7);
   }
 }
 
 .navaccount {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  right: 30px;
+  right: 15px;
 }
 

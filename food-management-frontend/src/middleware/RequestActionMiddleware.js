@@ -37,7 +37,7 @@ const checkIfUserCanPerformRequest = ({ dispatch }, state, action) => {
   // if ((currentTimeWOMs - 300) > expDate) {
   //  refreshToken(getToken(state))(dispatch);
   // }
-  if (currentTimeWOMs > expDate) {
+  if (currentTimeWOMs > expDate && expDate !==null) {
     logoutUser()(dispatch);
   }
   const { needAuth } = action.payload;

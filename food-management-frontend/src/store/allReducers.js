@@ -13,10 +13,21 @@ import { reducer as formReducer } from "redux-form";
 // import flightsReducer from "../reducers/flights.reducer";
 // import themeReducer from "../reducers/theme.reducer";
  import userReducer from "../reducers/user.reducer";
+ import { ACTIONS } from "../actions/user.actions";
 
 const allReducers = combineReducers({
   form: formReducer,
   user: userReducer
 });
 
-export default allReducers;
+const rootReducer = (state, action) => {
+  if(action.type === ACTIONS.LOGOUT_USER){
+    state = undefined;
+    //console.log("czyszcze pamiec");
+  }
+      
+
+  return allReducers(state, action);
+};
+
+export default rootReducer;

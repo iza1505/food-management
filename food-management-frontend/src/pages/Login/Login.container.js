@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bool, string, object, func } from "prop-types";
 import { withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { loginUser } from "../../actions/user.actions";
 import { getLoggedStatus, getToken } from "../../selectors/user.selectors";
 import Login from "./Login.component";
-import { toast } from "react-toastify";
+
 
 class LoginContainer extends Component {
   static propTypes = {
@@ -16,13 +17,13 @@ class LoginContainer extends Component {
     token: string
   };
 
-  _redirectToDelegationsPage = () => this.context.history.push("/");
+  _redirectToHomePage = () => this.props.history.push("/");
 
   handleSubmit = values => {
     return this.props.loginUser(values.login, values.password)
       .then(() => {
         if (this.props.loggedStatus && this.props.token) {
-          this._redirectToDelegationsPage();
+          this._redirectToHomePage();
         }
       })
       .catch(err => {

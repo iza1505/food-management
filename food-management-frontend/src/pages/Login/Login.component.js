@@ -9,7 +9,7 @@ import input from "../../components/Fields/input";
 //import Button from "../../components/Button/Button.component"; button
 
 //import login from "../../assets/images/login.jpg";
-import background from "../../assets/background.jpg";
+import background from "../../assets/backgroundUnauth.jpg";
 
 export const Login = props => {
   const { handleSubmit } = props;

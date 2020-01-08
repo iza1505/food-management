@@ -23,7 +23,6 @@ const allReducers = combineReducers({
 const rootReducer = (state, action) => {
   if(action.type === ACTIONS.LOGOUT_USER){
     state = undefined;
-    //console.log("czyszcze pamiec");
   }
       
 

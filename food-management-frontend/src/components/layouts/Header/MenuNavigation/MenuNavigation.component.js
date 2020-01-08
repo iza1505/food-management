@@ -7,8 +7,6 @@ import navigationItems from "../../../../configuration/navigation";
 import styles from "./MenuNavigation.module.scss";
 
 const MenuNavigation = ({ loggedStatus, roleActive }) => {
-  // console.log("status");
-  // console.log(loggedStatus);
   return loggedStatus ? (
     <div className={styles["menu-nav"]}>
       {navigationItems.map((navItem, index) => (

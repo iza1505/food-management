@@ -4,6 +4,7 @@ import { Switch, BrowserRouter, Route } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import routes from "../configuration/routes";
+import PrivateRoute from "./PrivateRoute";
 
 class Router extends Component {
     render() {
@@ -19,8 +20,8 @@ class Router extends Component {
                         elem.public === true ? (
                           <Route key={elem.path} exact {...elem} />
                         ) : (
-                            <Route key={elem.path} exact {...elem} />
-                        //   <PrivateRoute key={elem.path} exact {...elem} />
+                            //<Route key={elem.path} exact {...elem} />
+                           <PrivateRoute key={elem.path} exact {...elem} />
                         )
                       )}
                     </Switch>

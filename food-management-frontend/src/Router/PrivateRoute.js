@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import { array, bool, string } from "prop-types";
 
-//import { getLoggedStatus, getRoleActive } from "../../selectors/user.selectors";
+import { getLoggedStatus, getRole } from "./../selectors/user.selectors";
 
 class PrivateRoute extends Component {
   static propTypes = {
@@ -12,10 +12,10 @@ class PrivateRoute extends Component {
     roleActive: string
   };
 
-  _redirectToHome = () =>
+  _homeRedirect = () =>
     window.location.pathname === "/" ? null : <Redirect to="/" />;
 
-  _redirectToLogin = () =>
+  _loginRedirect = () =>
     window.location.pathname === "/login" ? null : <Redirect to="/login" />;
 
   haveAccessToRoute = () => {
@@ -35,20 +35,19 @@ class PrivateRoute extends Component {
       this.haveAccessToRoute() ? (
         <Route {...this.props} />
       ) : (
-        this._redirectToHome()
+        this._homeRedirect()
       )
     ) : (
-      this._redirectToLogin()
+      this._loginRedirect()
     );
   }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     loggedStatus: getLoggedStatus(state),
-//     roleActive: getRoleActive(state)
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    loggedStatus: getLoggedStatus(state),
+    roleActive: getRole(state)
+  };
+};
 
-export default PrivateRoute;
-//export default connect(mapStateToProps, null)(PrivateRoute);
+export default connect(mapStateToProps, null)(PrivateRoute);

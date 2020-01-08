@@ -27,7 +27,7 @@ const userReducer = (state = initialState, action) => {
         fetchingUser: false,
         logged: true,
         login: token.sub,
-        token: action.payload.data.token,
+        token: action.payload.data.accessToken,
         tokenExpDate: token.exp,
         role: role
       };
@@ -39,7 +39,6 @@ const userReducer = (state = initialState, action) => {
     case ACTIONS.LOGOUT_USER:{
       return initialState;
     }
-      
       
     default:
       return state;

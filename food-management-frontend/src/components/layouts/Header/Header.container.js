@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, func, string } from "prop-types";
+import { bool, func, string, object } from "prop-types";
+import { withRouter } from "react-router-dom";
 
 import Header from "./Header.component";
 import { logoutUser } from "./../../../actions/user.actions";
@@ -12,14 +13,18 @@ import {
 
 export class HeaderContainer extends Component {
   static propTypes = {
+    history: object,
     loggedStatus: bool,
     login: string,
     logoutUser: func,
     roleActive: string
   };
 
+  _redirectToLoginPage = () => this.props.history.push("/login");
+
   handleLogout = () => {
     this.props.logoutUser();
+    return this._redirectToLoginPage();
   };
 
   render() {
@@ -44,5 +49,8 @@ const mapDispatchToProps = {
   logoutUser
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);
 //export default HeaderContainer;
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)
+);
+

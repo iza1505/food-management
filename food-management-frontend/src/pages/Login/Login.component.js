@@ -15,7 +15,7 @@ export const Login = props => {
   const { handleSubmit } = props;
 
   return (
-    <LayoutMain title="Sign in" hideTitle fullContent>
+    <LayoutMain title="Log in" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
   
           <Form
@@ -41,7 +41,7 @@ export const Login = props => {
             />
             <button className="btn btn-success" type="submit">
               {" "}
-              Sign in{" "}
+              Log in{" "}
             </button>
           </Form>
         

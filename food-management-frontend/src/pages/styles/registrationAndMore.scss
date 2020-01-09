@@ -1,3 +1,22 @@
 .registrationAndMore-container {
-    color: greenyellow;
+  color: greenyellow;
+}
+
+.myDivRegistration {
+  background: red;
+  height: 15px;
+}
+
+.email-container {
+  //display: inline;
+  //margin-right: 50px;
+  position: absolute;
+  height: 150px;
+
+   
+}
+
+.email-container button {
+    position: relative;
+    background: red;
 }

@@ -2,11 +2,12 @@ import { userRoles } from "./roles";
 
 import Login from "../pages/Login";
 import Home from "../pages/Home";
+import RegistrationAndMore from "../pages/registrationAndMore";
 
 const { admin, user } = userRoles;
 const routes = [
   { path: "/login", component: Login, public: true },
-  { path: "/registrationAndMore", component: Login, public: true },
+  { path: "/registrationAndMore", component: RegistrationAndMore, public: true },
   { path: "/", component: Home, canAccess: [user, admin] },
   {
     path: "/profile/settings",

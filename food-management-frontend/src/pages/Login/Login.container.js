@@ -1,21 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bool, string, object, func } from "prop-types";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
+import { reset } from "redux-form";
+import { bindActionCreators } from "redux";
 
 import { loginUser } from "../../actions/user.actions";
 import { getLoggedStatus, getToken } from "../../selectors/user.selectors";
 import Login from "./Login.component";
 
-
 class LoginContainer extends Component {
   static propTypes = {
+    dispatch: func,
     history: object,
     loggedStatus: bool,
     loginUser: func,
     token: string
   };
+
+  constructor(props) {
+    super(props);
+    this.props.dispatch(reset("loginform"));
+  }
 
   componentDidMount() {
     if (this.props.loggedStatus) {
@@ -26,7 +33,8 @@ class LoginContainer extends Component {
   _redirectToHomePage = () => this.props.history.push("/");
 
   handleSubmit = values => {
-    return this.props.loginUser(values.login, values.password)
+    return this.props
+      .loginUser(values.login, values.password)
       .then(() => {
         if (this.props.loggedStatus && this.props.token) {
           this._redirectToHomePage();
@@ -53,13 +61,14 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = {
-  loginUser
-};
+// const mapDispatchToProps = dispatch => {
+//   loginUser, dispatch;
+// };
+
+function mapDispatchToProps(dispatch) {
+  return { dispatch, loginUser: bindActionCreators(loginUser, dispatch) };
+}
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(LoginContainer)
+  connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
 );

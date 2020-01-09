@@ -22,7 +22,12 @@
   right: 15px;
 }
 
-a {
+.unauth-button-container {
+  display: inline;
+  margin-left: 250px;
+}
+
+.a-style-registration {
   margin-left: 25px;
   font-style: italic;
   letter-spacing: 0.1em;
@@ -33,5 +38,13 @@ a {
 
   &:visited {
     color: green;
+  }
+}
+
+nav a {
+  display: inline-block;
+  margin-left: 10px;
+  &:hover {
+    cursor: pointer;
   }
 }

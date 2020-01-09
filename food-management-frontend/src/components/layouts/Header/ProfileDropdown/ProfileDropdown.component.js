@@ -41,17 +41,15 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           </div>
         </div>
       ) : (
-        <div>
-          <b>
-          <a href="/login">
-            {" "}
-            Log in
-          </a>
-          <a href="/registrationAndMore" >
-            {" "}
-            Sign in/More..
-          </a>
-          </b>
+        <div className="unauth-button-container">
+          <nav>
+            <a className="btn btn-success" href="/login">
+              Log in
+            </a>
+            <a className="btn btn-success" href="/registrationAndMore">
+              Sign in/More..
+            </a>
+          </nav>
         </div>
       )}
     </div>

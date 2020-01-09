@@ -8,16 +8,19 @@ import input from "../../components/Fields/input";
 import background from "../../assets/backgroundUnauth.jpg";
 
 export const RegistrationAndMore = props => {
-  const { handleSubmitSignIn, handleSubmitSendEmail } = props;
-
+  // const { handleSubmitSignIn, handleSubmitSendEmail } = props;
+  const { handleSubmit } = props;
   return (
     <LayoutMain title="Sign in" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <Form
-          onSubmit={handleSubmitSignIn}
+          onSubmit={handleSubmit}
           className="form-container"
           autoComplete="on"
         >
+          <h1 className="email-information">
+            Type required information and sign in.
+          </h1>
           <Field
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="login"
@@ -55,13 +58,16 @@ export const RegistrationAndMore = props => {
             Sign in{" "}
           </button>
         </Form>
-
+{/* 
         <Form
           onSubmit={handleSubmitSendEmail}
           className="form-container"
           autoComplete="on"
         >
           <div className="email-container">
+            <h1 className="email-information">
+              Type your email and choose one of two options.{" "}
+            </h1>
             <Field
               className="form-control mb-2 mr-sm-2 autoComplete"
               name="email"
@@ -82,14 +88,15 @@ export const RegistrationAndMore = props => {
               Reset password
             </button>
           </div>
-        </Form>
+        </Form> */}
       </div>
     </LayoutMain>
   );
 };
 
 RegistrationAndMore.propTypes = {
-  handleSubmit: func
+  handleSubmit: func,
+  //handleSubmitSendEmail: func
 };
 
 export default reduxForm({

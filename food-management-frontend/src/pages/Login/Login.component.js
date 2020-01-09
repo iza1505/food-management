@@ -5,10 +5,6 @@ import { func } from "prop-types";
 import { validateRequired } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
-//import Input from "../../components/Input/Input.component"; input
-//import Button from "../../components/Button/Button.component"; button
-
-//import login from "../../assets/images/login.jpg";
 import background from "../../assets/backgroundUnauth.jpg";
 
 export const Login = props => {
@@ -55,5 +51,5 @@ Login.propTypes = {
 };
 
 export default reduxForm({
-  form: "loginform"
+  form: "loginform",
 })(Login);

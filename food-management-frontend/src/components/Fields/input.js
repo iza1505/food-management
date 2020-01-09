@@ -4,6 +4,7 @@ import { string, object } from "prop-types";
 const renderInput = ({ input, placeholder, type, className, 
     meta: { touched, error, warning }, 
 }) => { 
+  console.log("meta: " + touched + ". blad: " + error);
     return (
     <div>
       <div>

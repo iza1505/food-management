@@ -21,7 +21,10 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           >
             <span>{login}</span>
           </button>
-          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="usernavmenu">
+          <div
+            className="dropdown-menu dropdown-menu-right"
+            aria-labelledby="usernavmenu"
+          >
             <Link to="/profile" className="dropdown-item">
               Profile
             </Link>
@@ -38,7 +41,18 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           </div>
         </div>
       ) : (
-        <a href="/login" text="sign in" style={{color: 'blue'}}> sign in </a>
+        <div>
+          <b>
+          <a href="/login">
+            {" "}
+            Log in
+          </a>
+          <a href="/registrationAndMore" >
+            {" "}
+            Sign in/More..
+          </a>
+          </b>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bool, string, object, func } from "prop-types";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { loginUser } from "../../actions/user.actions";
@@ -16,6 +16,12 @@ class LoginContainer extends Component {
     loginUser: func,
     token: string
   };
+
+  componentDidMount() {
+    if (this.props.loggedStatus) {
+      return this._redirectToHomePage();
+    }
+  }
 
   _redirectToHomePage = () => this.props.history.push("/");
 

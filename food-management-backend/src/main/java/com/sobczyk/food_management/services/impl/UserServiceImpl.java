@@ -130,12 +130,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendActivationEmail(String hashedPassword, String email) {
-        String hashPasswordHash = passwordEncoder.encode(hashedPassword);
-        String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
-        SimpleMailMessage emailToSend = emailProvider
-                .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
-                                             "Active your account using link"
-                                            );
+        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        if(hashedPassword == null){
+            emailToSend = emailProvider
+                    .constructResetPasswordEmail(null, email, null, "Account activation information",
+                                                 "You can't active account because it is deactivated by administrator. "
+                                                );
+        } else {
+            String hashPasswordHash = passwordEncoder.encode(hashedPassword);
+            String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
+            emailToSend = emailProvider
+                    .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
+                                                 "Active your account using link"
+                                                );
+        }
+
         emailProvider.sendEmail(emailToSend);
     }
 
@@ -223,18 +232,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto) {
-        UserEntity userEntity = findByLogin(dto.getLogin());
-        if (userEntity.getEmail().equals(dto.getEmail())) {
-            String passwordHash = passwordEncoder.encode(findByEmail(dto.getEmail()).getPasswordHash());
-            String jwt = tokenProvider.generatePasswordToken(dto.getEmail(), passwordHash);
-            SimpleMailMessage emailToSend = emailProvider
-                    .constructResetPasswordEmail(jwt, dto.getEmail(), "/auth/forgotPassword?token=", "Reset Password",
+        UserEntity userEntity = findByEmail(dto.getEmail());
+        String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
+        String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
+        SimpleMailMessage emailToSend = emailProvider
+                    .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=", "Reset Password",
                                                  "Reset your password using link:"
                                                 );
-            emailProvider.sendEmail(emailToSend);
-        } else {
-            throw new IncompatibilityDataException("User with this login and email not exists.");
-        }
+        emailProvider.sendEmail(emailToSend);
+
 
     }
 
@@ -281,23 +287,25 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    @Override
-    public void deactivateAccount() {
-        UserEntity userEntity = userSessionService.getUser();
-        userEntity.setActive(false);
-        userEntity.setConfrimationDate(null);
-        userIngredientRepository.deleteAllByUserIngredientKey_UserId(userEntity.getId());
-        repository.save(userEntity);
-    }
+//    @Override
+//    public void changeActiveStatus() {
+//        UserEntity userEntity = userSessionService.getUser();
+//        userEntity.setActive(false);
+//        //userEntity.setConfrimationDate(null);
+//        userIngredientRepository.deleteAllByUserIngredientKey_UserId(userEntity.getId());
+//        repository.save(userEntity);
+//    }
 
     @Override
     public void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto) {
-        UserEntity userEntity = findByLogin(dto.getLogin());
-        if (userEntity.getEmail().equals(dto.getEmail())) {
-            sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
-        } else {
-            throw new IncompatibilityDataException("User with this login and email not exists.");
-        }
+        UserEntity userEntity = findByEmail(dto.getEmail());
+
+            if(!userEntity.getActive() && userEntity.getConfrimationDate() == null){
+                sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
+            } else {
+                sendActivationEmail(null, userEntity.getEmail());
+            }
+
     }
 
 }

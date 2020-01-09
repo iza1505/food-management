@@ -38,6 +38,7 @@ public class AuthController {
 
     @PostMapping(value = "/registration", params = {"token"})
     public ResponseEntity registration(@RequestParam(value = "token") String token) throws Exception {
+        System.out.println(token);
         userService.confirmAccount(token);
         return ResponseEntity.ok("Account has been confirmed.");
     }

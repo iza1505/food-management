@@ -3,11 +3,12 @@ package com.sobczyk.food_management.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 public class ForgotPasswordOrResendConfirmationEmailDto {
 
-    public String login;
-
+    @NotNull
     public String email;
 }

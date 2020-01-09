@@ -43,7 +43,7 @@ public interface UserService {
 
     ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto);
 
-    void deactivateAccount();
+    //void changeActiveStatus();
 
     void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto);
 

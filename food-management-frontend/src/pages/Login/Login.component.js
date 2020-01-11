@@ -13,34 +13,32 @@ export const Login = props => {
   return (
     <LayoutMain title="Log in" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
-  
-          <Form
-            onSubmit={handleSubmit}
-            className="form-container"
-            autoComplete="on"
-          >
-            <Field
-              className="form-control mb-2 mr-sm-2 autoComplete"
-              name="login"
-              type="text"
-              placeholder="Login"
-              validate={validateRequired}
-              component={input}
-            />
-            <Field
-              className="form-control mb-2 mr-sm-2"
-              name="password"
-              placeholder="Password"
-              validate={validateRequired}
-              type="password"
-              component={input}
-            />
-            <button className="btn btn-success" type="submit">
-              {" "}
-              Log in{" "}
-            </button>
-          </Form>
-        
+        <Form
+          onSubmit={handleSubmit}
+          className="form-container"
+          autoComplete="on"
+        >
+          <Field
+            className="form-control mb-2 mr-sm-2"
+            name="login"
+            type="text"
+            placeholder="Login"
+            validate={validateRequired}
+            component={input}
+          />
+          <Field
+            className="form-control mb-2 mr-sm-2"
+            name="password"
+            placeholder="Password"
+            validate={validateRequired}
+            type="password"
+            component={input}
+          />
+          <button className="btn btn-success" type="submit">
+            {" "}
+            Log in{" "}
+          </button>
+        </Form>
       </div>
     </LayoutMain>
   );
@@ -51,5 +49,5 @@ Login.propTypes = {
 };
 
 export default reduxForm({
-  form: "loginform",
+  form: "loginform"
 })(Login);

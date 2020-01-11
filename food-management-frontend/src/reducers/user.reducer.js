@@ -1,6 +1,6 @@
 import { ACTIONS } from "../actions/user.actions";
 import { PENDING, FULFILLED, REJECTED } from "../middleware";
-//import { prepareToken, mapRoles } from "../helpers";
+//import { mapRoles } from "../helpers";
 
 const initialState = {
   logged: false,

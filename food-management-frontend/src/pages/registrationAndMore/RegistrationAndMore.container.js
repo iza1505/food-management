@@ -1,30 +1,49 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, string, object, func } from "prop-types";
+import { bool, object, func } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
-import { reset } from "redux-form";
+import { reset, getFormSyncErrors } from "redux-form";
 import { bindActionCreators } from "redux";
 
-import { getLoggedStatus, getToken } from "../../selectors/user.selectors";
+import { getLoggedStatus } from "../../selectors/user.selectors";
 import RegistrationAndMore from "./RegistrationAndMore.component";
-import { register } from "./../../actions/user.actions";
+import {
+  register,
+  sendConfirmationMail,
+  sendResetPasswordMail
+} from "./../../actions/user.actions";
 
 class RegistrationAndMoreContainer extends Component {
   static propTypes = {
+    dispatch: func,
     history: object,
     loggedStatus: bool,
-    dispatch: func,
-    register: func,
-    loggedStatus: bool,
-    token: string
+    register: func
+  };
+
+  state = {
+    login: "",
+    email: ""
   };
 
   constructor(props) {
     super(props);
-    console.log("reset form");
-    //this.props.dispatch(reset("registrationform"));
+    this.handleSubmitRegistration = this.handleSubmitRegistration.bind(this);
+    this.handleSendConfirmationMail = this.handleSendConfirmationMail.bind(
+      this
+    );
+    this.handleSendResetPasswordMail = this.handleSendResetPasswordMail.bind(
+      this
+    );
+    this.props.dispatch(reset("registrationform"));
   }
+
+  changeState = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   componentDidMount() {
     if (this.props.loggedStatus) {
@@ -34,24 +53,44 @@ class RegistrationAndMoreContainer extends Component {
 
   _redirectToHomePage = () => this.props.history.push("/");
 
-  handleSubmit = (values) => {
-    //console.log(JSON.stringify(values));
-    // console.log("jestem tutaj");
-    // console.log(values.login + " " + values.emailSignIn + " " + values.passwordConfirm);
-    // toast.error(values.login + " " + values.emailSignIn + " " + values.passwordConfirm);
-    return this.props.register(values.login, values.emailSignIn, values.password).then(()=>{
-      toast.info("Confirmation email was send.");
-    }).catch(err => {
-      if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
-      } else {
-        toast.error("Invalid registration data.");
-      }
-    });
+  handleSubmit = values => {
+    return this.props
+      .register(values.login, values.emailToSign, values.password)
+      .then(() => {
+        toast.info("Confirmation email was send.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Invalid registration data.");
+        }
+      });
+  };
+  handleSubmitRegistration(e) {
+    e.preventDefault();
+
+    // return this.props
+    //   .register(
+    //     e.target.loginSignIn.value,
+    //     e.target.emailSignIn.value,
+    //     e.target.password.value
+    //   )
+    //   .then(() => {
+    //     toast.info("Confirmation email was send.");
+    //   })
+    //   .catch(err => {
+    //     if (!err.response) {
+    //       toast.warn("Server is unreachable. Check your internet connection.");
+    //     } else {
+    //       toast.error("Invalid registration data.");
+    //     }
+    //   });
   }
 
-  handleSubmitSendEmail = values => {
-    console.log("email");
+  handleSendConfirmationMail(e) {
+    e.preventDefault();
+    //console.log("Confirm account: " + e.target.email.value);
     // return this.props
     //   .loginUser(values.login, values.password)
     //   .then(() => {
@@ -66,15 +105,21 @@ class RegistrationAndMoreContainer extends Component {
     //       toast.error("Invalid Username or Password");
     //     }
     //   });
-  };
-  //handleSubmitSignIn, handleSubmitSendEmail
+  }
+
+  handleSendResetPasswordMail(e) {
+    e.preventDefault();
+    //console.log("dane: " + this.state.login + this.state.email);
+  }
 
   render() {
     return (
       <RegistrationAndMore
-      onSubmit={this.handleSubmit}
-      // handleSubmitSignIn={this.handleSubmitSignIn}
-      //   handleSubmitSendEmail={this.handleSubmitSendEmail}
+        changeState={this.changeState}
+        handleSubmitRegistration={this.handleSubmitRegistration}
+        handleSendConfirmationMail={this.handleSendConfirmationMail}
+        handleSendResetPasswordMail={this.handleSendResetPasswordMail}
+        onSubmit={this.handleSubmit}
       />
     );
   }
@@ -83,11 +128,14 @@ class RegistrationAndMoreContainer extends Component {
 const mapStateToProps = state => {
   return {
     loggedStatus: getLoggedStatus(state),
-    token: getToken(state)
+    formErrors: getFormSyncErrors('registrationform')(state)
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return { dispatch, register: bindActionCreators(register, dispatch) };
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationAndMoreContainer));
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(RegistrationAndMoreContainer)
+);

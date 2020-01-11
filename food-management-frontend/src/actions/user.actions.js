@@ -5,8 +5,10 @@ export const ACTIONS = {
   LOGIN_USER: "USER_LOGIN_USER",
   LOGOUT_USER: "USER_LOGOUT_USER",
   SEND_CONFIRMATION_EMAIL: "USER_SEND_CONFIRMATION_EMAIL",
-  REGISTER_USER: "USER_REGISTER_USER"
+  REGISTER_USER: "USER_REGISTER_USER",
+  SEND_RESET_PASSWORD_EMAIL: "USER_SEND_RESET_PASSWORD_EMAIL",
   //REFRESH_TOKEN: "USER_REFRESH_TOKEN"
+  RESET_PASSWORD: "USER_RESET_PASSWORD"
 };
 
 const loginUser = (login, password) => dispatch =>
@@ -44,7 +46,37 @@ const sendConfirmationMail = email => dispatch => {
   );
 };
 
-const confirmEmail = url => dispatch => {
+const sendResetPasswordMail = email => dispatch => {
+  return dispatch(
+    APIService.post(ACTIONS.SEND_RESET_PASSWORD_EMAIL, {
+      url: "/forgotPassword",
+      needAuth: false,
+      headers: {
+        "Content-type": "application/json"
+      },
+      data: {
+        email: email
+      }
+    })
+  );
+};
+
+const resetPassword = (url, password) => dispatch => {
+  return dispatch(
+    APIService.post(ACTIONS.RESET_PASSWORD, {
+      url: url,
+      needAuth: false,
+      headers: {
+        "Content-type": "application/json"
+      },
+      data: {
+        password: password
+      }
+    })
+  );
+};
+
+const confirmAccount = url => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.CONFIRMATION_EMAIL, {
       url: url,
@@ -57,7 +89,6 @@ const confirmEmail = url => dispatch => {
 };
 
 const register = (login, email, password) => dispatch => {
-  console.log(email);
   return dispatch(
     APIService.post(ACTIONS.REGISTER_USER, {
       url: "/auth/registration",
@@ -88,4 +119,12 @@ const register = (login, email, password) => dispatch => {
 //     })
 //   );
 
-export { loginUser, logoutUser, sendConfirmationMail, confirmEmail, register };
+export {
+  loginUser,
+  logoutUser,
+  sendConfirmationMail,
+  confirmAccount,
+  register,
+  sendResetPasswordMail,
+  resetPassword
+};

@@ -9,12 +9,17 @@ import background from "../../assets/backgroundUnauth.jpg";
 
 export const RegistrationAndMore = props => {
   // const { handleSubmitSignIn, handleSubmitSendEmail } = props;
-  const { handleSubmit } = props;
+  const {
+    changeState,
+    handleSubmitRegistration,
+    handleSendConfirmationMail,
+    handleSendResetPasswordMail
+  } = props;
   return (
     <LayoutMain title="Sign in" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <Form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitRegistration}
           className="form-container"
           autoComplete="on"
         >
@@ -22,16 +27,18 @@ export const RegistrationAndMore = props => {
             Type required information and sign in.
           </h1>
           <Field
-            className="form-control mb-2 mr-sm-2 autoComplete"
-            name="login"
+            className="form-control mb-2 mr-sm-2"
+            name="loginSignIn"
+            id="loginSignIn"
             type="text"
             placeholder="Login"
             validate={validateRequired}
             component={input}
           />
           <Field
-            className="form-control mb-2 mr-sm-2 autoComplete"
+            className="form-control mb-2 mr-sm-2"
             name="emailSignIn"
+            id="emailSignIn"
             type="text"
             placeholder="Email"
             validate={validateRequired}
@@ -40,6 +47,7 @@ export const RegistrationAndMore = props => {
           <Field
             className="form-control mb-2 mr-sm-2"
             name="password"
+            id="password"
             placeholder="Password"
             validate={validateRequired}
             type="password"
@@ -48,6 +56,7 @@ export const RegistrationAndMore = props => {
           <Field
             className="form-control mb-2 mr-sm-2"
             name="passwordConfirm"
+            id="passwordConfirm"
             placeholder="Repeat password"
             validate={validateRequired}
             type="password"
@@ -58,9 +67,9 @@ export const RegistrationAndMore = props => {
             Sign in{" "}
           </button>
         </Form>
-{/* 
+
         <Form
-          onSubmit={handleSubmitSendEmail}
+          onSubmit={handleSendConfirmationMail}
           className="form-container"
           autoComplete="on"
         >
@@ -70,13 +79,22 @@ export const RegistrationAndMore = props => {
             </h1>
             <Field
               className="form-control mb-2 mr-sm-2 autoComplete"
+              name="login"
+              type="text"
+              placeholder="Login"
+              validate={validateRequired}
+              component={input}
+              onChange={e => changeState(e)}
+            />
+            <Field
+              className="form-control mb-2 mr-sm-2 autoComplete"
               name="email"
               type="text"
               placeholder="Email"
               validate={validateRequired}
               component={input}
+              onChange={e => changeState(e)}
             />
-
             <button
               className="btn btn-success"
               type="submit"
@@ -84,21 +102,29 @@ export const RegistrationAndMore = props => {
             >
               Confirmation email
             </button>
-            <button className="btn btn-success" type="submit" name="reset">
+            <button
+              className="btn btn-success"
+              type="button"
+              name="reset"
+              onClick={e => handleSendResetPasswordMail(e)}
+            >
               Reset password
             </button>
           </div>
-        </Form> */}
+        </Form>
       </div>
     </LayoutMain>
   );
 };
 
 RegistrationAndMore.propTypes = {
-  handleSubmit: func,
-  //handleSubmitSendEmail: func
+  changeState: func,
+  handleSubmitRegistration: func,
+  handleSendConfirmationMail: func,
+  handleSendResetPasswordMail: func
 };
 
 export default reduxForm({
-  form: "registrationform"
+  form: "registrationform",
+  keepDirtyOnReinitialize: false
 })(RegistrationAndMore);

@@ -4,11 +4,14 @@ import { string, object } from "prop-types";
 const renderInput = ({ input, placeholder, type, className, 
     meta: { touched, error, warning }, 
 }) => { 
-  console.log("meta: " + touched + ". blad: " + error);
+  input.onInvalid = function(e) {
+    e.target.setCustomValidity(error);
+  };
     return (
     <div>
       <div>
         <input {...input}
+        required
         style={{position: "relative"}}
         placeholder={placeholder} 
         type={type} 

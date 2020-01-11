@@ -80,7 +80,7 @@ public class AuthController {
     @PostMapping("/resendConfirmationEmail")
     public ResponseEntity resendConfirmationEmail(@RequestBody ForgotPasswordOrResendConfirmationEmailDto dto) {
         userService.resendConfirmationEmail(dto);
-        return ResponseEntity.ok("Reset passsword email was sent.");
+        return ResponseEntity.ok("Confirmation email was sent.");
     }
 
 }

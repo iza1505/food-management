@@ -36,7 +36,7 @@ class RegistrationAndMoreContainer extends Component {
     this.handleSendResetPasswordMail = this.handleSendResetPasswordMail.bind(
       this
     );
-    this.props.dispatch(reset("registrationform"));
+    //this.props.dispatch(reset("registrationform"));
   }
 
   changeState = e => {
@@ -69,46 +69,56 @@ class RegistrationAndMoreContainer extends Component {
   };
   handleSubmitRegistration(e) {
     e.preventDefault();
-
-    // return this.props
-    //   .register(
-    //     e.target.loginSignIn.value,
-    //     e.target.emailSignIn.value,
-    //     e.target.password.value
-    //   )
-    //   .then(() => {
-    //     toast.info("Confirmation email was send.");
-    //   })
-    //   .catch(err => {
-    //     if (!err.response) {
-    //       toast.warn("Server is unreachable. Check your internet connection.");
-    //     } else {
-    //       toast.error("Invalid registration data.");
-    //     }
-    //   });
+    return this.props
+      .register(
+        e.target.loginSignIn.value,
+        e.target.emailSignIn.value,
+        e.target.password.value
+      )
+      .then(() => {
+        toast.info("Confirmation email was send.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Invalid registration data.");
+        }
+      });
   }
 
   handleSendConfirmationMail(e) {
     e.preventDefault();
-    //console.log("Confirm account: " + e.target.email.value);
-    // return this.props
-    //   .loginUser(values.login, values.password)
-    //   .then(() => {
-    //     if (this.props.loggedStatus && this.props.token) {
-    //       this._redirectToHomePage();
-    //     }
-    //   })
-    //   .catch(err => {
-    //     if (!err.response) {
-    //       toast.warn("Server is unreachable. Check your internet connection.");
-    //     } else {
-    //       toast.error("Invalid Username or Password");
-    //     }
-    //   });
+    console.log("Confirm account: " + e.target.email.value);
+    return this.props
+      .sendConfirmationMail(e.target.login.value, e.target.email.value)
+      .then(() => {
+        toast.info("Confirmation email was send.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Invalid data.");
+        }
+      });
   }
 
   handleSendResetPasswordMail(e) {
     e.preventDefault();
+    
+    return this.props
+      .sendResetPasswordMail(this.state.login, this.state.email)
+      .then(() => {
+        toast.info("Change password email was send.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Invalid data.");
+        }
+      });
     //console.log("dane: " + this.state.login + this.state.email);
   }
 
@@ -128,13 +138,21 @@ class RegistrationAndMoreContainer extends Component {
 const mapStateToProps = state => {
   return {
     loggedStatus: getLoggedStatus(state),
-    formErrors: getFormSyncErrors('registrationform')(state)
+    formErrors: getFormSyncErrors("registrationform")(state)
   };
 };
 
 function mapDispatchToProps(dispatch) {
-  return { dispatch, register: bindActionCreators(register, dispatch) };
+  return {
+    dispatch,
+    register: bindActionCreators(register, dispatch),
+    sendConfirmationMail: bindActionCreators(sendConfirmationMail, dispatch),
+    sendResetPasswordMail: bindActionCreators(sendResetPasswordMail, dispatch)
+  };
 }
+
+//sendConfirmationMail,
+//sendResetPasswordMail
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(RegistrationAndMoreContainer)

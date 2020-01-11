@@ -11,7 +11,6 @@ class ConfirmedEmailContainer extends Component {
   static propTypes = {
     information: string,
     token: string,
-    match: object,
     confirmAccount: func
   };
 

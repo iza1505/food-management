@@ -233,14 +233,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByEmail(dto.getEmail());
-        String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
-        String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
-        SimpleMailMessage emailToSend = emailProvider
+        if(userEntity.getConfrimationDate()==null){
+            throw new IncompatibilityDataException("If you want reset password, first confirm your account.");
+        }
+        if(userEntity.getLogin().equals(dto.getLogin())){
+            String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
+            String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
+            SimpleMailMessage emailToSend = emailProvider
                     .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=", "Reset Password",
                                                  "Reset your password using link:"
                                                 );
-        emailProvider.sendEmail(emailToSend);
-
+            emailProvider.sendEmail(emailToSend);
+        } else {
+            throw new IncompatibilityDataException("User with this login ang email not exists.");
+        }
 
     }
 
@@ -299,12 +305,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByEmail(dto.getEmail());
-
+        if(userEntity.getLogin().equals(dto.getLogin())){
             if(!userEntity.getActive() && userEntity.getConfrimationDate() == null){
                 sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
             } else {
                 sendActivationEmail(null, userEntity.getEmail());
             }
+        } else {
+            throw new IncompatibilityDataException("User with this login and email not exists.");
+        }
+
 
     }
 

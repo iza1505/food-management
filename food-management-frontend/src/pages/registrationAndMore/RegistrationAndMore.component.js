@@ -125,6 +125,5 @@ RegistrationAndMore.propTypes = {
 };
 
 export default reduxForm({
-  form: "registrationform",
-  keepDirtyOnReinitialize: false
+  form: "registrationform"
 })(RegistrationAndMore);

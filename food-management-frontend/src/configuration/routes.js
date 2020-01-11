@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import RegistrationAndMore from "../pages/registrationAndMore";
 import ComfirmedEmail from "../pages/ConfirmedEmail";
+import ChangePasswordMail from "../pages/ChangePasswordMail";
 
 const { admin, user } = userRoles;
 
@@ -23,6 +24,11 @@ const routes = [
   {
     path: "/auth/registration",
     component: ComfirmedEmail,
+    public: true
+  },
+  {
+    path: "/auth/forgotPassword",
+    component: ChangePasswordMail,
     public: true
   }
 ];

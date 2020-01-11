@@ -31,30 +31,32 @@ const logoutUser = () => dispatch =>
     type: ACTIONS.LOGOUT_USER
   });
 
-const sendConfirmationMail = email => dispatch => {
+const sendConfirmationMail = (login, email) => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.SEND_CONFIRMATION_EMAIL, {
-      url: "/resendConfirmationEmail",
+      url: "/auth/resendConfirmationEmail",
       needAuth: false,
       headers: {
         "Content-type": "application/json"
       },
       data: {
+        login: login,
         email: email
       }
     })
   );
 };
 
-const sendResetPasswordMail = email => dispatch => {
+const sendResetPasswordMail = (login, email)  => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.SEND_RESET_PASSWORD_EMAIL, {
-      url: "/forgotPassword",
+      url: "/auth/forgotPassword",
       needAuth: false,
       headers: {
         "Content-type": "application/json"
       },
       data: {
+        login: login,
         email: email
       }
     })

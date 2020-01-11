@@ -10,5 +10,8 @@ import javax.validation.constraints.NotNull;
 public class ForgotPasswordOrResendConfirmationEmailDto {
 
     @NotNull
+    public String login;
+
+    @NotNull
     public String email;
 }

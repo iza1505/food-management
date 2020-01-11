@@ -73,6 +73,7 @@ public class AuthController {
     @PostMapping(value = "/forgotPassword", params = {"token"})
     public ResponseEntity resetForgottenPassword(@RequestParam(value = "token") String token,
                                                  @RequestBody NewPasswordDto dto) {
+
         userService.resetForgottenPassword(dto.getPassword(), token);
         return ResponseEntity.ok("Password has been changed.");
     }

@@ -1,5 +1,4 @@
 import { APIService } from "../services/RequestCreator";
-import { API_URL } from "../configuration";
 
 export const ACTIONS = {
   LOGIN_USER: "USER_LOGIN_USER",

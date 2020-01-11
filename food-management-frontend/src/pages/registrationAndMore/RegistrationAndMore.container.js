@@ -36,7 +36,7 @@ class RegistrationAndMoreContainer extends Component {
     this.handleSendResetPasswordMail = this.handleSendResetPasswordMail.bind(
       this
     );
-    //this.props.dispatch(reset("registrationform"));
+    this.props.dispatch(reset("registrationform"));
   }
 
   changeState = e => {

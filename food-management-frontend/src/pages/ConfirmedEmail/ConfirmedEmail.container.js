@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { string, func, object } from "prop-types";
+import { string, func } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 
@@ -37,9 +37,6 @@ class ConfirmedEmailContainer extends Component {
           this.setState({ information: "Invalid data." });
         }
       });
-    // this.props.fetchDelegationChecklist(this.props.delegationId).then(() => {
-    //   this.setState({ delegationChecklist: this.props.delegationChecklist });
-    // });
   }
 
   render() {

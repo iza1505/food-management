@@ -8,28 +8,19 @@ const renderInput = ({
   className,
   meta: { touched, error, warning }
 }) => {
-  if (error) {
-    input.onInvalid = function(e) {
-      e.target.setCustomValidity(error);
-    };
-  } else {
-    input.onInvalid = function(e) {
-      e.target.setCustomValidity("");
-    };
-  }
-
   return (
     <div>
       <div>
         <input
           {...input}
-          required
           style={{ position: "relative" }}
           placeholder={placeholder}
           type={type}
           className={className}
         />
-        {/* {touched && !input.value && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))} */}
+        {touched &&
+          ((error && <span>{error}</span>) ||
+            (warning && <span>{warning}</span>))}
       </div>
     </div>
   );

@@ -59,4 +59,3 @@ ChangePasswordMail.propTypes = {
 export default reduxForm({
   form: "changePasswordForm"
 })(ChangePasswordMail);
-//export default ChangePasswordMail;

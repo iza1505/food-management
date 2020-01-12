@@ -49,7 +49,6 @@ const mapDispatchToProps = {
   logoutUser
 };
 
-//export default HeaderContainer;
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)
 );

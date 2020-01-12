@@ -50,5 +50,4 @@ const mapStateToProps = state => {
   };
 };
 
-//export default PrivateRoute;
 export default connect(mapStateToProps, null)(PrivateRoute);

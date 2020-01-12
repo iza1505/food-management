@@ -2,8 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { bool, func, string } from "prop-types";
 
-//import ButtonLink from "../../../../../ButtonLink/ButtonLink.component";
-
 import styles from "./ProfileDropdown.module.scss";
 
 const ProfileDropdown = ({ loggedStatus, logout, login }) => {
@@ -27,9 +25,6 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
           >
             <Link to="/profile" className="dropdown-item">
               Profile
-            </Link>
-            <Link to="/profile/settings" className="dropdown-item">
-              Settings
             </Link>
             <hr />
             <li

@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import RegistrationAndMore from "../pages/registrationAndMore";
 import ComfirmedEmail from "../pages/ConfirmedEmail";
 import ChangePasswordMail from "../pages/ChangePasswordMail";
+import Profile from "../pages/Profile";
 
 const { admin, user } = userRoles;
 
@@ -17,8 +18,8 @@ const routes = [
   },
   { path: "/", component: Home, canAccess: [user, admin] },
   {
-    path: "/profile/settings",
-    component: Login,
+    path: "/profile",
+    component: Profile,
     canAccess: [user, admin]
   },
   {

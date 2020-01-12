@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsToChangeDto updateDetails(UserDetailsToChangeDto dto) {
-        UserEntity userToUpdate = findByEmail(dto.getEmail());
+        UserEntity userToUpdate = userSessionService.getUser();
         Validator.validateVersion(userToUpdate, dto.getVersion());
 
         userToUpdate.setEmail(dto.getEmail());
@@ -260,7 +260,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(ChangePasswordDto dto) {
         UserEntity userEntity = userSessionService.getUser();
-        Validator.validateVersion(userEntity, dto.getVersion());
         
         if (passwordEncoder.matches(dto.getOldPassword(), userEntity.getPasswordHash())) {
             String newPasswordHash = passwordEncoder.encode(dto.getNewPassword());

@@ -8,6 +8,8 @@ const getTokenExpDate = state => get(state, "user.tokenExpDate");
 const getRole = state => get(state, "user.role");
 const getLogin = state => get(state, "user.login");
 const getFetchingUser = state => get(state, "user.fetchingUser");
+const getEmail = state => get(state, "user.email");
+const getVersion = state => get(state, "user.version");
 
 const isUserUser = state => getRole(state) === userRoles.user;
 const isUserAdmin = state => getRole(state) === userRoles.admin;
@@ -21,5 +23,7 @@ export {
   getLogin,
   getFetchingUser,
   isUserUser,
-  isUserAdmin
+  isUserAdmin,
+  getEmail,
+  getVersion
 };

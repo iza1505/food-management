@@ -6,15 +6,29 @@ import Footer from "./../Footer/Footer.component";
 
 import styles from "./MainLayout.module.scss";
 
-const MainLayout = ({ children, title, fullContent, hideTitle, buttonsHide, buttons }) => {
+const MainLayout = ({
+  children,
+  title,
+  fullContent,
+  hideTitle,
+  buttonsHide,
+  buttons
+}) => {
   return (
     <div>
       <Header />
-      <main className={[styles["main-content"], fullContent ? styles["full-content"] : ""].join(" ")}>
+      <main
+        className={[
+          styles["main-content"],
+          fullContent ? styles["full-content"] : ""
+        ].join(" ")}
+      >
         {title && !hideTitle ? (
           <div className={styles["page-header"]}>
-            <h2>{title}</h2>
-            {!buttonsHide && buttons ? <div className={styles["buttons"]}>{buttons}</div> : null}
+            <h4 className="layout-title">{title}</h4>
+            {!buttonsHide && buttons ? (
+              <div className={styles["buttons"]}>{buttons}</div>
+            ) : null}
           </div>
         ) : null}
         <section>{children}</section>

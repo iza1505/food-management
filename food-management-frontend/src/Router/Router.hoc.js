@@ -20,7 +20,6 @@ class Router extends Component {
                         elem.public === true ? (
                           <Route key={elem.path} exact {...elem} />
                         ) : (
-                            //<Route key={elem.path} exact {...elem} />
                            <PrivateRoute key={elem.path} exact {...elem} />
                         )
                       )}

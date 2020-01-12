@@ -36,8 +36,8 @@ const RegistrationModalForm = props => {
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
-                name="loginSignIn"
-                id="loginSignIn"
+                name="login"
+                id="login"
                 type="text"
                 placeholder="Login"
                 validate={[validateRequired, validateLogin]}
@@ -45,8 +45,8 @@ const RegistrationModalForm = props => {
               />
               <Field
                 className="form-control mb-2 mr-sm-2"
-                name="emailSignIn"
-                id="emailSignIn"
+                name="email"
+                id="email"
                 type="text"
                 placeholder="Email"
                 validate={[validateRequired, validateEmail]}
@@ -55,7 +55,7 @@ const RegistrationModalForm = props => {
               <Field
                 className="form-control mb-2 mr-sm-2"
                 name="password1"
-                id="password"
+                id="password1"
                 placeholder="Password"
                 validate={[
                   validateRequired,

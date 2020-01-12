@@ -13,7 +13,7 @@ export class RegistrationModalFormContainer extends Component {
 
   handleSubmit = values => {
     return this.props
-      .register(values.login, values.emailToSign, values.password)
+      .register(values.login, values.email, values.password1)
       .then(() => {
         toast.info("Confirmation email was send.");
       })

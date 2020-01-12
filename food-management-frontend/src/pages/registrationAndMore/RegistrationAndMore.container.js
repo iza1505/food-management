@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bool, object, func } from "prop-types";
 import { withRouter } from "react-router-dom";
-import { toast } from "react-toastify";
 import { reset, getFormSyncErrors } from "redux-form";
 
 import { getLoggedStatus } from "../../selectors/user.selectors";

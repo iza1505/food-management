@@ -138,7 +138,6 @@ const updateDetails = (email, version) => dispatch => {
 };
 
 const changePassword = (oldPassword, newPassword) => dispatch => {
-  console.log(oldPassword + newPassword);
   return dispatch(
     APIService.put(ACTIONS.CHANGE_PASSWORD, {
       url: "/users/myAccount/changePassword",

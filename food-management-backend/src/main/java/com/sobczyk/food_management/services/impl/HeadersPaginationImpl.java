@@ -21,7 +21,7 @@ public class HeadersPaginationImpl implements HeadersPagination {
             if (sortBy != null) {
                 if (ascendingSort != null) {
                     pageHolder =
-                            new PagedListHolder<>(headers, new MutableSortDefinition("title", true, ascendingSort));
+                            new PagedListHolder<>(headers, new MutableSortDefinition(sortBy, true, ascendingSort));
                 } else {
                     pageHolder = new PagedListHolder<>(headers, new MutableSortDefinition(sortBy, true, true));
                 }
@@ -41,6 +41,8 @@ public class HeadersPaginationImpl implements HeadersPagination {
             headersDto.setHeaders(headers);
             headersDto.setPageCount(1);
         }
+
+        headersDto.setCurrentPage(currentPage);
 
         return headersDto;
     }

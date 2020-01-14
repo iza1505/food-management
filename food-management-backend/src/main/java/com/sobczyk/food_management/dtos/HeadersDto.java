@@ -6,10 +6,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@JsonPropertyOrder({"headers", "pageCount" })
+@JsonPropertyOrder({"headers", "pageCount", "currentPage" })
 public class HeadersDto {
 
     public List<?> headers;
 
     public Integer pageCount;
+
+    public Integer currentPage;
 }

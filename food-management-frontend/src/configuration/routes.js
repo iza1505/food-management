@@ -6,6 +6,7 @@ import RegistrationAndMore from "../pages/registrationAndMore";
 import ComfirmedEmail from "../pages/ConfirmedEmail";
 import ChangePasswordMail from "../pages/ChangePasswordMail";
 import Profile from "../pages/Profile";
+import HeadersUser from "../pages/Headers/User";
 
 const { admin, user } = userRoles;
 
@@ -31,6 +32,11 @@ const routes = [
     path: "/auth/forgotPassword",
     component: ChangePasswordMail,
     public: true
+  },
+  {
+    path: "/recipes/all",
+    component: HeadersUser,
+    canAccess: [user, admin]
   }
 ];
 

@@ -3,12 +3,14 @@ import { reducer as formReducer } from "redux-form";
 
 import userReducer from "../reducers/user.reducer";
 import recipeHeaders from "../reducers/recipeHeades.reducer";
+import recipeReducer from "../reducers/recipe.reducer";
 import { ACTIONS } from "../actions/user.actions";
 
 const allReducers = combineReducers({
   form: formReducer,
   user: userReducer,
-  recipeHeaders: recipeHeaders
+  recipeHeaders: recipeHeaders,
+  recipe: recipeReducer
 });
 
 const rootReducer = (state, action) => {

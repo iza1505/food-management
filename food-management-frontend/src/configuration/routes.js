@@ -7,6 +7,7 @@ import ComfirmedEmail from "../pages/ConfirmedEmail";
 import ChangePasswordMail from "../pages/ChangePasswordMail";
 import Profile from "../pages/Profile";
 import HeadersUser from "../pages/Headers/User";
+import Recipe from "../pages/Recipe";
 
 const { admin, user } = userRoles;
 
@@ -36,6 +37,11 @@ const routes = [
   {
     path: "/recipes/all",
     component: HeadersUser,
+    canAccess: [user, admin]
+  },
+  {
+    path: "/recipes/:recipeId",
+    component: Recipe,
     canAccess: [user, admin]
   }
 ];

@@ -93,7 +93,7 @@ export const HeadersUser = props => {
         </form>
         <div>
           {userRole === userRoles.user ? (
-            <table className="table table-striped">
+            <table className="table table-striped ">
               <thead className="bg-success">
                 <tr>
                   <th scope="col">Title</th>

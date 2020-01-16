@@ -5,7 +5,6 @@ const initialState = {
   recipesHeaders: [],
   pageCount: 1,
   fetchingHeaders: false,
-  fetchingRecipe: false,
   currentPage: 1
 };
 

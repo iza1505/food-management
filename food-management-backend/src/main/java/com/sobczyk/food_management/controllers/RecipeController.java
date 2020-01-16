@@ -99,7 +99,7 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @PutMapping(value = "/{id}/updateRecipe")
+    @PutMapping(value = "/{id}")
         // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
         if (!userSessionService.isActive()) {

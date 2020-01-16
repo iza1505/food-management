@@ -3,12 +3,23 @@ import { array, bool, number, object, string, oneOfType } from "prop-types";
 
 import styles from "./LabelWithData.module.scss";
 
-const LabelWithData = ({ label, children, loading = false }) => {
+const LabelWithData = ({
+  color,
+  dataColor,
+  label,
+  children,
+  loading = false
+}) => {
+  console.log(label);
   return (
-    <div style={{alignItems: "center"}}>
+    <div>
       <div className="row">
-        <div className="col-sm-1  ">
-          <label className={styles["label-bold"]} htmlFor="row-content">
+        <div className="col-sm-3">
+          <label
+            className={styles["label-bold"]}
+            htmlFor="row-content"
+            style={{ color: color }}
+          >
             {label}
           </label>
         </div>
@@ -16,7 +27,9 @@ const LabelWithData = ({ label, children, loading = false }) => {
           {loading ? (
             <div />
           ) : (
-            <span className={styles["label-data"]}>{children}</span>
+            <span className={styles["label-data"]} style={{ color: dataColor }}>
+              {children}
+            </span>
           )}
         </div>
       </div>
@@ -25,7 +38,9 @@ const LabelWithData = ({ label, children, loading = false }) => {
 };
 
 LabelWithData.propTypes = {
-  children: oneOfType([array, object, string, number]),
+  children: string,
+  color: string,
+  dataColor: string,
   label: string.isRequired,
   loading: bool
 };

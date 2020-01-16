@@ -4,12 +4,11 @@ import { object, string } from "prop-types";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import LabelWithData from "../../components/LabelWithData/LabelWithData";
-import RecipeHeaderAdmin from "../../components/RecipeHeaderAdmin/RecipeHeaderAdmin";
 import { userRoles } from "../../configuration/roles";
+import { renderBooelan } from "../../configuration/helpers";
 
 export const Recipe = props => {
   const { recipe, userRole } = props;
-
   return (
     <LayoutMain title="Recipe">
       <div>
@@ -38,11 +37,25 @@ export const Recipe = props => {
           <ChangePasswordModalForm />
         </div> */}
         {userRole === userRoles.admin ? (
-          <RecipeHeaderAdmin
-            active={recipe.active}
-            waitingForAccept={recipe.waitingForAccept}
-            toImprove={recipe.toImprove}
-          />
+          <>
+            <LabelWithData loading={false} label="Active:" color="blueviolet">
+              {renderBooelan(recipe.active)}
+            </LabelWithData>
+            <LabelWithData
+              loading={false}
+              label="Waiting for accept:"
+              color="blueviolet"
+            >
+              {renderBooelan(recipe.waitingForAccept)}
+            </LabelWithData>
+            <LabelWithData
+              loading={false}
+              label="To improve:"
+              color="blueviolet"
+            >
+              {recipe.toImprove ? recipe.toImprove : "-"}
+            </LabelWithData>
+          </>
         ) : (
           <></>
         )}
@@ -62,9 +75,58 @@ export const Recipe = props => {
             {recipe.userName}
           </LabelWithData>
         )}
-        {/* <LabelWithData loading={false} label="Author:">
-          {recipe.userName}
-        </LabelWithData> */}
+
+        {userRole === userRoles.admin ? (
+          <>
+            <LabelWithData loading={false} label="Ingredients:">
+              {recipe.ingredients.map(elem => (
+                <LabelWithData
+                  loading={false}
+                  label={elem.ingredient.ingredientName}
+                  color="blue"
+                  key={elem.id}
+                >
+                  {elem.amount} {elem.ingredient.measure.measureName}
+                </LabelWithData>
+              ))}
+            </LabelWithData>
+          </>
+        ) : (
+          <>
+            {" "}
+            <LabelWithData loading={false} label="Ingredients:">
+              {recipe.ingredients.map(elem =>
+                elem.amount <= elem.hasGot ? (
+                  //   <LabelWithData
+                  //     loading={false}
+                  //     label={elem.ingredient.ingredientName}
+                  //     color="blue"
+                  //     key={elem.id}
+                  //   >
+                  <div style={{ color: "blue" }}>
+                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                    {elem.ingredient.measure.measureName} / You have:{" "}
+                    {elem.hasGot} {elem.ingredient.measure.measureName}
+                  </div>
+                ) : (
+                  //</LabelWithData>
+                  //   <LabelWithData
+                  //     loading={false}
+                  //     label={elem.ingredient.ingredientName}
+                  //     color="red"
+                  //     key={elem.id}
+                  //   >
+                  <div style={{ color: "red" }}>
+                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                    {elem.ingredient.measure.measureName} / You have:{" "}
+                    {elem.hasGot} {elem.ingredient.measure.measureName}
+                  </div>
+                  // </LabelWithData>
+                )
+              )}
+            </LabelWithData>
+          </>
+        )}
       </div>
     </LayoutMain>
   );

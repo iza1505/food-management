@@ -12,7 +12,7 @@ insert into ingredient (version, ingredient_name, measure_id, active) values (0,
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'egg', 3, true );
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'milk', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'salt', 2, true);
-insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'vegetable oil', 1, true);
+insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'veg. oil', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'butter', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'onion', 3, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'carrot', 3, true);

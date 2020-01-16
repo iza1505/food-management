@@ -3,7 +3,6 @@ import { PENDING, FULFILLED, REJECTED } from "../middleware";
 
 const initialState = {
   recipesHeaders: [],
-  recipe: {},
   pageCount: 1,
   fetchingHeaders: false,
   fetchingRecipe: false,
@@ -22,6 +21,17 @@ const recipeHeadersReducer = (state = initialState, action) => {
         recipesHeaders: action.payload.data.headers,
         pageCount: action.payload.data.pageCount,
         currentPage: action.payload.data.currentPage
+      };
+    }
+
+    case ACTIONS.RESET_HEADERS: {
+      return initialState;
+    }
+
+    case ACTIONS.RESET_CURRENTPAGE_ON_SUBMIT: {
+      return {
+        ...state,
+        currentPage: 1
       };
     }
 

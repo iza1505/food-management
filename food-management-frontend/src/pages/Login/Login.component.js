@@ -23,6 +23,7 @@ export const Login = props => {
             name="login"
             type="text"
             placeholder="Login"
+            label="Login:"
             validate={validateRequired}
             component={input}
           />
@@ -30,6 +31,7 @@ export const Login = props => {
             className="form-control mb-2 mr-sm-2"
             name="password"
             placeholder="Password"
+            label="Password:"
             validate={validateRequired}
             type="password"
             component={input}

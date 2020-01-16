@@ -40,6 +40,7 @@ const RegistrationModalForm = props => {
                 id="login"
                 type="text"
                 placeholder="Login"
+                label="Login:"
                 validate={[validateRequired, validateLogin]}
                 component={input}
               />
@@ -49,6 +50,7 @@ const RegistrationModalForm = props => {
                 id="email"
                 type="text"
                 placeholder="Email"
+                label="Email:"
                 validate={[validateRequired, validateEmail]}
                 component={input}
               />
@@ -57,6 +59,7 @@ const RegistrationModalForm = props => {
                 name="password1"
                 id="password1"
                 placeholder="Password"
+                label="Password:"
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -71,6 +74,7 @@ const RegistrationModalForm = props => {
                 name="passwordConfirm"
                 id="passwordConfirm"
                 placeholder="Repeat password"
+                label="Repeat password:"
                 validate={[validateRequired, validateConfirmedPassword]}
                 type="password"
                 component={input}

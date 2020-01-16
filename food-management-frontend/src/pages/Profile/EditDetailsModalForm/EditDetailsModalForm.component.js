@@ -30,6 +30,7 @@ const EditDetailsModalForm = props => {
                 id="email"
                 type="text"
                 placeholder={email}
+                label="Email:"
                 validate={[validateRequired, validateEmail]}
                 component={input}
               />

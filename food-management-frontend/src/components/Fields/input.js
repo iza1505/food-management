@@ -3,6 +3,7 @@ import { string, object } from "prop-types";
 
 const renderInput = ({
   input,
+  label,
   placeholder,
   type,
   className,
@@ -11,6 +12,7 @@ const renderInput = ({
   return (
     <div>
       <div>
+        <label>{label}</label>
         <input
           {...input}
           style={{ position: "relative" }}
@@ -19,8 +21,8 @@ const renderInput = ({
           className={className}
         />
         {touched &&
-          ((error && <span>{error}</span>) ||
-            (warning && <span>{warning}</span>))}
+          ((error && <span style={{ color: "red" }}>{error}</span>) ||
+            (warning && <span style={{ color: "yellow" }}>{warning}</span>))}
       </div>
     </div>
   );
@@ -28,6 +30,7 @@ const renderInput = ({
 
 renderInput.propTypes = {
   input: object,
+  label: string,
   placeholder: string,
   meta: object,
   type: string.isRequired,

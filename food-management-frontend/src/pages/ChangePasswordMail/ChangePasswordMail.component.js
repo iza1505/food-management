@@ -28,6 +28,7 @@ export const ChangePasswordMail = props => {
               name="password1"
               type="password"
               placeholder="Password"
+              label="Password:"
               validate={validateRequired}
               component={input}
             />
@@ -36,6 +37,7 @@ export const ChangePasswordMail = props => {
               name="password2"
               type="password"
               placeholder="Password confirmation"
+              label="Password confirmation:"
               validate={validateConfirmedPassword}
               component={input}
             />

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, object, number } from "prop-types";
+import { array, func, object, number, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -12,32 +12,36 @@ import {
   getCurrentPage
 } from "../../../selectors/recipeHeaders.selectors";
 
-import { getHeaders } from "../../../actions/recipeHeaders.actions";
+import { getRole } from "../../../selectors/user.selectors";
+
+import {
+  getHeaders,
+  resetHeaders,
+  resetCurrentPageOnSubmit
+} from "../../../actions/recipeHeaders.actions";
 import HeadersUser from "./HeadersUser.component";
+import { userRoles } from "../../../configuration/roles";
 
 class HeadersUserContainer extends Component {
   static propTypes = {
+    currentPage: number,
     getHeaders: func,
     history: object,
     pageCount: number,
     recipeHeaders: array,
-    currentPage: number
+    resetHeaders: func,
+    resetCurrentPageOnSubmit: func,
+    userRole: string
   };
 
   state = {
-    elementsOnPage: 10,
-    elementsOnPageOptions: [1, 2, 5, 20],
-    //currentPage: 1,
-    sortBy: null,
-    sortByOptions: [
-      { label: "Title", value: "title" },
-      { label: "Missing ingredient amout", value: "missingIngredientsAmount" },
-      {label: "Cookable %", value: "percentageToCook"}
-    ],
-    ascendingSort: null,
-    possibleMissingIngredientsAmount: -1,
     paginationElem: []
   };
+
+  constructor(props) {
+    super(props);
+    this.props.resetHeaders();
+  }
 
   reloadData = newPage => {
     const parsed = querySearch.parse(this.props.location.search);
@@ -66,11 +70,7 @@ class HeadersUserContainer extends Component {
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
       let url =
-        window.location.pathname +
-        "?elementsOnPage=" +
-        parsed.elementsOnPage +
-        "&possibleMissingIngredientsAmount=" +
-        parsed.possibleMissingIngredientsAmount;
+        window.location.pathname + "?elementsOnPage=" + parsed.elementsOnPage;
 
       if (parsed.sortBy) {
         url = url + "&sortBy=" + parsed.sortBy;
@@ -86,16 +86,27 @@ class HeadersUserContainer extends Component {
         url = url + "&currentPage=1";
       }
 
-      this.props.getHeaders(url).then(()=> {
-        this.createPagination();
-      })
-      .catch(err => {
-        if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
-        } else {
-          toast.error("Can't get recipes headers.");
-        }
-      });
+      if (this.props.userRole === userRoles.user) {
+        url =
+          url +
+          "&possibleMissingIngredientsAmount=" +
+          parsed.possibleMissingIngredientsAmount;
+      }
+
+      this.props
+        .getHeaders(url)
+        .then(() => {
+          this.createPagination();
+        })
+        .catch(err => {
+          if (!err.response) {
+            toast.warn(
+              "Server is unreachable. Check your internet connection."
+            );
+          } else {
+            toast.error("Can't get recipes headers.");
+          }
+        });
     }
   }
 
@@ -117,36 +128,35 @@ class HeadersUserContainer extends Component {
     this.reloadData(page);
   };
 
+  handleClick = e => {
+    console.log(e.target.name);
+  };
+
   render() {
     return (
       <HeadersUser
         pageCount={this.props.pageCount}
         recipeHeaders={this.props.recipeHeaders}
-        elementsOnPage={this.state.elementsOnPage}
         currentPage={this.props.currentPage}
-        sortBy={this.state.sortBy}
-        ascendingSort={this.state.ascendingSort}
-        possibleMissingIngredientsAmount={
-          this.state.possibleMissingIngredientsAmount
-        }
         handlePagination={this.handlePagination}
         paginationElem={this.state.paginationElem}
-        handlePrevious={this.handlePrevious}
-        elementsOnPageOptions={this.state.elementsOnPageOptions}
-        sortByOptions={this.state.sortByOptions}
+        userRole={this.props.userRole}
+        handleClick={this.handleClick}
       />
     );
   }
 }
 
 const mapDispatchToProps = {
-  getHeaders
+  getHeaders,
+  resetHeaders
 };
 
 const mapStateToProps = state => ({
   pageCount: getPageCount(state),
   recipeHeaders: getRecipesHeaders(state),
-  currentPage: getCurrentPage(state)
+  currentPage: getCurrentPage(state),
+  userRole: getRole(state)
 });
 
 export default withRouter(

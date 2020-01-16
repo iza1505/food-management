@@ -36,6 +36,7 @@ const ConfirmationEmailModalForm = props => {
                 id="login"
                 type="text"
                 placeholder="Login"
+                label="Login:"
                 validate={[validateRequired, validateLogin]}
                 component={input}
               />
@@ -45,6 +46,7 @@ const ConfirmationEmailModalForm = props => {
                 id="email"
                 type="text"
                 placeholder="Email"
+                label="Email:"
                 validate={[validateRequired, validateEmail]}
                 component={input}
               />

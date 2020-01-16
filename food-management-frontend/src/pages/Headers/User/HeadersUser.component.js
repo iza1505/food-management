@@ -1,165 +1,151 @@
 import React from "react";
-import { array, bool, number, object, string, func } from "prop-types";
-import { reduxForm, Form, Field } from "redux-form";
-import _ from "lodash";
+import { array, number, func, string } from "prop-types";
+import { reduxForm, Field } from "redux-form";
 
+import {
+  elementsOnPageOptions,
+  possibleMissingIngredientsAmountOptions,
+  sortByOptionsUser,
+  sortByOptionsAdmin,
+  ascendingSortOptions,
+  renderBooelan
+} from "../../../configuration/recipeConst";
+
+import { userRoles } from "../../../configuration/roles";
 import LayoutMain from "../../../components/layouts/MainLayout";
 import input from "../../../components/Fields/input";
+import select from "../../../components/Fields/select";
+import Pagination from "../../../components/Pagination/Pagination";
 
 export const HeadersUser = props => {
   const {
     pageCount,
     recipeHeaders,
-    elementsOnPage,
-    elementsOnPageOptions,
     currentPage,
-    sortBy,
-    sortByOptions,
-    ascendingSort,
-    possibleMissingIngredientsAmount,
     handlePagination,
-    paginationElem
+    paginationElem,
+    userRole,
+    handleClick
   } = props;
+
   return (
     <LayoutMain title="Recipes">
       <div>
-        <Form autoComplete="on">
+        <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
-            <label>Elements on page: </label>
             <Field
               className="form-control mb-2 mr-sm-4"
-              name="elementsOnPage"
+              name="sortBy"
               type="text"
-              placeholder="Elements on page"
-              //validate={validateRequired}
-              component="select"
-              options={elementsOnPageOptions}
-            >
-              {elementsOnPageOptions.map(elem => (
-                <option value={elem} key={elem}>
-                  {elem}
-                </option>
-              ))}
-            </Field>
-            <label>Possible missing ingredients amount:</label>
-            <Field
-              className="form-control mb-0 mr-sm-4"
-              name="possibleMissingIngredientsAmount"
-              placeholder="possible Missing Ingredients Amount"
-              //validate={validateRequired} //do ilosci posiadanych skladnikow
-              type="text"
-              component={input}
+              label="Sort by:"
+              component={select}
+              options={
+                userRole === userRoles.user
+                  ? sortByOptionsUser
+                  : sortByOptionsAdmin
+              }
             />
+            <Field
+              className="form-control mb-2 mr-sm-4"
+              name="ascendingSort"
+              type="text"
+              label="Sort option:"
+              component={select}
+              options={ascendingSortOptions}
+            />
+          </div>
+          <div className="center-align-elem">
             <input
               defaultValue={currentPage}
               name="currentPage"
               hidden={true}
             ></input>
-          </div>
-          <div className="center-align-elem">
-            <label>Sort by: </label>
-            <Field
-              className="form-control mb-0 mr-sm-4"
-              name="sortBy"
-              placeholder="Sort by"
-              //validate={validateRequired}
-              type="text"
-              component="select"
-            >
-              {sortByOptions.map(elem => (
-                <option value={elem.value} key={elem.value}>
-                  {elem.label}
-                </option>
-              ))}
-            </Field>
-            <label className="ml-2 ">Sort option: </label>
             <Field
               className="form-control mb-2 mr-sm-4"
-              name="ascendingSort"
-              placeholder="Ascending sort"
-              //validate={validateRequired}
+              name="elementsOnPage"
               type="text"
-              component="select"
-            >
-              <option value={true}>Ascending</option>
-              <option value={false}>Descending</option>
-            </Field>
+              label="Elements on page:"
+              component={select}
+              options={elementsOnPageOptions}
+            />
+            {userRole === userRoles.user ? (
+              <Field
+                className="form-control mb-2 mr-sm-4"
+                name="possibleMissingIngredientsAmount"
+                type="text"
+                label="Max possible missing ingredients:"
+                component={select}
+                options={possibleMissingIngredientsAmountOptions}
+              />
+            ) : (
+              <></>
+            )}
           </div>
-          <button className="btn btn-success" type="submit">
+          <button
+            className="btn btn-success"
+            name="submit_button"
+            type="submit"
+            onClick={handleClick}
+          >
             {" "}
             Search{" "}
           </button>
-        </Form>
-        <nav aria-label="...">
-          <ul className="pagination">
-            <li
-              className={
-                _.isEqual(Number(1), Number(currentPage))
-                  ? "page-item disabled"
-                  : "page-item"
-              }
-            >
-              <a
-                className="page-link"
-                onClick={() => handlePagination(currentPage - 1)}
-                tabIndex="-1"
-              >
-                Previous
-              </a>
-            </li>
-            {paginationElem.map(page => (
-              <li
-                className={
-                  _.isEqual(Number(page), Number(currentPage))
-                    ? "page-item active"
-                    : "page-item"
-                }
-                key={page}
-              >
-                <a className="page-link" onClick={() => handlePagination(page)}>
-                  {page}
-                </a>
-              </li>
-            ))}
-            <li
-              className={
-                _.gte(Number(currentPage), Number(pageCount))
-                  ? "page-item disabled"
-                  : "page-item"
-              }
-            >
-              <a
-                className="page-link"
-                onClick={() =>
-                  handlePagination(Number(currentPage) + Number(1))
-                }
-              >
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
+        </form>
         <div>
-          <table className="table table-striped">
-            <thead className="bg-success">
-              <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Missing ingredient amout</th>
-                <th scope="col">Cookable %</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recipeHeaders.map(elem => (
-                <tr key={elem.id}>
-                  <th scope="row">
-                    <a href={"/recipes/" + elem.id}>{elem.title}</a>
-                  </th>
-                  <td>{elem.missingIngredientsAmount}</td>
-                  <td>{elem.percentageToCook}</td>
+          {userRole === userRoles.user ? (
+            <table className="table table-striped">
+              <thead className="bg-success">
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Missing ingredient amout</th>
+                  <th scope="col">Cookable %</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {recipeHeaders.map(elem => (
+                  <tr key={elem.id}>
+                    <th scope="row">
+                      <a href={"/recipes/" + elem.id}>{elem.title}</a>
+                    </th>
+                    <td>{elem.missingIngredientsAmount}</td>
+                    <td>{elem.percentageToCook}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <table className="table table-striped">
+              <thead className="bg-success">
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">User login</th>
+                  <th scope="col">Active</th>
+                  <th scope="col">Waiting for accept</th>
+                  <th scope="col">To improve</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recipeHeaders.map(elem => (
+                  <tr key={elem.id}>
+                    <th scope="row">
+                      <a href={"/recipes/" + elem.id}>{elem.title}</a>
+                    </th>
+                    <td>{elem.userLogin}</td>
+                    <td>{renderBooelan(elem.active)}</td>
+                    <td>{renderBooelan(elem.waitingForAccept)}</td>
+                    <td>{elem.toImprove}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <Pagination
+            currentPage={currentPage}
+            handlePagination={handlePagination}
+            pageCount={pageCount}
+            paginationElem={paginationElem}
+          />
         </div>
       </div>
     </LayoutMain>
@@ -167,17 +153,13 @@ export const HeadersUser = props => {
 };
 
 HeadersUser.propTypes = {
-  ascendingSort: bool,
   currentPage: number,
-  elementsOnPage: number,
-  elementsOnPageOptions: array,
   handlePagination: func,
   pageCount: number,
   paginationElem: array,
-  possibleMissingIngredientsAmount: number,
   recipeHeaders: array,
-  sortBy: string,
-  sortByOptions: array
+  userRole: string,
+  handleClick: func
 };
 
 export default reduxForm({

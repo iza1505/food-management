@@ -38,6 +38,7 @@ const ChangePasswordModalForm = props => {
                 id="oldPassword"
                 type="password"
                 placeholder="Old Password"
+                label="Old Password:"
                 validate={[validateRequired]}
                 component={input}
               />
@@ -47,6 +48,7 @@ const ChangePasswordModalForm = props => {
                 id="password1"
                 type="password"
                 placeholder="New Password"
+                label="New Password:"
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -61,6 +63,7 @@ const ChangePasswordModalForm = props => {
                 id="passwordConfirm"
                 type="password"
                 placeholder="Confirm new password"
+                label="Confirm new password:"
                 validate={[validateRequired, validateConfirmedPassword]}
                 component={input}
               />

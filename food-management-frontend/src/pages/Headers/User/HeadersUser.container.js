@@ -129,7 +129,10 @@ class HeadersUserContainer extends Component {
   };
 
   handleClick = e => {
-    console.log(e.target.name);
+    if (e.target.name === "submit_button") {
+      console.log(e.target.name);
+      this.props.resetCurrentPageOnSubmit();
+    }
   };
 
   render() {
@@ -149,7 +152,8 @@ class HeadersUserContainer extends Component {
 
 const mapDispatchToProps = {
   getHeaders,
-  resetHeaders
+  resetHeaders,
+  resetCurrentPageOnSubmit
 };
 
 const mapStateToProps = state => ({

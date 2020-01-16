@@ -23,14 +23,6 @@ const sortByOptionsAdmin = [
   { label: "Waiting for accept", value: "waitingForAccept" }
 ];
 
-function renderBooelan(value) {
-  if (value) {
-    return "yes";
-  } else {
-    return "no";
-  }
-}
-
 const possibleMissingIngredientsAmountOptions = [
   { label: "Any amount", value: -1 },
   { label: "0", value: 0 },
@@ -51,6 +43,5 @@ export {
   possibleMissingIngredientsAmountOptions,
   sortByOptionsUser,
   ascendingSortOptions,
-  sortByOptionsAdmin,
-  renderBooelan
+  sortByOptionsAdmin
 };

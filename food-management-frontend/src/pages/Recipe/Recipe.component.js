@@ -79,54 +79,48 @@ export const Recipe = props => {
         {userRole === userRoles.admin ? (
           <>
             <LabelWithData loading={false} label="Ingredients:">
-              {recipe.ingredients.map(elem => (
-                <LabelWithData
-                  loading={false}
-                  label={elem.ingredient.ingredientName}
-                  color="blue"
-                  key={elem.id}
-                >
-                  {elem.amount} {elem.ingredient.measure.measureName}
-                </LabelWithData>
-              ))}
+              {recipe.ingredients ? (
+                recipe.ingredients.map(elem => (
+                  <div style={{ color: "blue" }} key={elem.id}>
+                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                    {elem.ingredient.measure.measureName}
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
             </LabelWithData>
           </>
         ) : (
           <>
             {" "}
             <LabelWithData loading={false} label="Ingredients:">
-              {recipe.ingredients.map(elem =>
-                elem.amount <= elem.hasGot ? (
-                  //   <LabelWithData
-                  //     loading={false}
-                  //     label={elem.ingredient.ingredientName}
-                  //     color="blue"
-                  //     key={elem.id}
-                  //   >
-                  <div style={{ color: "blue" }}>
-                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                    {elem.ingredient.measure.measureName} / You have:{" "}
-                    {elem.hasGot} {elem.ingredient.measure.measureName}
-                  </div>
-                ) : (
-                  //</LabelWithData>
-                  //   <LabelWithData
-                  //     loading={false}
-                  //     label={elem.ingredient.ingredientName}
-                  //     color="red"
-                  //     key={elem.id}
-                  //   >
-                  <div style={{ color: "red" }}>
-                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                    {elem.ingredient.measure.measureName} / You have:{" "}
-                    {elem.hasGot} {elem.ingredient.measure.measureName}
-                  </div>
-                  // </LabelWithData>
+              {recipe.ingredients ? (
+                recipe.ingredients.map(elem =>
+                  elem.amount <= elem.hasGot ? (
+                    <div style={{ color: "blue" }}>
+                      {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.hasGot} {elem.ingredient.measure.measureName}
+                    </div>
+                  ) : (
+                    <div style={{ color: "red" }}>
+                      {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.hasGot} {elem.ingredient.measure.measureName}
+                    </div>
+                  )
                 )
+              ) : (
+                <></>
               )}
             </LabelWithData>
           </>
         )}
+
+        <LabelWithData loading={false} label="Description:">
+          {recipe.description} 
+        </LabelWithData>
       </div>
     </LayoutMain>
   );

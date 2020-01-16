@@ -10,7 +10,6 @@ const LabelWithData = ({
   children,
   loading = false
 }) => {
-  console.log(label);
   return (
     <div>
       <div className="row">

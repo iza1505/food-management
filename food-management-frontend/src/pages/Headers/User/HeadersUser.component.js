@@ -7,8 +7,7 @@ import {
   possibleMissingIngredientsAmountOptions,
   sortByOptionsUser,
   sortByOptionsAdmin,
-  ascendingSortOptions,
-  renderBooelan
+  ascendingSortOptions
 } from "../../../configuration/recipeConst";
 
 import { userRoles } from "../../../configuration/roles";
@@ -16,6 +15,7 @@ import LayoutMain from "../../../components/layouts/MainLayout";
 import input from "../../../components/Fields/input";
 import select from "../../../components/Fields/select";
 import Pagination from "../../../components/Pagination/Pagination";
+import { renderBooelan } from "../../../configuration/helpers";
 
 export const HeadersUser = props => {
   const {

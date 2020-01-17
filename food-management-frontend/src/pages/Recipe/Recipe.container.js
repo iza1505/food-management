@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 
 import { getRecipe } from "../../selectors/recipe.selectors";
 import { getRecipeDetails } from "../../actions/recipe.actions";
-import { getRole } from "../../selectors/user.selectors";
+import { getRole, getLogin } from "../../selectors/user.selectors";
 import Recipe from "./Recipe.component";
 
 class RecipeContainer extends Component {
@@ -16,6 +16,7 @@ class RecipeContainer extends Component {
     getRecipeDetails: func,
     recipe: object,
     recipeId: number,
+    userLogin: string,
     userRole: string
   };
 
@@ -42,13 +43,20 @@ class RecipeContainer extends Component {
   };
 
   render() {
-    return <Recipe recipe={this.props.recipe} userRole={this.props.userRole} />;
+    return (
+      <Recipe
+        recipe={this.props.recipe}
+        userRole={this.props.userRole}
+        userLogin={this.props.userLogin}
+      />
+    );
   }
 }
 
 const mapStateToProps = state => ({
   recipe: getRecipe(state),
-  userRole: getRole(state)
+  userRole: getRole(state),
+  userLogin: getLogin(state)
 });
 
 function mapDispatchToProps(dispatch) {

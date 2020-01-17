@@ -6,36 +6,51 @@ import LayoutMain from "../../components/layouts/MainLayout";
 import LabelWithData from "../../components/LabelWithData/LabelWithData";
 import { userRoles } from "../../configuration/roles";
 import { renderBooelan } from "../../configuration/helpers";
+import UpdateRecipeStatusModal from "./UpdateRecipeStatusModal";
+//import EditRecipeModalForm from "./EditRecipeModalForm";
 
 export const Recipe = props => {
-  const { recipe, userRole } = props;
+  const { recipe, userRole, userLogin } = props;
   return (
     <LayoutMain title="Recipe">
       <div>
-        {/* <div className="center-align-elem"> //buttony, jak bd robic edcje statusu i przepisu 
-          <button
-            className="btn btn-success "
-            data-toggle="modal"
-            data-target="#editDetailsModal"
-            text="Edit details"
-          >
-            Edit details
-          </button>
-          <EditDetailsModalForm />
-
-          <button
-            className="btn btn-success"
-            data-toggle="modal"
-            data-target="#changePasswordModal"
-            text="Change password"
-            style={{
-              marginLeft: "5px"
-            }}
-          >
-            Change password
-          </button>
-          <ChangePasswordModalForm />
-        </div> */}
+        <div className="center-align-elem">
+          {userRole === userRoles.user && recipe.userName === userLogin ? (
+            <button
+              className="btn btn-success "
+              data-toggle="modal"
+              data-target="#editRecipeModal"
+              text="Edit recipe"
+            >
+              Edit recipe
+            </button>
+          ) : (
+            <></>
+          )}
+          {userRole === userRoles.admin ? (
+            recipe.user && recipe.user.login === userLogin ? (
+              <button
+                className="btn btn-success "
+                data-toggle="modal"
+                data-target="#editRecipeModal"
+                text="Edit recipe"
+              >
+                Edit recipe
+              </button>
+            ) : (
+              <button
+                className="btn btn-success "
+                data-toggle="modal"
+                data-target="#updateRecipeStatusModal"
+                text="Edit recipe"
+              >
+                Update recipe status
+              </button>
+            )
+          ) : (
+            <></>
+          )}
+        </div>
         {userRole === userRoles.admin ? (
           <>
             <LabelWithData loading={false} label="Active:" color="blueviolet">
@@ -59,7 +74,7 @@ export const Recipe = props => {
         ) : (
           <></>
         )}
-
+        <UpdateRecipeStatusModal />
         <LabelWithData loading={false} label="Title:">
           {recipe.title}
         </LabelWithData>
@@ -119,7 +134,7 @@ export const Recipe = props => {
         )}
 
         <LabelWithData loading={false} label="Description:">
-          {recipe.description} 
+          {recipe.description}
         </LabelWithData>
       </div>
     </LayoutMain>
@@ -128,6 +143,7 @@ export const Recipe = props => {
 
 Recipe.propTypes = {
   recipe: object,
+  userLogin: string,
   userRole: string
 };
 

@@ -5,12 +5,14 @@ import userReducer from "../reducers/user.reducer";
 import recipeHeaders from "../reducers/recipeHeades.reducer";
 import recipeReducer from "../reducers/recipe.reducer";
 import { ACTIONS } from "../actions/user.actions";
+import ingredientsReducer from "../reducers/ingredients.reducer";
 
 const allReducers = combineReducers({
   form: formReducer,
   user: userReducer,
   recipeHeaders: recipeHeaders,
-  recipe: recipeReducer
+  recipe: recipeReducer,
+  ingredients: ingredientsReducer
 });
 
 const rootReducer = (state, action) => {

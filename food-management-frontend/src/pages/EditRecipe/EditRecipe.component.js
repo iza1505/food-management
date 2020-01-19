@@ -1,6 +1,7 @@
 import React from "react";
 import { reduxForm, Form, Field, FieldArray } from "redux-form";
-import { bool, func, object, array } from "prop-types";
+import { bool, func, number, object, array } from "prop-types";
+import _ from "lodash";
 
 import {
   validateRequired,
@@ -11,11 +12,21 @@ import {
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
 import mySelect from "../../components/Fields/MySelect";
+import select from "../../components/Fields/select";
 import textarea from "../../components/Fields/textarea";
 
 export const EditRecipe = props => {
-  const { handleSubmit, ingredientsOptions, editable } = props;
-
+  const {
+    handleSubmit,
+    ingredientsOptions,
+    editable,
+    selectedIngredients,
+    handleSelectIngredient,
+    handleAmountIngredient,
+    handleAddIngredientToList,
+    handleDeteleIngredientFromListButton,
+    selectedIngredient
+  } = props;
   return (
     <LayoutMain title="Edit recipe">
       <div className="d-flex flex-column bd-highlight mb-3">
@@ -38,13 +49,60 @@ export const EditRecipe = props => {
             validate={[validateRequired, validateInteger]}
             component={input}
           />
-
           <label>Ingredients:</label>
-          <FieldArray
-            name="recipe.ingredients"
-            component={renderIngredients}
-            options={ingredientsOptions}
-          />
+          {selectedIngredients ? (
+            selectedIngredients.map((elem, index) => (
+              <div key={index}>
+                {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                {elem.ingredient.measure.measureName}
+                <button
+                  type="button"
+                  className="btn btn-warning p-1 m-2 bd-highlight align-self-center"
+                  title="Add ingr to list"
+                  onClick={() => handleDeteleIngredientFromListButton(index)}
+                >
+                  Delete ingredient
+                </button>
+              </div>
+            ))
+          ) : (
+            <></>
+          )}
+
+          <div className="d-flex justify-content-end">
+            <h5>Add new ingredient to recipe:</h5>
+            <Field
+              className="form-control mr-auto p-2 bd-highlight"
+              name="selectIngredient"
+              type="text"
+              label={
+                _.isEmpty(selectedIngredient)
+                  ? "Select ingredient: (nothing selected)"
+                  : "Select ingredient:"
+              }
+              component={select}
+              options={ingredientsOptions}
+              onBlur={e => handleSelectIngredient(e)}
+            />
+            <Field
+              placeholder="Amount"
+              label="Ingredient amount: "
+              component={input}
+              className="form-control p-2 bd-highlight"
+              name="selectedIngredientAmount"
+              type="number"
+              onBlur={e => handleAmountIngredient(e)}
+            />
+            <button
+              type="button"
+              className="btn btn-warning p-2 flex-shrink-1 bd-highlight"
+              title="Add ingr to list"
+              onClick={() => handleAddIngredientToList()}
+            >
+              Add ingredient to list
+            </button>
+          </div>
+
           <Field
             className="form-control mb-2 mr-sm-2 textarea-autosize"
             name="recipe.description"
@@ -54,7 +112,6 @@ export const EditRecipe = props => {
             validate={validateRequired}
             component={textarea}
           />
-
           <button
             className="btn btn-success"
             type="submit"
@@ -69,59 +126,16 @@ export const EditRecipe = props => {
   );
 };
 
-const renderIngredients = ({
-  fields,
-  meta: { error, submitFailed },
-  options
-}) => (
-  <div>
-    {fields.map((ingredient, index) => (
-      <div className="d-flex flex-row bd-highlight mb-3" key={index}>
-        <Field
-          name={`${ingredient}.ingredient`}
-          type="text"
-          component={mySelect}
-          options={options}
-          label={"Ingredient #" + Number(index + 1)}
-          defaultValue={ingredient.amount}
-          className=" bd-highlight form-control mb-2 mr-sm-2"
-          validate={[validateSelectedOption, validateIngredientExists]}
-        />
-        <Field
-          className="form-control p-2 bd-highlight"
-          name={`${ingredient}.amount`}
-          type="number"
-          component={input}
-          label="Amount"
-          validate={[validateRequired, validateInteger]}
-        />
-        <button
-          type="button"
-          className="btn btn-warning p-1 m-2 bd-highlight align-self-center"
-          title="Remove ingredient"
-          onClick={() => fields.remove(index)}
-        >
-          Remove ingredient
-        </button>
-      </div>
-    ))}
-    <div>
-      <button
-        className="btn btn-warning"
-        type="button"
-        onClick={() => fields.push({})}
-      >
-        Add new ingredient
-      </button>
-      {submitFailed && error && <span>{error}</span>}
-    </div>
-  </div>
-);
-
 EditRecipe.propTypes = {
   editable: bool,
+  handleAddIngredientToList: func,
+  handleAmountIngredient: func,
+  handleDeteleIngredientFromListButton: func,
+  handleSelectIngredient: func,
   handleSubmit: func,
-  ingredientsOptions: array
+  ingredientsOptions: array,
+  selectedIngredient: object,
+  selectedIngredients: array
 };
 
 export default reduxForm({

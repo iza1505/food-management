@@ -11,37 +11,24 @@ const renderInput = ({
   name,
   defaultValue
 }) => {
+  //console.log("SELECT: " + input.nonSelect);
+  console.log("SELECT: " + JSON.stringify(input));
   return (
     <div style={{ paddingLeft: "50px", alignContent: "center" }}>
-      {console.log(JSON.stringify(input))}
       <label>{label}</label>
       <select
         {...input}
         style={{ position: "relative" }}
         type={type}
         className={className}
-        //defaultValue={`input.value`}
-        defaultValue={JSON.stringify(input.value)}
-        onChange={e => console.log(e.target.value)}
       >
-        
-        {options.map(elem =>
+        {options.map((elem, index) =>
           _.isEqual(elem.value, input.value) ? (
-            <option
-              value={JSON.stringify(elem.value)}
-              key={input.name + elem.value}
-              //selected="selected"
-              style={{ backgroundColor: "red" }}
-            >
-              {console.log(elem.value)}
+            <option value={JSON.stringify(elem.value)} key={index}>
               {elem.label}
             </option>
           ) : (
-            <option
-              value={JSON.stringify(elem.value)}
-              key={input.name + elem.value}
-              //style={{ backgroundColor: "red" }}
-            >
+            <option value={JSON.stringify(elem.value)} key={index}>
               {elem.label}
             </option>
           )

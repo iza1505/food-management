@@ -56,7 +56,9 @@ const validateIngredientExists = (value, allValues, props) => {
 
   finalIngredients.map(ingredient => {
     if (
-      ingredient && ingredient.ingredient && valueConv &&
+      ingredient &&
+      ingredient.ingredient &&
+      valueConv &&
       _.isEqual(ingredient.ingredient.ingredientName, valueConv.ingredientName)
     ) {
       iterator = iterator + 1;
@@ -71,14 +73,14 @@ const validateIngredientExists = (value, allValues, props) => {
 
 const validateInteger = value => {
   const regex = /^[0-9\b]+$/;
-  if (regex.test(value)) {
+  if (regex.test(value) && value>0) {
     return undefined;
   } else {
-    return "Must be integer.";
+    return "Must be integer bigger than 0.";
   }
 };
 
-const validateSelectedOption = value =>
+const validateSelectedOption = value => 
   value ? undefined : "Select option from list.";
 
 function hasDigit(string) {

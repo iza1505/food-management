@@ -19,7 +19,15 @@ class MySelect extends Component {
     this.setState({ value: e.target.value });
   }
 
+  handleBlur(e) {
+    console.log(e.target.value);
+    //this.setState({ value: e.target.value });
+  }
+
   render() {
+    {
+      console.log("Error: " + this.props.meta.error);
+    }
     return (
       <div>
         <label>{this.props.label}</label>
@@ -28,8 +36,11 @@ class MySelect extends Component {
           type={this.props.type}
           className={this.props.className}
           onChange={e => this.handleChange(e)}
+          onBlur={e => this.handleBlur(e)}
           value={this.state.value}
         >
+          {this.state.value ? <></> : <option>Select ingredient</option>}
+
           {this.props.options.map((elem, index) =>
             _.isEqual(elem.value, this.props.input.value) ? (
               <option value={elem.value} key={index} selected="selected">

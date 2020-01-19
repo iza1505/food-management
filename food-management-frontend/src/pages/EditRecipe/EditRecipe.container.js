@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { array, bool, func, form, object } from "prop-types";
 import { toast } from "react-toastify";
+import _ from "lodash";
 //import { reset } from "redux-form";
 
 import { getRecipeDetails } from "../../actions/recipe.actions";
@@ -26,6 +27,13 @@ export class EditRecipeContainer extends Component {
 
   constructor(props) {
     super(props);
+    this.handleSelectIngredient = this.handleSelectIngredient.bind(this);
+    this.handleAmountIngredient = this.handleAmountIngredient.bind(this);
+    this.handleAddIngredientToList = this.handleAddIngredientToList.bind(this);
+    this.handleDeteleIngredientFromListButton = this.handleDeteleIngredientFromListButton.bind(
+      this
+    );
+
     this.props.getSortedIngredientsAction().then(() => {
       let ingredientsOptionsCopy = [];
       this.props.ingredients.map(elem =>
@@ -46,57 +54,109 @@ export class EditRecipeContainer extends Component {
 
   state = {
     recipeId: this.props.match.params.recipeId,
-    ingredientsOptions: []
+    ingredientsOptions: [],
+    selectedIngredient: {},
+    selectedAmount: null,
+    selectedIngredients: []
   };
 
   componentDidMount() {
-    this.props.getRecipeDetails(this.state.recipeId).catch(err => {
-      if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
-      } else {
-        toast.error("Can't get details.");
-      }
-    });
-  }
-
-  handleSubmit = values => {
-    let finalIngredients = [];
-    values.recipe.ingredients.map(elem => {
-      if (!IsJsonString(elem.ingredient)) {
-        finalIngredients.push({
-          ingredient: elem.ingredient,
-          amount: elem.amount
-        });
-      } else {
-        finalIngredients.push({
-          ingredient: JSON.parse(elem.ingredient),
-          amount: elem.amount
-        });
-      }
-    });
-
     this.props
-      .updateRecipe(
-        this.props.recipe.id,
-        this.props.recipe.version,
-        values.recipe.title,
-        values.recipe.preparationMins,
-        values.recipe.description,
-        "user",
-        finalIngredients
-      )
+      .getRecipeDetails(this.state.recipeId)
       .then(() => {
-        toast.info("Details have been changed.");
-        window.location.reload();
+        if (this.props.recipe.ingredients) {
+          this.setState({
+            selectedIngredients: [...this.props.recipe.ingredients]
+          });
+        }
       })
       .catch(err => {
         if (!err.response) {
           toast.warn("Server is unreachable. Check your internet connection.");
         } else {
-          toast.error("Invalid data.");
+          toast.error("Can't get details.");
         }
       });
+  }
+
+  handleSubmit = values => {
+    console.log("wchodze");
+    let copySelectedIngredients = [...this.state.selectedIngredients];
+
+    if (!_.isEmpty(this.state.selectedIngredients)) {
+      this.props
+        .updateRecipe(
+          this.props.recipe.id,
+          this.props.recipe.version,
+          values.recipe.title,
+          values.recipe.preparationMins,
+          values.recipe.description,
+          "user",
+          copySelectedIngredients
+        )
+        .then(() => {
+          toast.info("Details have been changed.");
+          window.location.reload();
+        })
+        .catch(err => {
+          if (!err.response) {
+            toast.warn(
+              "Server is unreachable. Check your internet connection."
+            );
+          } else {
+            toast.error("Invalid data.");
+          }
+        });
+    } else {
+      toast.info("Ingredients list cannot be empty.");
+    }
   };
+
+  handleDeteleIngredientFromListButton(index) {
+    let copySelectedIngredients = [...this.state.selectedIngredients];
+    copySelectedIngredients.splice(index, 1);
+    this.setState({ selectedIngredients: copySelectedIngredients });
+  }
+
+  handleSelectIngredient(e) {
+    this.setState({ selectedIngredient: JSON.parse(e.target.value) });
+    console.log("Ingr: " + e.target.value);
+  }
+
+  handleAmountIngredient(e) {
+    this.setState({ selectedAmount: e.target.value });
+    console.log("Amoutn: " + e.target.value);
+  }
+
+  handleAddIngredientToList(e) {
+    if (
+      _.isEmpty(this.state.selectedIngredient) ||
+      !this.state.selectedAmount
+    ) {
+      toast.warn("Select ingredient and type amount to add to list.");
+    } else {
+      let iterator = 0;
+      this.state.selectedIngredients.map((elem, index) => {
+        if (_.isEqual(elem.ingredient.id, this.state.selectedIngredient.id)) {
+          toast.warn(
+            "This ingredient is already on list. (position " +
+              Number(index + 1) +
+              ")"
+          );
+          iterator++;
+        }
+      });
+      if (iterator === 0) {
+        let copySelectedIngredients = [...this.state.selectedIngredients];
+        copySelectedIngredients.push({
+          ingredient: this.state.selectedIngredient,
+          amount: this.state.selectedAmount
+        });
+        //console.log("before edition: " + JSON.stringify(copySelectedIngredients));
+        this.setState({ selectedIngredients: copySelectedIngredients });
+      }
+    }
+  }
 
   render() {
     return (
@@ -105,6 +165,14 @@ export class EditRecipeContainer extends Component {
         initialValues={this.props.initialValues}
         ingredientsOptions={this.state.ingredientsOptions}
         editable={this.props.editable}
+        selectedIngredients={this.state.selectedIngredients}
+        handleSelectIngredient={this.handleSelectIngredient}
+        handleAmountIngredient={this.handleAmountIngredient}
+        handleAddIngredientToList={this.handleAddIngredientToList}
+        handleDeteleIngredientFromListButton={
+          this.handleDeteleIngredientFromListButton
+        }
+        selectedIngredient={this.state.selectedIngredient}
       />
     );
   }

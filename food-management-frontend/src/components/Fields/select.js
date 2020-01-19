@@ -1,6 +1,6 @@
 import React from "react";
 import { array, string, object } from "prop-types";
-
+import _ from "lodash";
 const renderInput = ({
   input,
   label,
@@ -20,22 +20,27 @@ const renderInput = ({
         style={{ position: "relative" }}
         type={type}
         className={className}
-        defaultValue={"salt (g)"}
-        //value={JSON.stringify(input.value)}
+        //defaultValue={`input.value`}
+        defaultValue={JSON.stringify(input.value)}
+        onChange={e => console.log(e.target.value)}
       >
+        
         {options.map(elem =>
-          input.value === elem.value ? (
+          _.isEqual(elem.value, input.value) ? (
             <option
               value={JSON.stringify(elem.value)}
               key={input.name + elem.value}
-              selected="selected"
+              //selected="selected"
+              style={{ backgroundColor: "red" }}
             >
+              {console.log(elem.value)}
               {elem.label}
             </option>
           ) : (
             <option
               value={JSON.stringify(elem.value)}
               key={input.name + elem.value}
+              //style={{ backgroundColor: "red" }}
             >
               {elem.label}
             </option>
@@ -59,12 +64,3 @@ renderInput.propTypes = {
 };
 
 export default renderInput;
-
-{
-  /* <option
-            value={JSON.stringify(elem.value)}
-            key={input.name + elem.value}
-          >
-            {elem.label}
-          </option> */
-}

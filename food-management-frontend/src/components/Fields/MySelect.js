@@ -7,51 +7,53 @@ class MySelect extends Component {
 
     //console.log("Propsy: " + JSON.stringify(props));
     this.state = {
-      value: props.input.value
+      value: this.props.input.value,
+      options: this.props.options
     };
   }
   state = {
-    value: null,
+    value: this.props.input.value,
     options: []
   };
 
   handleChange(e) {
-    //console.log("data: " + document.getElementById(data).value);
-    //let val = e.target.value;
-    //console.log(e);
-    //console.log("e " + JSON.parse(e.target.value.rgragraga));
-    // console.log("to json: " + JSON.stringify(e.target.selectedIndex));
-    this.setState({
-      value: this.props.options[e.target.selectedIndex].value
-    });
+    console.log("target: " + e.target.value);
+    this.setState({ value: e.target.value });
   }
 
   render() {
-    //console.log("props input: " + JSON.stringify(this.state.value));
-    //console.log(JSON.stringify(this.props.options));
+    console.log("state " + this.state.value);
     return (
       <div>
         <select
           {...this.props.input}
-          //defaultValue={this.props.input.value}
           style={{ position: "relative" }}
           type={this.props.type}
           className={this.props.className}
-          //name={this.props.input.name}
-          //key={this.props.input.name}
           onChange={e => this.handleChange(e)}
-          //value="1"
-          //value={this.props.input.value}
+          value={this.state.value}
+          //defaultValue={this.state.value}
         >
-          {this.props.options.map((elem, index) => (
+          {/* {this.props.options.map((elem, index) => (
             <option
               value={this.state.value}
               key={index + this.props.input.name}
-              selected="selected"
+              //selected="selected"
             >
               {elem.label}
             </option>
-          ))}
+          ))} */}
+          {this.props.options.map((elem, index) =>
+            _.isEqual(elem.value, this.props.input.value) ? (
+              <option value={elem.value} key={index} selected="selected">
+                {elem.label}
+              </option>
+            ) : (
+              <option value={JSON.stringify(elem.value)} key={index}>
+                {elem.label}
+              </option>
+            )
+          )}
         </select>
       </div>
     );

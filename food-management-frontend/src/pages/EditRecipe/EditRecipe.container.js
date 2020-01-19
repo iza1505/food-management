@@ -11,6 +11,7 @@ import { updateRecipe } from "../../actions/recipe.actions";
 import { getRecipe, getEditableRecipe } from "../../selectors/recipe.selectors";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
+import { IsJsonString } from "../../configuration/helpers";
 
 export class EditRecipeContainer extends Component {
   static propTypes = {
@@ -81,7 +82,24 @@ export class EditRecipeContainer extends Component {
   };
 
   handleSubmit = values => {
-    console.log("handle z glownego: " + JSON.stringify(values));
+    let finalIngredients = [];
+    values.recipe.ingredients.map((elem, index) => {
+      if (!IsJsonString(elem.ingredient)) {
+        //console.log(elem.ingredient);
+        finalIngredients.push({
+          ingredient: elem.ingredient,
+          amount: elem.amount
+        });
+      } else {
+        //console.log(JSON.parse(elem.ingredient));
+        finalIngredients.push({
+          ingredient: JSON.parse(elem.ingredient),
+          amount: elem.amount
+        });
+      }
+    });
+    console.log(JSON.stringify(finalIngredients));
+
     //id, version, username -> to ze state, reszta z forma
     //   return this.props
     //   id,

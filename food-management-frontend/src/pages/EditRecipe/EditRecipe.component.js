@@ -6,6 +6,7 @@ import { validateRequired } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
 import select from "../../components/Fields/select";
+import mySelect from "../../components/Fields/MySelect";
 import textarea from "../../components/Fields/textarea";
 
 import AddIngredientModalForm from "./AddIngredientModalForm/AddIngredientModalForm.component";
@@ -140,7 +141,7 @@ const renderIngredients = ({
         <Field
           name={`${ingredient}.ingredient`}
           type="text"
-          component={select}
+          component={mySelect}
           options={options}
           label="Ingredient"
           defaultValue={ingredient.amount}

@@ -18,6 +18,7 @@ const getHeaders = url => dispatch => {
   );
 };
 
+
 const resetHeaders = () => dispatch => {
   dispatch({
     type: ACTIONS.RESET_HEADERS

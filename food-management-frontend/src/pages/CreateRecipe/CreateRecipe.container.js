@@ -74,6 +74,7 @@ export class CreateRecipeContainer extends Component {
         .then(() => {
           toast.info("Recipe has been added.");
           this.props.dispatch(reset("createRecipeForm"));
+          this.redirectToMyRecipes();
           //this.setState({ selectedIngredients: {} });
           //window.location.reload();
           //TODO: przeniesc sie do moich przepisow
@@ -91,6 +92,8 @@ export class CreateRecipeContainer extends Component {
       toast.info("Ingredients list cannot be empty.");
     }
   };
+
+  redirectToMyRecipes = () => this.props.history.push("/recipes/my");
 
   handleDeteleIngredientFromListButton(index) {
     let copySelectedIngredients = [...this.state.selectedIngredients];

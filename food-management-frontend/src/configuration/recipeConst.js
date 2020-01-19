@@ -23,6 +23,12 @@ const sortByOptionsAdmin = [
   { label: "Waiting for accept", value: "waitingForAccept" }
 ];
 
+const sortByOptionsAuthor = [
+  { label: "Title", value: "title" },
+  { label: "Active", value: "active" },
+  { label: "Waiting for accept", value: "waitingForAccept" }
+];
+
 const possibleMissingIngredientsAmountOptions = [
   { label: "Any amount", value: -1 },
   { label: "0", value: 0 },
@@ -43,5 +49,6 @@ export {
   possibleMissingIngredientsAmountOptions,
   sortByOptionsUser,
   ascendingSortOptions,
-  sortByOptionsAdmin
+  sortByOptionsAdmin,
+  sortByOptionsAuthor
 };

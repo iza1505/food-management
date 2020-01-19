@@ -10,6 +10,7 @@ import HeadersUser from "../pages/Headers/User";
 import Recipe from "../pages/Recipe";
 import EditRecipe from "../pages/EditRecipe";
 import CreateRecipe from "../pages/CreateRecipe";
+import HeadersAuthor from "../pages/Headers/HeadersAuthor";
 
 const { admin, user } = userRoles;
 
@@ -23,6 +24,11 @@ const routes = [
   {
     path: "/recipes/create",
     component: CreateRecipe,
+    canAccess: [user, admin]
+  },
+  {
+    path: "/recipes/my",
+    component: HeadersAuthor,
     canAccess: [user, admin]
   },
   { path: "/", component: Home, canAccess: [user, admin] },

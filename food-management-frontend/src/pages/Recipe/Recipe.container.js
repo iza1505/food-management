@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { func, number, object, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
-import { reset } from "redux-form";
+//import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
 
 import { getRecipe } from "../../selectors/recipe.selectors";
@@ -22,8 +22,7 @@ class RecipeContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.recipeId = this.props.match.params.recipeId;
-    this.props.getRecipeDetails(this.recipeId).catch(err => {
+    this.props.getRecipeDetails(this.state.recipeId).catch(err => {
       if (!err.response) {
         toast.warn("Server is unreachable. Check your internet connection.");
       } else {
@@ -33,7 +32,7 @@ class RecipeContainer extends Component {
   }
 
   componentDidMount = () => {
-    this.props.getRecipeDetails(this.recipeId).catch(err => {
+    this.props.getRecipeDetails(this.state.recipeId).catch(err => {
       if (!err.response) {
         toast.warn("Server is unreachable. Check your internet connection.");
       } else {
@@ -42,12 +41,25 @@ class RecipeContainer extends Component {
     });
   };
 
+  state = {
+    recipeId: this.props.match.params.recipeId
+  };
+
+  redirectToEditRecipe = () =>
+    this.props.history.push("/recipes/" + this.state.recipeId + "/edit");
+
+  handleEditRecipe = () => {
+    console.log("redirect");
+    return this.redirectToEditRecipe();
+  };
+
   render() {
     return (
       <Recipe
         recipe={this.props.recipe}
         userRole={this.props.userRole}
         userLogin={this.props.userLogin}
+        handleEditRecipe={this.handleEditRecipe}
       />
     );
   }

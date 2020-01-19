@@ -26,7 +26,10 @@ const LabelWithData = ({
           {loading ? (
             <div />
           ) : (
-            <span className={styles["label-data"]} style={{ color: dataColor }}>
+            <span
+              className={styles["label-data"]}
+              style={{ color: dataColor }}
+            >
               {children}
             </span>
           )}
@@ -37,7 +40,7 @@ const LabelWithData = ({
 };
 
 LabelWithData.propTypes = {
-  children: string,
+  children: oneOfType([array, object, string, number]),
   color: string,
   dataColor: string,
   label: string.isRequired,

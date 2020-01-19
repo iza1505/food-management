@@ -7,22 +7,40 @@ const renderInput = ({
   options,
   type,
   className,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
+  name,
+  defaultValue
 }) => {
   return (
-    <div style={{paddingLeft: "50px", alignContent: "center"}}>
+    <div style={{ paddingLeft: "50px", alignContent: "center" }}>
+      {console.log(JSON.stringify(input))}
       <label>{label}</label>
       <select
         {...input}
         style={{ position: "relative" }}
         type={type}
         className={className}
+        defaultValue={"salt (g)"}
+        //value={JSON.stringify(input.value)}
       >
-        {options.map(elem => (
-          <option value={elem.value} key={elem.value}>
-            {elem.label}
-          </option>
-        ))}
+        {options.map(elem =>
+          input.value === elem.value ? (
+            <option
+              value={JSON.stringify(elem.value)}
+              key={input.name + elem.value}
+              selected="selected"
+            >
+              {elem.label}
+            </option>
+          ) : (
+            <option
+              value={JSON.stringify(elem.value)}
+              key={input.name + elem.value}
+            >
+              {elem.label}
+            </option>
+          )
+        )}
       </select>
       {touched &&
         ((error && <span style={{ color: "red" }}>{error}</span>) ||
@@ -41,3 +59,12 @@ renderInput.propTypes = {
 };
 
 export default renderInput;
+
+{
+  /* <option
+            value={JSON.stringify(elem.value)}
+            key={input.name + elem.value}
+          >
+            {elem.label}
+          </option> */
+}

@@ -6,7 +6,6 @@ export const ACTIONS = {
 };
 
 const getSortedIngredients = () => dispatch => {
-  console.log("pobieram");
   return dispatch(
     APIService.get(ACTIONS.GET_SORTED_INGREDIENTS, {
       url: `/ingredients/all`,

@@ -8,6 +8,7 @@ import ChangePasswordMail from "../pages/ChangePasswordMail";
 import Profile from "../pages/Profile";
 import HeadersUser from "../pages/Headers/User";
 import Recipe from "../pages/Recipe";
+import EditRecipe from "../pages/EditRecipe";
 
 const { admin, user } = userRoles;
 
@@ -42,6 +43,11 @@ const routes = [
   {
     path: "/recipes/:recipeId",
     component: Recipe,
+    canAccess: [user, admin]
+  },
+  {
+    path: "/recipes/:recipeId/edit",
+    component: EditRecipe,
     canAccess: [user, admin]
   }
 ];

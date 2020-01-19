@@ -130,7 +130,6 @@ class HeadersUserContainer extends Component {
 
   handleClick = e => {
     if (e.target.name === "submit_button") {
-      console.log(e.target.name);
       this.props.resetCurrentPageOnSubmit();
     }
   };

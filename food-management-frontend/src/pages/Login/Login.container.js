@@ -33,7 +33,6 @@ class LoginContainer extends Component {
   _redirectToHomePage = () => this.props.history.push("/");
 
   handleSubmit = values => {
-    console.log(values);
     return this.props
       .loginUser(values.login, values.password)
       .then(() => {

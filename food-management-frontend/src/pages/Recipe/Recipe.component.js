@@ -1,33 +1,34 @@
 import React from "react";
 import { reduxForm } from "redux-form";
-import { object, string } from "prop-types";
+import { func, object, string } from "prop-types";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import LabelWithData from "../../components/LabelWithData/LabelWithData";
 import { userRoles } from "../../configuration/roles";
 import { renderBooelan } from "../../configuration/helpers";
-import UpdateRecipeStatusModal from "./UpdateRecipeStatusModal";
+//import UpdateRecipeStatusModal from "./UpdateRecipeStatusModal";
 //import EditRecipeModalForm from "./EditRecipeModalForm";
 
 export const Recipe = props => {
-  const { recipe, userRole, userLogin } = props;
+  const { recipe, userRole, userLogin, handleEditRecipe } = props;
   return (
     <LayoutMain title="Recipe">
       <div>
         <div className="center-align-elem">
-          {userRole === userRoles.user && recipe.userName === userLogin ? (
+          {recipe &&
+          userRole === userRoles.user &&
+          recipe.userName === userLogin ? (
             <button
               className="btn btn-success "
-              data-toggle="modal"
-              data-target="#editRecipeModal"
               text="Edit recipe"
+              onClick={() => handleEditRecipe()}
             >
               Edit recipe
             </button>
           ) : (
             <></>
           )}
-          {userRole === userRoles.admin ? (
+          {recipe && userRole === userRoles.admin ? (
             recipe.user && recipe.user.login === userLogin ? (
               <button
                 className="btn btn-success "
@@ -51,7 +52,7 @@ export const Recipe = props => {
             <></>
           )}
         </div>
-        {userRole === userRoles.admin ? (
+        {recipe && userRole === userRoles.admin ? (
           <>
             <LabelWithData loading={false} label="Active:" color="blueviolet">
               {renderBooelan(recipe.active)}
@@ -74,24 +75,26 @@ export const Recipe = props => {
         ) : (
           <></>
         )}
-        <UpdateRecipeStatusModal />
+
         <LabelWithData loading={false} label="Title:">
-          {recipe.title}
+          {recipe ? <>{recipe.title}</> : <></>}
         </LabelWithData>
+
         <LabelWithData loading={false} label="Preparation (mins):">
-          {recipe.preparationMins}
+          {recipe ? <>{recipe.preparationMins}</> : <></>}
         </LabelWithData>
-        {recipe.user ? (
+
+        {recipe && recipe.user ? (
           <LabelWithData loading={false} label="Author:">
             {recipe.user.login}
           </LabelWithData>
         ) : (
           <LabelWithData loading={false} label="Author:">
-            {recipe.userName}
+            {recipe ? <>{recipe.userName}</> : <></>}
           </LabelWithData>
         )}
 
-        {userRole === userRoles.admin ? (
+        {recipe && userRole === userRoles.admin ? (
           <>
             <LabelWithData loading={false} label="Ingredients:">
               {recipe.ingredients ? (
@@ -110,16 +113,16 @@ export const Recipe = props => {
           <>
             {" "}
             <LabelWithData loading={false} label="Ingredients:">
-              {recipe.ingredients ? (
-                recipe.ingredients.map(elem =>
+              {recipe && recipe.ingredients ? (
+                recipe.ingredients.map((elem, index) =>
                   elem.amount <= elem.hasGot ? (
-                    <div style={{ color: "blue" }}>
+                    <div style={{ color: "blue" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
                       {elem.ingredient.measure.measureName} / You have:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}
                     </div>
                   ) : (
-                    <div style={{ color: "red" }}>
+                    <div style={{ color: "red" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
                       {elem.ingredient.measure.measureName} / You have:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}
@@ -132,9 +135,8 @@ export const Recipe = props => {
             </LabelWithData>
           </>
         )}
-
         <LabelWithData loading={false} label="Description:">
-          {recipe.description}
+          {recipe ? <>{recipe.description}</> : <></>}
         </LabelWithData>
       </div>
     </LayoutMain>
@@ -142,6 +144,7 @@ export const Recipe = props => {
 };
 
 Recipe.propTypes = {
+  handleEditRecipe: func,
   recipe: object,
   userLogin: string,
   userRole: string

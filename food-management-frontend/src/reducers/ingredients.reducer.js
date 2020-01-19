@@ -13,7 +13,6 @@ const ingredientsReducer = (state = initialState, action) => {
       return { ...state, fetchingIngredients: true };
 
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${FULFILLED}`: {
-      console.log("zapisuej");
       return {
         ...state,
         fetchingIngredients: false,

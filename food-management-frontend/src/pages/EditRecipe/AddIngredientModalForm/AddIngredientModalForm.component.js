@@ -7,60 +7,56 @@ import select from "../../../components/Fields/select";
 import MySelect from "../../../components/Fields/MySelect";
 import recipeSelect from "../../../components/Fields/recipeSelect";
 import { validateRequired } from "../../Validators/Validators";
+import ingredientLabel from "../../../components/Fields/ingredientLabel";
 
-const AddIngredientToRecipeModal = props => {
-  const {
-    handleSubmit,
-    handleAddIngredient,
-    initialValues,
-    ingredientsOptions
-  } = props;
-
+const AddIngredientModalForm = props => {
+  const { handleAddIngredient, ingredientsOptions } = props;
+  //console.log(JSON.stringify(ingredientsOptions));
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form formKey="addIngr">
       <div
         className="modal fade"
-        id="editRecipeModal"
+        id="addIngredientModal"
         tabIndex="-1"
         role="dialog"
-        aria-labelledby="editRecipeModal"
+        aria-labelledby="addIngredientModal"
         aria-hidden="true"
       >
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5> Add ingredient </h5>
+              <h5>Ingredient</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Choose ingredient from list and type amount
+                Add ingredient. If you want change amount of exists ingredient
+                on recipe list add it as new one.
               </h1>
               <div className="d-flex bd-highlight mb-3">
                 <Field
-                  className="form-control mb-2 mr-sm-4"
-                  name="addIngredientToRecipe"
+                  className="form-control mb-2 mr-sm-2"
+                  name="ingredientId"
                   type="text"
-                  label="New ingredient:"
+                  label="Ingredient:"
                   component={select}
                   options={ingredientsOptions}
                 />
                 <Field
-                  className="p-2 bd-highlight"
+                  className="form-control mb-2 mr-sm-2"
+                  name="ingredientAmount"
                   type="text"
                   component={input}
+                  placeholder="Amount"
                   label="Amount"
                 />
-                <button
-                  type="button"
-                  title="Add ingredient"
-                  className="btn btn-success ml-auto p-2 bd-highlight"
-                  onClick={values => handleAddIngredient(values)}
-                >
-                  Add ingredient
-                </button>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-success" type="submit">
+                <button
+                  className="btn btn-success"
+                  type="button"
+                  data-dismiss="modal"
+                  onClick={e => handleAddIngredient(e)}
+                >
                   Add
                 </button>
                 <button
@@ -79,51 +75,15 @@ const AddIngredientToRecipeModal = props => {
   );
 };
 
-const renderMembers = ({ fields, meta: { touched, error } }) => (
-  <ul>
-    <li>
-      <button type="button" onClick={() => fields.push({})}>
-        Add Member
-      </button>
-      {touched && error && <span>{error}</span>}
-    </li>
-    {fields.map((member, index) => (
-      <li key={index}>
-        
-        <h4>Member #{index + 1}</h4>
-        <Field
-          name={`${member}.firstName`}
-          type="text"
-          component={renderField}
-          label="First Name"
-        />
-        <Field
-          name={`${member}.lastName`}
-          type="text"
-          component={renderField}
-          label="Last Name"
-        />
-        <button
-          type="button"
-          title="Remove ingredient"
-          onClick={() => fields.remove(index)}
-        />
-      </li>
-    ))}
-  </ul>
-);
-
-AddIngredientToRecipeModal.propTypes = {
-  initialValues: object,
+AddIngredientModalForm.propTypes = {
   handleAddIngredient: func,
-  handleSubmit: func,
   ingredientsOptions: array
 };
 
 export default reduxForm({
-  form: "addIngredientToRecipeModalForm",
+  form: "addIngredientModalForm",
   enableReinitialize: true
   //keepDirtyOnReinitialize: true,
   //   onSubmitSuccess: (result, dispatch) =>
   //     dispatch(reset("updateRecipeStatusModalForm"))
-})(AddIngredientToRecipeModal);
+})(AddIngredientModalForm);

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,11 +126,23 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public List<IngredientDto> getAll() {
+        List<IngredientEntity> modelList = repository.findAll();
+        List<IngredientDto> dtos = modelList
+                .stream()
+                .map(entity ->
+                             convertToDto(entity))
+                .sorted(Comparator.comparing(IngredientDto::getIngredientName))
+                .collect(Collectors.toList());
+        //dtos.sort(Comparator.comparing(IngredientDto::getIngredientName));
+        return dtos;
+    }
+
+    @Override
     public IngredientEntity findById(Long id) {
-        IngredientEntity model = repository
+        return repository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not exists."));
-        return model;
     }
 
     @Override

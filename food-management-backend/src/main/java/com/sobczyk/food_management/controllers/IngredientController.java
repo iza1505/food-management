@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ingredients")
@@ -25,6 +26,16 @@ public class IngredientController {
             UserSessionService userSessionService) {
         this.service = service;
         this.userSessionService = userSessionService;
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @GetMapping(value = "/all")
+    ResponseEntity<List<IngredientDto>> getAll() {
+        if (!userSessionService.isActive()) {
+            throw new InactiveAccountException("Inactive account.");
+        }
+
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")

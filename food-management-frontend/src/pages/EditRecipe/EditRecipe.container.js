@@ -22,22 +22,31 @@ export class EditRecipeContainer extends Component {
     recipe: object,
     updateRecipe: func,
     editable: bool
-    //addIngrForm: form
   };
 
   constructor(props) {
     super(props);
-    this.props.getSortedIngredientsAction();
-    // this.handleDeleteIngredient = this.handleDeleteIngredient.bind(this);
-    // this.handleEditAmountIngredient = this.handleEditAmountIngredient.bind(
-    //   this
-    // );
+    this.props.getSortedIngredientsAction().then(() => {
+      let ingredientsOptionsCopy = [];
+      this.props.ingredients.map(elem =>
+        elem.measure.measureName
+          ? ingredientsOptionsCopy.push({
+              label:
+                elem.ingredientName + " (" + elem.measure.measureName + ")",
+              value: elem
+            })
+          : ingredientsOptionsCopy.push({
+              label: elem.ingredientName + " (items)",
+              value: elem
+            })
+      );
+      this.setState({ ingredientsOptions: ingredientsOptionsCopy });
+    });
   }
 
   state = {
     recipeId: this.props.match.params.recipeId,
-    ingredientsOptions: [],
-    recipeIngredientsCopy: []
+    ingredientsOptions: []
   };
 
   componentDidMount() {
@@ -48,107 +57,54 @@ export class EditRecipeContainer extends Component {
         toast.error("Can't get details.");
       }
     });
-    let ingredientsOptionsCopy = [];
-    this.props.ingredients.map(elem =>
-      elem.measure.measureName
-        ? ingredientsOptionsCopy.push({
-            label: elem.ingredientName + " (" + elem.measure.measureName + ")",
-            value: elem
-          })
-        : ingredientsOptionsCopy.push({
-            label: elem.ingredientName + " (items)",
-            value: elem
-          })
-    );
-    this.setState({ ingredientsOptions: ingredientsOptionsCopy });
-    this.setState({
-      recipeIngredientsCopy: [...this.props.recipe.ingredients]
-    });
   }
-
-  addIngredient = values => {
-    console.log(values);
-  };
-
-  handleAddIngredient = values => {
-    //console.log("z modala: " + JSON.stringify(values));
-    console.log(
-      "pod modalem: " +
-        JSON.stringify(this.props.addIngrForm.values.ingredientId)
-    );
-
-    const val = JSON.parse(this.props.addIngrForm.values.ingredientId);
-    console.log(val);
-  };
 
   handleSubmit = values => {
     let finalIngredients = [];
-    values.recipe.ingredients.map((elem, index) => {
+    values.recipe.ingredients.map(elem => {
       if (!IsJsonString(elem.ingredient)) {
-        //console.log(elem.ingredient);
         finalIngredients.push({
           ingredient: elem.ingredient,
           amount: elem.amount
         });
       } else {
-        //console.log(JSON.parse(elem.ingredient));
         finalIngredients.push({
           ingredient: JSON.parse(elem.ingredient),
           amount: elem.amount
         });
       }
     });
-    console.log(JSON.stringify(finalIngredients));
 
-    //id, version, username -> to ze state, reszta z forma
-    //   return this.props
-    //   id,
-    // version,
-    // title,
-    // preparationMins,
-    // description,
-    // userName,
-    // ingredients
-    //     .updateRecipe(values.email, this.props.version)
-    //     .then(() => {
-    //       toast.info("Details have been changed.");
-    //     })
-    //     .catch(err => {
-    //       if (!err.response) {
-    //         toast.warn("Server is unreachable. Check your internet connection.");
-    //       } else {
-    //         toast.error("Invalid data.");
-    //       }
-    //     });
+    this.props
+      .updateRecipe(
+        this.props.recipe.id,
+        this.props.recipe.version,
+        values.recipe.title,
+        values.recipe.preparationMins,
+        values.recipe.description,
+        "user",
+        finalIngredients
+      )
+      .then(() => {
+        toast.info("Details have been changed.");
+        window.location.reload();
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Invalid data.");
+        }
+      });
   };
-
-  // handleDeleteIngredient(index) {
-  //   const copyOfCopyIngredients = [...this.state.recipeIngredientsCopy];
-  //   copyOfCopyIngredients.splice(index, 1);
-  //   this.setState({ recipeIngredientsCopy: [...copyOfCopyIngredients] });
-  // }
-
-  // handleEditAmountIngredient(e, index, ingredientName) {
-  //   const copyOfCopyIngredients = [...this.state.recipeIngredientsCopy];
-  //   //console.log(copyOfCopyIngredients[index].amount);
-  //   copyOfCopyIngredients[index].amount = e.target.value;
-  //   this.setState({ recipeIngredientsCopy: [...copyOfCopyIngredients] });
-  //   //console.log(e.target.value + ingredientName);
-  // }
 
   render() {
     return (
       <EditRecipe
         onSubmit={this.handleSubmit}
         initialValues={this.props.initialValues}
-        ingredients={this.props.ingredients}
         ingredientsOptions={this.state.ingredientsOptions}
-        recipeIngredientsCopy={this.state.recipeIngredientsCopy}
-        handleAddIngredient={this.handleAddIngredient}
         editable={this.props.editable}
-        recipe={this.props.recipe}
-        handleDeleteIngredient={this.handleDeleteIngredient}
-        handleEditAmountIngredient={this.handleEditAmountIngredient}
       />
     );
   }
@@ -157,14 +113,10 @@ export class EditRecipeContainer extends Component {
 const mapStateToProps = state => ({
   initialValues: {
     recipe: getRecipe(state)
-    // preparationMins: getRecipe(state).preparationMins,
-    // description: getRecipe(state).description
   },
   recipe: getRecipe(state),
   ingredients: getSortedIngredients(state),
   editable: getEditableRecipe(state)
-  //addIngrForm: state.form.addIngredientModalForm
-  //recipeIngredients: getRecipe(state).ingredients
 });
 
 function mapDispatchToProps(dispatch) {

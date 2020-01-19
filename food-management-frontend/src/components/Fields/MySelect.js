@@ -5,7 +5,6 @@ class MySelect extends Component {
   constructor(props) {
     super(props);
 
-    //console.log("Propsy: " + JSON.stringify(props));
     this.state = {
       value: this.props.input.value,
       options: this.props.options
@@ -17,32 +16,20 @@ class MySelect extends Component {
   };
 
   handleChange(e) {
-    console.log("target: " + e.target.value);
     this.setState({ value: e.target.value });
   }
 
   render() {
-    console.log("state " + this.state.value);
     return (
       <div>
+        <label>{this.props.label}</label>
         <select
           {...this.props.input}
-          style={{ position: "relative" }}
           type={this.props.type}
           className={this.props.className}
           onChange={e => this.handleChange(e)}
           value={this.state.value}
-          //defaultValue={this.state.value}
         >
-          {/* {this.props.options.map((elem, index) => (
-            <option
-              value={this.state.value}
-              key={index + this.props.input.name}
-              //selected="selected"
-            >
-              {elem.label}
-            </option>
-          ))} */}
           {this.props.options.map((elem, index) =>
             _.isEqual(elem.value, this.props.input.value) ? (
               <option value={elem.value} key={index} selected="selected">
@@ -55,6 +42,13 @@ class MySelect extends Component {
             )
           )}
         </select>
+        {this.props.meta.touched &&
+          ((this.props.meta.error && (
+            <span style={{ color: "red" }}>{this.props.meta.error}</span>
+          )) ||
+            (this.props.meta.warning && (
+              <span style={{ color: "yellow" }}>{this.props.meta.warning}</span>
+            )))}
       </div>
     );
   }

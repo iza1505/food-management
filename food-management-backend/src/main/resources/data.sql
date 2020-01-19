@@ -3,6 +3,7 @@ insert into role (version, name) values (0,'USER');
 
 insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date ) values (0,'admin','admin@admin.pl','$2a$10$0Iu3Y/URm21pcr5uW5kLuenkeNSk1aOIiEeQzZ2cgSTTGCmDb3Q6e',1, true , '2019-01-01 01:01:00.00000');
 insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date ) values (0,'user','izasobczyk1505@gmailllllll.com','$2a$10$PyDUgMV3fi9bfZ/S4zBuCODOMrk5.INyOzCJLm04H30GoVm3tJJQe',2, true, '2019-01-01 01:01:00.00000' );
+insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date ) values (0,'admin2','admin2@admin.pl','$2a$10$0Iu3Y/URm21pcr5uW5kLuenkeNSk1aOIiEeQzZ2cgSTTGCmDb3Q6e',1, true , '2019-01-01 01:01:00.00000');
 
 insert into measure (version, measure_name) values (0, 'ml');
 insert into measure (version, measure_name) values (0, 'g');
@@ -12,7 +13,7 @@ insert into ingredient (version, ingredient_name, measure_id, active) values (0,
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'egg', 3, true );
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'milk', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'salt', 2, true);
-insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'veg. oil', 1, true);
+insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'vegetable oil', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'butter', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'onion', 3, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'carrot', 3, true);

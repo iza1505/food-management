@@ -1,3 +1,6 @@
+import _ from "lodash";
+import { IsJsonString } from "../../configuration/helpers";
+
 const validator = require("email-validator");
 
 const validateRequired = value =>
@@ -29,6 +32,55 @@ const validatePasswordUpperLowerCase = password =>
 const validatePasswordDidits = password =>
   hasDigit(password) ? undefined : "Password must containd min 1 digit.";
 
+const validateIngredientExists = (value, allValues, props) => {
+  let iterator = 0;
+  let valueConv = value;
+  let ingredientName = null;
+
+  if (IsJsonString(value)) {
+    valueConv = JSON.parse(value);
+  }
+
+  let finalIngredients = [];
+  allValues.recipe.ingredients.map(elem => {
+    if (!IsJsonString(elem.ingredient)) {
+      finalIngredients.push({
+        ingredient: elem.ingredient
+      });
+    } else {
+      finalIngredients.push({
+        ingredient: JSON.parse(elem.ingredient)
+      });
+    }
+  });
+
+  finalIngredients.map(ingredient => {
+    if (
+      ingredient && ingredient.ingredient && valueConv &&
+      _.isEqual(ingredient.ingredient.ingredientName, valueConv.ingredientName)
+    ) {
+      iterator = iterator + 1;
+    }
+  });
+  if (iterator > 1) {
+    return "Duplicate ingredient.";
+  } else {
+    return undefined;
+  }
+};
+
+const validateInteger = value => {
+  const regex = /^[0-9\b]+$/;
+  if (regex.test(value)) {
+    return undefined;
+  } else {
+    return "Must be integer.";
+  }
+};
+
+const validateSelectedOption = value =>
+  value ? undefined : "Select option from list.";
+
 function hasDigit(string) {
   return string.match(/\d/);
 }
@@ -47,5 +99,8 @@ export {
   validateLogin,
   validatePasswordLength,
   validatePasswordUpperLowerCase,
-  validatePasswordDidits
+  validatePasswordDidits,
+  validateIngredientExists,
+  validateSelectedOption,
+  validateInteger
 };

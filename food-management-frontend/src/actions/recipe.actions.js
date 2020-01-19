@@ -36,7 +36,6 @@ const updateRecipe = (
   title,
   preparationMins,
   description,
-  userName,
   ingredients
 ) => dispatch => {
   console.log(ingredients);
@@ -53,11 +52,32 @@ const updateRecipe = (
         title: title,
         preparationMins: preparationMins,
         description: description,
-        userName: userName,
         ingredients: [...ingredients]
       }
     })
   );
 };
 
-export { getRecipeDetails, deleteRecipe, updateRecipe };
+const addRecipe = (
+  title,
+  preparationMins,
+  description,
+  ingredients
+) => dispatch =>
+  dispatch(
+    APIService.post(ACTIONS.LOGIN_USER, {
+      url: "/recipes",
+      needAuth: true,
+      headers: {
+        "Content-type": "application/json"
+      },
+      data: {
+        title: title,
+        preparationMins: preparationMins,
+        description: description,
+        ingredients: [...ingredients]
+      }
+    })
+  );
+
+export { getRecipeDetails, deleteRecipe, updateRecipe, addRecipe };

@@ -116,16 +116,23 @@ export const Recipe = props => {
               {recipe && recipe.ingredients ? (
                 recipe.ingredients.map((elem, index) =>
                   elem.amount <= elem.hasGot ? (
-                    <div style={{ color: "blue" }} key={index}>
+                    <div style={{ color: "green" }} key={index}>
+                      {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.hasGot} {elem.ingredient.measure.measureName}
+                    </div>
+                  ) : elem.hasGot === 0 ? (
+                    <div style={{ color: "red" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
                       {elem.ingredient.measure.measureName} / You have:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}
                     </div>
                   ) : (
-                    <div style={{ color: "red" }} key={index}>
+                    <div style={{ color: "orange" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
                       {elem.ingredient.measure.measureName} / You have:{" "}
-                      {elem.hasGot} {elem.ingredient.measure.measureName}
+                      {elem.hasGot} {elem.ingredient.measure.measureName}{" "}
+                      {"(" + ((elem.hasGot / elem.amount)*100).toFixed(0) + "%)"}
                     </div>
                   )
                 )

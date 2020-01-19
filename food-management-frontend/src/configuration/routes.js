@@ -9,6 +9,7 @@ import Profile from "../pages/Profile";
 import HeadersUser from "../pages/Headers/User";
 import Recipe from "../pages/Recipe";
 import EditRecipe from "../pages/EditRecipe";
+import CreateRecipe from "../pages/CreateRecipe";
 
 const { admin, user } = userRoles;
 
@@ -18,6 +19,11 @@ const routes = [
     path: "/registrationAndMore",
     component: RegistrationAndMore,
     public: true
+  },
+  {
+    path: "/recipes/create",
+    component: CreateRecipe,
+    canAccess: [user, admin]
   },
   { path: "/", component: Home, canAccess: [user, admin] },
   {

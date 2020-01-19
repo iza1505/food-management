@@ -3,23 +3,16 @@ import { reduxForm, Form, Field, FieldArray } from "redux-form";
 import { bool, func, number, object, array } from "prop-types";
 import _ from "lodash";
 
-import {
-  validateRequired,
-  validateIngredientExists,
-  validateSelectedOption,
-  validateInteger
-} from "./../Validators/Validators";
+import { validateRequired, validateInteger } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
-import mySelect from "../../components/Fields/MySelect";
 import select from "../../components/Fields/select";
 import textarea from "../../components/Fields/textarea";
 
-export const EditRecipe = props => {
+export const CreateRecipe = props => {
   const {
     handleSubmit,
     ingredientsOptions,
-    editable,
     selectedIngredients,
     handleSelectIngredient,
     handleAmountIngredient,
@@ -28,7 +21,7 @@ export const EditRecipe = props => {
     selectedIngredient
   } = props;
   return (
-    <LayoutMain title="Edit recipe">
+    <LayoutMain title="Create recipe">
       <div className="d-flex flex-column bd-highlight mb-3">
         <Form onSubmit={handleSubmit} autoComplete="on">
           <Field
@@ -116,10 +109,9 @@ export const EditRecipe = props => {
             <button
               className="btn btn-success "
               type="submit"
-              disabled={!editable}
             >
               {" "}
-              Update{" "}
+              Create{" "}
             </button>
           </div>
         </Form>
@@ -128,7 +120,7 @@ export const EditRecipe = props => {
   );
 };
 
-EditRecipe.propTypes = {
+CreateRecipe.propTypes = {
   editable: bool,
   handleAddIngredientToList: func,
   handleAmountIngredient: func,
@@ -141,6 +133,6 @@ EditRecipe.propTypes = {
 };
 
 export default reduxForm({
-  form: "editRecipeForm",
+  form: "createRecipeForm",
   enableReinitialize: true
-})(EditRecipe);
+})(CreateRecipe);

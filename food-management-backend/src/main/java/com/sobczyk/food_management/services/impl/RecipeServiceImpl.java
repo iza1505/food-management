@@ -145,11 +145,13 @@ public class RecipeServiceImpl implements RecipeService {
         Integer missingIngredientsAmount;
         Integer maxPercentageToCook;
         Integer percentageToCook = 0;
-
+        Integer ingredientsAmountInRecipe = 0;
 
         for (RecipeEntity recipeEntity : recipeEntities) {
             missingIngredientsAmount = 0;
             maxPercentageToCook = 100;
+            ingredientsAmountInRecipe=recipeEntity.getRecipeIngredients().size();
+            recipeEntity.getTitle();
             for (RecipeIngredientEntity recipeIngredient : recipeEntity.getRecipeIngredients()) {
                 if (missingIngredientsAmount <= possibleMissingIngredientsAmount ||
                         possibleMissingIngredientsAmount == -1) {
@@ -165,6 +167,9 @@ public class RecipeServiceImpl implements RecipeService {
                 } else {
                     break;
                 }
+            }
+            if(ingredientsAmountInRecipe==missingIngredientsAmount){
+                maxPercentageToCook=0;
             }
 
             if (missingIngredientsAmount <= possibleMissingIngredientsAmount ||

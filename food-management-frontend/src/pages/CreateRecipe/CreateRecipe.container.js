@@ -3,26 +3,24 @@ import { connect } from "react-redux";
 import { array, bool, func, form, object } from "prop-types";
 import { toast } from "react-toastify";
 import _ from "lodash";
-//import { reset } from "redux-form";
+import { reset } from "redux-form";
 
-import { getRecipeDetails } from "../../actions/recipe.actions";
 import { bindActionCreators } from "redux";
-import EditRecipe from "./EditRecipe.component";
-import { updateRecipe } from "../../actions/recipe.actions";
-import { getRecipe, getEditableRecipe } from "../../selectors/recipe.selectors";
+import CreateRecipe from "./CreateRecipe.component";
+import { addRecipe } from "../../actions/recipe.actions";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
-import { IsJsonString } from "../../configuration/helpers";
 
-export class EditRecipeContainer extends Component {
+export class CreateRecipeContainer extends Component {
   static propTypes = {
+    dispatch: func,
+    addRecipe: func,
+    editable: bool,
     getRecipeDetails: func,
     getSortedIngredientsAction: func,
     ingredients: array,
     initialValues: object,
-    recipe: object,
-    updateRecipe: func,
-    editable: bool
+    recipe: object
   };
 
   constructor(props) {
@@ -53,31 +51,13 @@ export class EditRecipeContainer extends Component {
   }
 
   state = {
-    recipeId: this.props.match.params.recipeId,
     ingredientsOptions: [],
     selectedIngredient: {},
     selectedAmount: null,
     selectedIngredients: []
   };
 
-  componentDidMount() {
-    this.props
-      .getRecipeDetails(this.state.recipeId)
-      .then(() => {
-        if (this.props.recipe.ingredients) {
-          this.setState({
-            selectedIngredients: [...this.props.recipe.ingredients]
-          });
-        }
-      })
-      .catch(err => {
-        if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
-        } else {
-          toast.error("Can't get details.");
-        }
-      });
-  }
+  componentDidMount() {}
 
   handleSubmit = values => {
     console.log("wchodze");
@@ -85,17 +65,18 @@ export class EditRecipeContainer extends Component {
 
     if (!_.isEmpty(this.state.selectedIngredients)) {
       this.props
-        .updateRecipe(
-          this.props.recipe.id,
-          this.props.recipe.version,
+        .addRecipe(
           values.recipe.title,
           values.recipe.preparationMins,
           values.recipe.description,
           copySelectedIngredients
         )
         .then(() => {
-          toast.info("Details have been changed.");
-          window.location.reload();
+          toast.info("Recipe has been added.");
+          this.props.dispatch(reset("createRecipeForm"));
+          //this.setState({ selectedIngredients: {} });
+          //window.location.reload();
+          //TODO: przeniesc sie do moich przepisow
         })
         .catch(err => {
           if (!err.response) {
@@ -158,8 +139,9 @@ export class EditRecipeContainer extends Component {
   }
 
   render() {
+    console.log("create page");
     return (
-      <EditRecipe
+      <CreateRecipe
         onSubmit={this.handleSubmit}
         initialValues={this.props.initialValues}
         ingredientsOptions={this.state.ingredientsOptions}
@@ -178,12 +160,7 @@ export class EditRecipeContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  initialValues: {
-    recipe: getRecipe(state)
-  },
-  recipe: getRecipe(state),
-  ingredients: getSortedIngredients(state),
-  editable: getEditableRecipe(state)
+  ingredients: getSortedIngredients(state)
 });
 
 function mapDispatchToProps(dispatch) {
@@ -193,12 +170,11 @@ function mapDispatchToProps(dispatch) {
       getSortedIngredientsAction,
       dispatch
     ),
-    updateRecipe: bindActionCreators(updateRecipe, dispatch),
-    getRecipeDetails: bindActionCreators(getRecipeDetails, dispatch)
+    addRecipe: bindActionCreators(addRecipe, dispatch)
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditRecipeContainer);
+)(CreateRecipeContainer);

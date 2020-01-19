@@ -11,8 +11,6 @@ const renderInput = ({
   name,
   defaultValue
 }) => {
-  //console.log("SELECT: " + input.nonSelect);
-  console.log("SELECT: " + JSON.stringify(input));
   return (
     <div style={{ paddingLeft: "50px", alignContent: "center" }}>
       <label>{label}</label>

@@ -38,7 +38,6 @@ const updateRecipe = (
   description,
   ingredients
 ) => dispatch => {
-  console.log(ingredients);
   return dispatch(
     APIService.put(ACTIONS.UPDATE_RECIPE, {
       url: `/recipes/${id}`,

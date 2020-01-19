@@ -20,10 +20,7 @@ const navigationItems = [
   {
     text: "Fridge",
     canAccess: [user],
-    subItems: [
-      { to: "/fridge/my", text: "My fridge", canAccess: [user] },
-      { to: "/products", text: "All avaliable products", canAccess: [user] }
-    ]
+    subItems: [{ to: "/myFridge", text: "My fridge", canAccess: [user] }]
   },
   {
     text: "Users",

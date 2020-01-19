@@ -50,7 +50,7 @@ public class UserIngredientController {
 
     @PreAuthorize("hasAnyAuthority('USER')")
     @DeleteMapping(value = "/{id}")
-    ResponseEntity delete(@RequestParam(value = "id") Long id) {
+    ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }

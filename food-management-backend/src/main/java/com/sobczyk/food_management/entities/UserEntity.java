@@ -34,7 +34,7 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
-    @OneToMany(mappedBy = "userIngredientKey.user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userIngredientKey.user")
     private List<UserIngredientEntity> userIngredients = new ArrayList<>();
 
     @Column(name = "active", nullable = false)

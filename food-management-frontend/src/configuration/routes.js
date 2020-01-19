@@ -11,6 +11,7 @@ import Recipe from "../pages/Recipe";
 import EditRecipe from "../pages/EditRecipe";
 import CreateRecipe from "../pages/CreateRecipe";
 import HeadersAuthor from "../pages/Headers/HeadersAuthor";
+import Fridge from "../pages/Fridge";
 
 const { admin, user } = userRoles;
 
@@ -61,6 +62,11 @@ const routes = [
     path: "/recipes/:recipeId/edit",
     component: EditRecipe,
     canAccess: [user, admin]
+  },
+  {
+    path: "/myFridge",
+    component: Fridge,
+    canAccess: [user]
   }
 ];
 

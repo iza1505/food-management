@@ -84,8 +84,8 @@ export const HeadersAuthor = props => {
                 </tr>
               </thead>
               <tbody>
-                {recipeHeaders.map(elem => (
-                  <tr key={elem.id}>
+                {recipeHeaders.map((elem, index) => (
+                  <tr key={index}>
                     <th scope="row">
                       <a href={"/recipes/" + elem.id}>{elem.title}</a>
                     </th>
@@ -106,8 +106,8 @@ export const HeadersAuthor = props => {
                 </tr>
               </thead>
               <tbody>
-                {recipeHeaders.map(elem => (
-                  <tr key={elem.id}>
+                {recipeHeaders.map((elem, index) => (
+                  <tr key={index}>
                     <th scope="row">
                       <a href={"/recipes/" + elem.id}>{elem.title}</a>
                     </th>

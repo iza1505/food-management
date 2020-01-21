@@ -128,14 +128,14 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public List<IngredientDto> getAll() {
         List<IngredientEntity> modelList = repository.findAll();
-        List<IngredientDto> dtos = modelList
+        return modelList
                 .stream()
-                .map(entity ->
-                             convertToDto(entity))
+                .map(this::convertToDto)
+                .filter(dto -> dto.active.equals(true))
                 .sorted(Comparator.comparing(IngredientDto::getIngredientName))
                 .collect(Collectors.toList());
         //dtos.sort(Comparator.comparing(IngredientDto::getIngredientName));
-        return dtos;
+        //return dtos;
     }
 
     @Override

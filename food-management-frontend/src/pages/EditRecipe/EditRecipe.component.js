@@ -1,12 +1,10 @@
 import React from "react";
-import { reduxForm, Form, Field, FieldArray } from "redux-form";
-import { bool, func, number, object, array } from "prop-types";
+import { reduxForm, Form, Field } from "redux-form";
+import { bool, func, object, array } from "prop-types";
 import _ from "lodash";
 
 import {
   validateRequired,
-  validateIngredientExists,
-  validateSelectedOption,
   validateInteger
 } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";

@@ -1,10 +1,10 @@
 import React from "react";
-import { array, bool, number, func, string } from "prop-types";
-import { reduxForm, Field } from "redux-form";
+import { array, bool, func } from "prop-types";
+import { reduxForm } from "redux-form";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
-// import AddIngredientToFridge from "./AddIngredientToFridge";
+import AddIngredientToFridge from "./AddIngredientToFridgeModalForm";
 // import IngredientProposition from "./IngredientProposition";
 
 export const Fridge = props => {
@@ -12,15 +12,17 @@ export const Fridge = props => {
     fetchingIngredients,
     ingredients,
     handleDeleteIngredient,
-    handleSaveChangesIngredient
+    handleSaveChangesIngredient,
+    avaliableIngredientsToAddToFridge,
+    getIngredientsUser
   } = props;
 
-  let ingredientSizeHalf = (ingredients.length / 2).toFixed();
+  const ingredientSizeHalf = (ingredients.length / 2).toFixed();
 
   return (
     <LayoutMain title="My fridge">
       <div className="">
-        <div className="row">
+        <div className="center-align-elem">
           <button
             className="btn btn-success "
             data-toggle="modal"
@@ -29,15 +31,25 @@ export const Fridge = props => {
           >
             Add ingredient to fridge
           </button>
-          {/* <AddIngredientToFridge /> */}
+          <AddIngredientToFridge
+            avaliableIngredientsToAddToFridge={
+              avaliableIngredientsToAddToFridge
+            }
+            getIngredientsUser={getIngredientsUser}
+          />
           <button
             className="btn btn-success "
             data-toggle="modal"
             data-target="#addIngredientToFridgeModal"
             text="Edit details"
+            style={{
+              marginLeft: "5px"
+            }}
           >
             Suggest a new ingredient
           </button>
+        </div>
+        <div className="row">
           {/* <IngredientProposition /> */}
           <div className="col-sm">
             {
@@ -72,13 +84,13 @@ export const Fridge = props => {
                             className="form-control"
                             onBlur={e => handleSaveChangesIngredient(e)}
                             defaultValue={elem.amount}
-                            disabled={!fetchingIngredients}
+                            disabled={fetchingIngredients}
                           />
                         </td>
                         <td>
                           <span className="table-remove">
                             <button
-                              disabled={!fetchingIngredients}
+                              disabled={fetchingIngredients}
                               type="button"
                               className="btn btn-danger btn-rounded btn-sm my-0"
                               onClick={() =>
@@ -130,11 +142,13 @@ export const Fridge = props => {
                               className="form-control"
                               onBlur={e => handleSaveChangesIngredient(e)}
                               defaultValue={elem.amount}
+                              disabled={fetchingIngredients}
                             />
                           </td>
                           <td>
                             <span className="table-remove">
                               <button
+                                disabled={fetchingIngredients}
                                 type="button"
                                 className="btn btn-danger btn-rounded btn-sm my-0"
                                 onClick={() =>
@@ -158,10 +172,12 @@ export const Fridge = props => {
 };
 
 Fridge.propTypes = {
+  avaliableIngredientsToAddToFridge: array,
   fetchingIngredients: bool,
   handleDeleteIngredient: func,
   handleSaveChangesIngredient: func,
-  ingredients: array
+  ingredients: array,
+  getIngredientsUser: func
 };
 
 export default reduxForm({

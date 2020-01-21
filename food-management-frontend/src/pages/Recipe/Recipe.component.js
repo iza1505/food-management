@@ -7,7 +7,6 @@ import LabelWithData from "../../components/LabelWithData/LabelWithData";
 import { userRoles } from "../../configuration/roles";
 import { renderBooelan } from "../../configuration/helpers";
 //import UpdateRecipeStatusModal from "./UpdateRecipeStatusModal";
-//import EditRecipeModalForm from "./EditRecipeModalForm";
 
 export const Recipe = props => {
   const { recipe, userRole, userLogin, handleEditRecipe } = props;

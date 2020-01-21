@@ -10,6 +10,7 @@
   },
   "plugins": ["react"],
   "rules": {
+    "array-callback-return": "off",
     "semi": "error",
     "eqeqeq": "warn",
     "default-case": "error",
@@ -28,7 +29,7 @@
         "tabWidth": 2
       }
     ],
-    
+
     "prefer-const": [
       "error",
       {

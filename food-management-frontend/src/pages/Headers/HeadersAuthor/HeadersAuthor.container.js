@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, object, number, string } from "prop-types";
+import { array, func, object, number } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -11,8 +11,6 @@ import {
   getRecipesHeaders,
   getCurrentPage
 } from "../../../selectors/recipeHeaders.selectors";
-
-import { getRole } from "../../../selectors/user.selectors";
 
 import {
   getHeaders,
@@ -28,8 +26,8 @@ class HeadersAuthorContainer extends Component {
     history: object,
     pageCount: number,
     recipeHeaders: array,
-    resetHeaders: func,
-    resetCurrentPageOnSubmit: func
+    resetCurrentPageOnSubmit: func,
+    resetHeaders: func
   };
 
   state = {
@@ -53,7 +51,6 @@ class HeadersAuthorContainer extends Component {
 
       if (parsed.sortBy) {
         const str = parsed.sortBy.replace(/"/g, "");
-        console.log(str);
         url = url + "&sortBy=" + str;
       }
 
@@ -72,7 +69,6 @@ class HeadersAuthorContainer extends Component {
 
       if (parsed.sortBy) {
         const str = parsed.sortBy.replace(/"/g, "");
-        console.log(str);
         url = url + "&sortBy=" + str;
       }
 

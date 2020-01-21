@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, bool, func, form, object } from "prop-types";
+import { array, bool, func, object } from "prop-types";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { reset } from "redux-form";
@@ -13,14 +13,12 @@ import { getSortedIngredients as getSortedIngredientsAction } from "../../action
 
 export class CreateRecipeContainer extends Component {
   static propTypes = {
-    dispatch: func,
     addRecipe: func,
+    dispatch: func,
     editable: bool,
-    getRecipeDetails: func,
     getSortedIngredientsAction: func,
     ingredients: array,
-    initialValues: object,
-    recipe: object
+    initialValues: object
   };
 
   constructor(props) {
@@ -42,7 +40,7 @@ export class CreateRecipeContainer extends Component {
               value: elem
             })
           : ingredientsOptionsCopy.push({
-              label: elem.ingredientName + " (items)",
+              label: elem.ingredientName + " (pieces)",
               value: elem
             })
       );
@@ -60,7 +58,6 @@ export class CreateRecipeContainer extends Component {
   componentDidMount() {}
 
   handleSubmit = values => {
-    console.log("wchodze");
     let copySelectedIngredients = [...this.state.selectedIngredients];
 
     if (!_.isEmpty(this.state.selectedIngredients)) {
@@ -89,7 +86,7 @@ export class CreateRecipeContainer extends Component {
           }
         });
     } else {
-      toast.info("Ingredients list cannot be empty.");
+      toast.error("Ingredients list cannot be empty.");
     }
   };
 
@@ -103,12 +100,10 @@ export class CreateRecipeContainer extends Component {
 
   handleSelectIngredient(e) {
     this.setState({ selectedIngredient: JSON.parse(e.target.value) });
-    console.log("Ingr: " + e.target.value);
   }
 
   handleAmountIngredient(e) {
     this.setState({ selectedAmount: e.target.value });
-    console.log("Amoutn: " + e.target.value);
   }
 
   handleAddIngredientToList(e) {
@@ -119,7 +114,7 @@ export class CreateRecipeContainer extends Component {
       toast.warn("Select ingredient and type amount to add to list.");
     } else {
       let iterator = 0;
-      this.state.selectedIngredients.map((elem, index) => {
+      this.state.selectedIngredients.forEach((elem, index) => {
         if (_.isEqual(elem.ingredient.id, this.state.selectedIngredient.id)) {
           toast.warn(
             "This ingredient is already on list. (position " +
@@ -135,14 +130,12 @@ export class CreateRecipeContainer extends Component {
           ingredient: this.state.selectedIngredient,
           amount: this.state.selectedAmount
         });
-        //console.log("before edition: " + JSON.stringify(copySelectedIngredients));
         this.setState({ selectedIngredients: copySelectedIngredients });
       }
     }
   }
 
   render() {
-    console.log("create page");
     return (
       <CreateRecipe
         onSubmit={this.handleSubmit}

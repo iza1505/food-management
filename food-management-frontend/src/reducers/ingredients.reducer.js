@@ -20,7 +20,7 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${FULFILLED}`: {
       return {
         ...state,
-        fetchingIngredients: false,
+        fetchingSortedIngredients: false,
         sortedIngredients: action.payload.data
       };
     }
@@ -28,7 +28,7 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_INGREDIENTS_USER}_${FULFILLED}`: {
       return {
         ...state,
-        fetchingSortedIngredients: false,
+        fetchingIngredients: false,
         ingredients: action.payload.data
       };
     }

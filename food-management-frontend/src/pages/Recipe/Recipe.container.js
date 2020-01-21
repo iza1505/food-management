@@ -49,7 +49,6 @@ class RecipeContainer extends Component {
     this.props.history.push("/recipes/" + this.state.recipeId + "/edit");
 
   handleEditRecipe = () => {
-    console.log("redirect");
     return this.redirectToEditRecipe();
   };
 

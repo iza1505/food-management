@@ -12,7 +12,7 @@ const renderInput = ({
   defaultValue
 }) => {
   return (
-    <div style={{ paddingLeft: "50px", alignContent: "center" }}>
+    <div style={{ alignContent: "center", marginRight: "10px" }}>
       <label>{label}</label>
       <select
         {...input}

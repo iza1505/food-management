@@ -61,7 +61,7 @@ const updateIngredientUser = ingredient => dispatch => {
   );
 };
 
-const addIngredientUser = ingredient => dispatch => {
+const addIngredientUser = (ingredient, amount) => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.ADD_INGREDIENT_USER, {
       url: `/myIngredients`,
@@ -70,9 +70,8 @@ const addIngredientUser = ingredient => dispatch => {
         "Content-type": "application/json"
       },
       data: {
-        ingredient: ingredient.ingredient,
-        amount: ingredient.amount,
-        version: ingredient.version
+        ingredient: ingredient,
+        amount: amount
       }
     })
   );

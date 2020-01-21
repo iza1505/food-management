@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, bool, func, object, number, string } from "prop-types";
+import { array, bool, func } from "prop-types";
 import { withRouter } from "react-router-dom";
-import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
@@ -10,25 +9,28 @@ import Fridge from "./Fridge.component";
 import {
   getIngredientsUser,
   deleteIngredientsUser,
-  updateIngredientUser
+  updateIngredientUser,
+  getSortedIngredients as getSortedIngredientsAction
 } from "../../actions/ingredients.actions";
 import {
   getIngredients,
-  getFethingIngredients
+  getFethingIngredients,
+  getSortedIngredients
 } from "../../selectors/ingredients.selectors";
 
 class FridgeContainer extends Component {
   static propTypes = {
+    allSortedIngredients: array,
     deleteIngredientsUser: func,
+    fetchingIngredients: bool,
     getIngredientsUser: func,
-    history: object,
+    getSortedIngredientsAction: func,
     ingredients: array,
-    updateIngredientUser: func,
-    fetchingIngredients: bool
+    updateIngredientUser: func
   };
 
   state = {
-    ingredientToUpdate2: {}
+    avaliableIngredientsToAddToFridge: []
   };
 
   constructor(props) {
@@ -37,28 +39,68 @@ class FridgeContainer extends Component {
     this.handleSaveChangesIngredient = this.handleSaveChangesIngredient.bind(
       this
     );
+
+    this.updateAvaliableIngredientsToAdd();
   }
 
   componentDidMount() {
     this.props
       .getIngredientsUser()
       .then(() => {
-        console.log("pobrane");
+        this.updateAvaliableIngredientsToAdd();
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn("1Server is unreachable. Check your internet connection.");
         } else {
           toast.error("Can't get ingredients.");
         }
       });
   }
 
+  updateAvaliableIngredientsToAdd() {
+    this.props.getSortedIngredientsAction().then(() => {
+      const ingredientsOptionsCopy = [];
+      this.props.allSortedIngredients.forEach(elem => {
+        let iterator = 0;
+        this.props.ingredients.forEach(ingr => {
+          if (_.isEqual(elem.id, ingr.ingredient.id)) {
+            iterator++;
+          }
+        });
+        if (iterator === 0) {
+          elem.measure.measureName
+            ? ingredientsOptionsCopy.push({
+                label:
+                  elem.ingredientName + " (" + elem.measure.measureName + ")",
+                value: elem
+              })
+            : ingredientsOptionsCopy.push({
+                label: elem.ingredientName + " (pieces)",
+                value: elem
+              });
+        }
+      });
+      this.setState({
+        avaliableIngredientsToAddToFridge: ingredientsOptionsCopy
+      });
+    });
+  }
+
   handleDeleteIngredient(id) {
     this.props
       .deleteIngredientsUser(id)
       .then(() => {
-        this.props.getIngredientsUser();
+        this.props.getIngredientsUser().catch(err => {
+          if (!err.response) {
+            toast.warn(
+              "Server is unreachable. Check your internet connection."
+            );
+          } else {
+            toast.error("Can't get ingredients.");
+          }
+        });
+        this.updateAvaliableIngredientsToAdd();
       })
       .catch(err => {
         if (!err.response) {
@@ -70,16 +112,26 @@ class FridgeContainer extends Component {
   }
 
   handleSaveChangesIngredient(e) {
+    this.setState({ zmienna: 2 });
     const ingredientId = Number(e.target.name);
     if (isPositiveInteger(e.target.value)) {
-      let ingredientToUpdate = this.props.ingredients.find(e =>
+      const ingredientToUpdate = this.props.ingredients.find(e =>
         _.isEqual(e.ingredient.id, ingredientId)
       );
       ingredientToUpdate.amount = Number(e.target.value);
       this.props
         .updateIngredientUser(ingredientToUpdate)
         .then(() => {
-          this.props.getIngredientsUser();
+          this.props.getIngredientsUser().catch(err => {
+            if (!err.response) {
+              toast.warn(
+                "Server is unreachable. Check your internet connection."
+              );
+            } else {
+              toast.error("Can't get ingredients.");
+            }
+          });
+          toast.info("Amount changed.");
         })
         .catch(err => {
           if (!err.response) {
@@ -96,32 +148,37 @@ class FridgeContainer extends Component {
   }
 
   render() {
-    console.log(this.props.ingredients);
     return (
       <Fridge
         ingredients={this.props.ingredients}
         handleDeleteIngredient={this.handleDeleteIngredient}
         handleSaveChangesIngredient={this.handleSaveChangesIngredient}
         fetchingIngredients={this.props.fetchingIngredients}
+        avaliableIngredientsToAddToFridge={
+          this.state.avaliableIngredientsToAddToFridge
+        }
+        getIngredientsUser={this.props.getIngredientsUser}
       />
     );
   }
 }
 
-function isPositiveInteger(n) {
-  var floatN = parseFloat(n);
-  return !isNaN(floatN) && isFinite(n) && floatN > 0 && floatN % 1 == 0;
+function isPositiveInteger(value) {
+  const floatN = parseFloat(value);
+  return !isNaN(floatN) && isFinite(value) && floatN > 0 && floatN % 1 === 0;
 }
 
 const mapDispatchToProps = {
   getIngredientsUser,
   deleteIngredientsUser,
-  updateIngredientUser
+  updateIngredientUser,
+  getSortedIngredientsAction
 };
 
 const mapStateToProps = state => ({
   ingredients: getIngredients(state),
-  fetchingIngredients: getFethingIngredients(state)
+  fetchingIngredients: getFethingIngredients(state),
+  allSortedIngredients: getSortedIngredients(state)
 });
 
 export default withRouter(

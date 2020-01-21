@@ -11,7 +11,7 @@ const renderInput = ({
 }) => {
   return (
     <div>
-      <div>
+      <div style={{ alignContent: "center", marginRight: "10px" }}>
         <label>{label}</label>
         <input
           {...input}

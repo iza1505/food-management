@@ -1,76 +1,55 @@
 import React from "react";
-import { func } from "prop-types";
+import { array, func } from "prop-types";
 import { Form, reduxForm, reset, Field } from "redux-form";
 
 import input from "../../../components/Fields/input";
-import {
-  validateRequired,
-  validatePasswordLength,
-  validatePasswordUpperLowerCase,
-  validatePasswordDidits,
-  validateConfirmedPassword
-} from "../../Validators/Validators";
+import { validateRequired, validateInteger } from "../../Validators/Validators";
 
-const ChangePasswordModalForm = props => {
-  const { handleSubmit } = props;
+import select from "../../../components/Fields/select";
+
+const AddIngredientToFridgeModalForm = props => {
+  const { handleSubmit, avaliableIngredientsToAddToFridge } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
         className="modal fade"
-        id="changePasswordModal"
+        id="addIngredientToFridgeModal"
         tabIndex="-1"
         role="dialog"
-        aria-labelledby="changePasswordModal"
+        aria-labelledby="addIngredientToFridgeModal"
         aria-hidden="true"
       >
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Change password</h5>
+              <h5>Add ingredient</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">
-                Type old password and new password to change.
-              </h1>
+              <h1 className="email-information">Add ingredient to fridge.</h1>
               <Field
-                className="form-control mb-2 mr-sm-2"
-                name="oldPassword"
-                id="oldPassword"
-                type="password"
-                placeholder="Old Password"
-                label="Old Password:"
+                className="form-control "
+                name="ingredient"
+                id="ingredient"
+                type="text"
+                label="Select ingredient"
                 validate={[validateRequired]}
-                component={input}
+                component={select}
+                options={avaliableIngredientsToAddToFridge}
               />
               <Field
                 className="form-control mb-2 mr-sm-2"
-                name="password1"
-                id="password1"
-                type="password"
-                placeholder="New Password"
-                label="New Password:"
-                validate={[
-                  validateRequired,
-                  validatePasswordLength,
-                  validatePasswordUpperLowerCase,
-                  validatePasswordDidits
-                ]}
-                component={input}
-              />
-              <Field
-                className="form-control mb-2 mr-sm-2"
-                name="passwordConfirm"
-                id="passwordConfirm"
-                type="password"
-                placeholder="Confirm new password"
-                label="Confirm new password:"
-                validate={[validateRequired, validateConfirmedPassword]}
+                name="amount"
+                id="amount"
+                type="number"
+                placeholder="Amount"
+                label="Amount:"
+                validate={[validateInteger]}
                 component={input}
               />
 
               <div className="modal-footer">
                 <button className="btn btn-success" type="submit">
-                  Reset
+                  Add
                 </button>
                 <button
                   type="button"
@@ -88,13 +67,15 @@ const ChangePasswordModalForm = props => {
   );
 };
 
-ChangePasswordModalForm.propTypes = {
-  handleSubmit: func
+AddIngredientToFridgeModalForm.propTypes = {
+  avaliableIngredientsToAddToFridge: array,
+  handleSubmit: func,
+  ingredientsOptions: array
 };
 
 export default reduxForm({
-  form: "changePasswordModalForm",
+  form: "addIngredientToFridgeModalForm",
   enableReinitialize: true,
   onSubmitSuccess: (result, dispatch) =>
-    dispatch(reset("changePasswordModalForm"))
-})(ChangePasswordModalForm);
+    dispatch(reset("addIngredientToFridgeModalForm"))
+})(AddIngredientToFridgeModalForm);

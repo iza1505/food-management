@@ -1,6 +1,6 @@
 import React from "react";
-import { reduxForm, Form, Field, FieldArray } from "redux-form";
-import { bool, func, number, object, array } from "prop-types";
+import { reduxForm, Form, Field } from "redux-form";
+import { bool, func, object, array } from "prop-types";
 import _ from "lodash";
 
 import { validateRequired, validateInteger } from "./../Validators/Validators";
@@ -63,7 +63,7 @@ export const CreateRecipe = props => {
           )}
 
           <div className="d-flex justify-content-end">
-            <h5>Add new ingredient to recipe:</h5>
+            <h5 className="mr-2">Add new ingredient to recipe:</h5>
             <Field
               className="form-control mr-auto p-2 bd-highlight"
               name="selectIngredient"
@@ -106,10 +106,7 @@ export const CreateRecipe = props => {
             component={textarea}
           />
           <div className="d-flex justify-content-center">
-            <button
-              className="btn btn-success "
-              type="submit"
-            >
+            <button className="btn btn-success " type="submit">
               {" "}
               Create{" "}
             </button>

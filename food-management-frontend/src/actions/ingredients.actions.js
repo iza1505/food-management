@@ -5,7 +5,8 @@ export const ACTIONS = {
   GET_INGREDIENTS_USER: "INGREDIENTS_GET_INGREDIENTS_USER",
   DELETE_INGREDIENT_USER: "INGREDIENTS_DELETE_INGREDIENT_USER",
   UPDATE_INGREDIENT_USER: "INGREDIENTS_UPDATE_INGREDIENT_USER",
-  ADD_INGREDIENT_USER: "INGREDIENTS_ADD_INGREDIENT_USER"
+  ADD_INGREDIENT_TO_FRIDGE: "INGREDIENTS_ADD_INGREDIENT_TO_FRIDGE",
+  GET_MEASURES: "INGREDIENTS_GET_MEASURES"
 };
 
 const getSortedIngredients = () => dispatch => {
@@ -61,9 +62,9 @@ const updateIngredientUser = ingredient => dispatch => {
   );
 };
 
-const addIngredientUser = (ingredient, amount) => dispatch => {
+const addIngredientToFridge = (ingredient, amount) => dispatch => {
   return dispatch(
-    APIService.post(ACTIONS.ADD_INGREDIENT_USER, {
+    APIService.post(ACTIONS.ADD_INGREDIENT_TO_FRIDGE, {
       url: `/myIngredients`,
       needAuth: true,
       headers: {
@@ -77,10 +78,40 @@ const addIngredientUser = (ingredient, amount) => dispatch => {
   );
 };
 
+const getMeasures = () => dispatch => {
+  return dispatch(
+    APIService.get(ACTIONS.GET_MEASURES, {
+      url: `/measures`,
+      needAuth: true,
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+  );
+};
+
+const addIngredientToDatabase = (ingredientName, measure) => dispatch => {
+  return dispatch(
+    APIService.post(ACTIONS.ADD_INGREDIENT_TO_FRIDGE, {
+      url: `/ingredients`,
+      needAuth: true,
+      headers: {
+        "Content-type": "application/json"
+      },
+      data: {
+        ingredientName: ingredientName,
+        measure: measure
+      }
+    })
+  );
+};
+
 export {
   getSortedIngredients,
   getIngredientsUser,
   deleteIngredientsUser,
   updateIngredientUser,
-  addIngredientUser
+  addIngredientToFridge,
+  getMeasures,
+  addIngredientToDatabase
 };

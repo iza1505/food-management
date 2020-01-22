@@ -5,7 +5,7 @@ import { reduxForm } from "redux-form";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
 import AddIngredientToFridge from "./AddIngredientToFridgeModalForm";
-// import IngredientProposition from "./IngredientProposition";
+import IngredientProposition from "./IngredientPropositionModalForm";
 
 export const Fridge = props => {
   const {
@@ -40,7 +40,7 @@ export const Fridge = props => {
           <button
             className="btn btn-success "
             data-toggle="modal"
-            data-target="#addIngredientToFridgeModal"
+            data-target="#ingredientPropositionModal"
             text="Edit details"
             style={{
               marginLeft: "5px"
@@ -50,7 +50,7 @@ export const Fridge = props => {
           </button>
         </div>
         <div className="row">
-          {/* <IngredientProposition /> */}
+          <IngredientProposition />
           <div className="col-sm">
             {
               <table className="table table-striped ">

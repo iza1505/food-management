@@ -4,8 +4,10 @@ import { PENDING, FULFILLED, REJECTED } from "../middleware";
 const initialState = {
   ingredients: [],
   sortedIngredients: [],
+  measures: [],
   fetchingIngredients: false,
-  fetchingSortedIngredients: false
+  fetchingSortedIngredients: false,
+  fetchingMeasures: false
 };
 
 const ingredientsReducer = (state = initialState, action) => {
@@ -15,6 +17,10 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_INGREDIENTS_USER}_${PENDING}`:
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${PENDING}`: {
       return { ...state, fetchingIngredients: true };
+    }
+
+    case `${ACTIONS.GET_MEASURES}_${PENDING}`: {
+      return { ...state, fetchingMeasures: true };
     }
 
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${FULFILLED}`: {
@@ -41,6 +47,14 @@ const ingredientsReducer = (state = initialState, action) => {
       };
     }
 
+    case `${ACTIONS.GET_MEASURES}_${FULFILLED}`: {
+      return {
+        ...state,
+        fetchingMeasures: false,
+        measures: action.payload.data
+      };
+    }
+
     case `${ACTIONS.GET_INGREDIENTS_USER}_${REJECTED}`:
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${REJECTED}`:
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${REJECTED}`:
@@ -49,6 +63,13 @@ const ingredientsReducer = (state = initialState, action) => {
         fetchingIngredients: false
         //errors: action.payload.response.data
       };
+
+    case `${ACTIONS.GET_MEASURES}_${REJECTED}`: {
+      return {
+        ...state,
+        fetchingMeasures: false
+      };
+    }
 
     default:
       return state;

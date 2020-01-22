@@ -40,7 +40,7 @@ class FridgeContainer extends Component {
       this
     );
 
-    this.updateAvaliableIngredientsToAdd();
+    this.props.getSortedIngredientsAction();
   }
 
   componentDidMount() {
@@ -58,33 +58,42 @@ class FridgeContainer extends Component {
       });
   }
 
+  componentDidUpdate() {
+    this.updateAvaliableIngredientsToAdd();
+  }
+
   updateAvaliableIngredientsToAdd() {
-    this.props.getSortedIngredientsAction().then(() => {
-      const ingredientsOptionsCopy = [];
-      this.props.allSortedIngredients.forEach(elem => {
-        let iterator = 0;
-        this.props.ingredients.forEach(ingr => {
-          if (_.isEqual(elem.id, ingr.ingredient.id)) {
-            iterator++;
-          }
-        });
-        if (iterator === 0) {
-          elem.measure.measureName
-            ? ingredientsOptionsCopy.push({
-                label:
-                  elem.ingredientName + " (" + elem.measure.measureName + ")",
-                value: elem
-              })
-            : ingredientsOptionsCopy.push({
-                label: elem.ingredientName + " (pieces)",
-                value: elem
-              });
+    const ingredientsOptionsCopy = [];
+    this.props.allSortedIngredients.forEach(elem => {
+      let iterator = 0;
+      this.props.ingredients.forEach(ingr => {
+        if (_.isEqual(elem.id, ingr.ingredient.id)) {
+          iterator++;
         }
       });
+      if (iterator === 0) {
+        elem.measure.measureName
+          ? ingredientsOptionsCopy.push({
+              label:
+                elem.ingredientName + " (" + elem.measure.measureName + ")",
+              value: elem
+            })
+          : ingredientsOptionsCopy.push({
+              label: elem.ingredientName + " (pieces)",
+              value: elem
+            });
+      }
+    });
+    if (
+      !_.isEqual(
+        this.state.avaliableIngredientsToAddToFridge,
+        ingredientsOptionsCopy
+      )
+    ) {
       this.setState({
         avaliableIngredientsToAddToFridge: ingredientsOptionsCopy
       });
-    });
+    }
   }
 
   handleDeleteIngredient(id) {

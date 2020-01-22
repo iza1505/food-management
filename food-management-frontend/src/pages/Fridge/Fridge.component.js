@@ -174,10 +174,10 @@ export const Fridge = props => {
 Fridge.propTypes = {
   avaliableIngredientsToAddToFridge: array,
   fetchingIngredients: bool,
+  getIngredientsUser: func,
   handleDeleteIngredient: func,
   handleSaveChangesIngredient: func,
-  ingredients: array,
-  getIngredientsUser: func
+  ingredients: array
 };
 
 export default reduxForm({

@@ -17,11 +17,14 @@ import {
   resetHeaders,
   resetCurrentPageOnSubmit
 } from "../../../actions/recipeHeaders.actions";
+
+import { deleteRecipe } from "../../../actions/recipe.actions";
 import HeadersAuthor from "./HeadersAuthor.component";
 
 class HeadersAuthorContainer extends Component {
   static propTypes = {
     currentPage: number,
+    deleteRecipe: func,
     getHeaders: func,
     history: object,
     pageCount: number,
@@ -123,6 +126,23 @@ class HeadersAuthorContainer extends Component {
     }
   };
 
+  handleDeleteRecipe = recipeId => {
+    console.log(window.location.pathname + window.location.search);
+    this.props
+      .deleteRecipe(recipeId)
+      .then(() => {
+        toast.info("Recipe has been deleted.");
+        this.props.getHeaders(window.location.pathname + window.location.search);
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Can't get recipes headers.");
+        }
+      });
+  };
+
   render() {
     return (
       <HeadersAuthor
@@ -132,12 +152,14 @@ class HeadersAuthorContainer extends Component {
         handlePagination={this.handlePagination}
         paginationElem={this.state.paginationElem}
         handleClick={this.handleClick}
+        handleDeleteRecipe={this.handleDeleteRecipe}
       />
     );
   }
 }
 
 const mapDispatchToProps = {
+  deleteRecipe,
   getHeaders,
   resetHeaders,
   resetCurrentPageOnSubmit

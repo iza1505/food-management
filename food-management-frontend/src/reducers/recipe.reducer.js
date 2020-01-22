@@ -10,18 +10,21 @@ const initialState = {
 const recipeReducer = (state = initialState, action) => {
   switch (action.type) {
     case `${ACTIONS.GET_RECIPE}_${PENDING}`:
-      return { ...state, fetchingHeaders: true, editable: false };
+    case `${ACTIONS.DELETE_RECIPE}_${PENDING}`:
+      return { ...state, fetchingRecipe: true, editable: false };
 
     case `${ACTIONS.GET_RECIPE}_${FULFILLED}`: {
       return {
         ...state,
         recipe: action.payload.data,
+        fetchingRecipe: false,
         editable: true
       };
     }
 
     case `${ACTIONS.GET_RECIPE}_${REJECTED}`:
       return {
+        fetchingRecipe: false,
         initialState
         //errors: action.payload.response.data
       };

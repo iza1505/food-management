@@ -51,7 +51,7 @@ class FridgeContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("1Server is unreachable. Check your internet connection.");
+          toast.warn("Server is unreachable. Check your internet connection.");
         } else {
           toast.error("Can't get ingredients.");
         }

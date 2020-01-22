@@ -121,9 +121,9 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe has been added.");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @DeleteMapping
-    ResponseEntity delete(@RequestParam(value = "id") Long id) {
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @DeleteMapping(value = "/{id}")
+    ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }

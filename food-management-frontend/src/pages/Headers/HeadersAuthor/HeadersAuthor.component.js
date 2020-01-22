@@ -1,5 +1,5 @@
 import React from "react";
-import { array, number, func, string } from "prop-types";
+import { array, number, func } from "prop-types";
 import { reduxForm, Field } from "redux-form";
 
 import {
@@ -8,7 +8,6 @@ import {
   ascendingSortOptions
 } from "../../../configuration/recipeConst";
 
-import { userRoles } from "../../../configuration/roles";
 import LayoutMain from "../../../components/layouts/MainLayout";
 import input from "../../../components/Fields/input";
 import select from "../../../components/Fields/select";
@@ -20,9 +19,9 @@ export const HeadersAuthor = props => {
     pageCount,
     recipeHeaders,
     currentPage,
+    handleDeleteRecipe,
     handlePagination,
     paginationElem,
-    userRole,
     handleClick
   } = props;
 
@@ -74,51 +73,41 @@ export const HeadersAuthor = props => {
           </button>
         </form>
         <div>
-          {userRole === userRoles.user ? (
-            <table className="table table-striped ">
-              <thead className="bg-success">
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Missing ingredient amout</th>
-                  <th scope="col">Cookable %</th>
+          <table className="table table-striped">
+            <thead className="bg-success">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Active</th>
+                <th scope="col">Waiting for accept</th>
+                <th scope="col">To improve</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {recipeHeaders.map((elem, index) => (
+                <tr key={index}>
+                  <th scope="row">
+                    <a href={"/recipes/" + elem.id}>{elem.title}</a>
+                  </th>
+                  <td>{renderBooelan(elem.active)}</td>
+                  <td>{renderBooelan(elem.waitingForAccept)}</td>
+                  <td>{elem.toImprove}</td>
+                  <td>
+                    <span className="table-remove">
+                      <button
+                        //disabled={fetchingIngredients}
+                        type="button"
+                        className="btn btn-danger btn-rounded btn-sm my-0"
+                        onClick={() => handleDeleteRecipe(elem.id)}
+                      >
+                        Remove
+                      </button>
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {recipeHeaders.map((elem, index) => (
-                  <tr key={index}>
-                    <th scope="row">
-                      <a href={"/recipes/" + elem.id}>{elem.title}</a>
-                    </th>
-                    <td>{elem.missingIngredientsAmount}</td>
-                    <td>{elem.percentageToCook}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <table className="table table-striped">
-              <thead className="bg-success">
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Active</th>
-                  <th scope="col">Waiting for accept</th>
-                  <th scope="col">To improve</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recipeHeaders.map((elem, index) => (
-                  <tr key={index}>
-                    <th scope="row">
-                      <a href={"/recipes/" + elem.id}>{elem.title}</a>
-                    </th>
-                    <td>{renderBooelan(elem.active)}</td>
-                    <td>{renderBooelan(elem.waitingForAccept)}</td>
-                    <td>{elem.toImprove}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+              ))}
+            </tbody>
+          </table>
 
           <Pagination
             currentPage={currentPage}
@@ -134,12 +123,12 @@ export const HeadersAuthor = props => {
 
 HeadersAuthor.propTypes = {
   currentPage: number,
+  handleClick: func,
+  handleDeleteRecipe: func,
   handlePagination: func,
   pageCount: number,
   paginationElem: array,
-  recipeHeaders: array,
-  userRole: string,
-  handleClick: func
+  recipeHeaders: array
 };
 
 export default reduxForm({

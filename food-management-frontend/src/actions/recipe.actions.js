@@ -18,18 +18,6 @@ const getRecipeDetails = recipeId => dispatch => {
   );
 };
 
-const deleteRecipe = recipeId => dispatch => {
-  return dispatch(
-    APIService.delete(ACTIONS.DELETE_RECIPE, {
-      url: `/recipes?id=${recipeId}`,
-      needAuth: true,
-      headers: {
-        "Content-type": "application/json"
-      }
-    })
-  );
-};
-
 const updateRecipe = (
   id,
   version,
@@ -79,4 +67,15 @@ const addRecipe = (
     })
   );
 
+const deleteRecipe = recipeId => dispatch => {
+  return dispatch(
+    APIService.delete(ACTIONS.DELETE_RECIPE, {
+      url: `/recipes/${recipeId}`,
+      needAuth: true,
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+  );
+};
 export { getRecipeDetails, deleteRecipe, updateRecipe, addRecipe };

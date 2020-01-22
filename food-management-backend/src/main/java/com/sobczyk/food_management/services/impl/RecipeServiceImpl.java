@@ -245,7 +245,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         for (RecipeEntity recipeEntity : recipeEntities) {
             if (recipeEntity.getUser().getId().equals(userEntity.getId())) {
-                recipeHeaders.add(new RecipeHeaderForAuthorDto(userEntity.getId(), recipeEntity.getVersion(),
+                recipeHeaders.add(new RecipeHeaderForAuthorDto(recipeEntity.getId(), recipeEntity.getVersion(),
                                                                recipeEntity.getTitle(), recipeEntity.getActive(),
                                                                recipeEntity.getWaitingForAccept(),
                                                                recipeEntity.getToImprove()
@@ -314,9 +314,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void delete(Long id) {
+        UserEntity userEntity = userSessionService.getUser();
         RecipeEntity recipeEntity = repository.getOne(id);
-        if (recipeEntity != null) {
+        if (recipeEntity != null && userEntity.getId()==recipeEntity.getUser().getId()) {
             repository.deleteById(id);
+        } else {
+            throw new IncompatibilityDataException("Can't delete recipe");
         }
     }
 }

@@ -1,4 +1,5 @@
 import { ACTIONS } from "../actions/recipeHeaders.actions";
+import { ACTIONS as ACTIONS_Recipe } from "../actions/recipe.actions";
 import { PENDING, FULFILLED, REJECTED } from "../middleware";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
 const recipeHeadersReducer = (state = initialState, action) => {
   switch (action.type) {
     case `${ACTIONS.GET_HEADERS_RECIPE}_${PENDING}`:
+    case `${ACTIONS_Recipe.DELETE_RECIPE}_${PENDING}`:
       return { ...state, fetchingHeaders: true };
 
     case `${ACTIONS.GET_HEADERS_RECIPE}_${FULFILLED}`: {
@@ -20,6 +22,20 @@ const recipeHeadersReducer = (state = initialState, action) => {
         recipesHeaders: action.payload.data.headers,
         pageCount: action.payload.data.pageCount,
         currentPage: action.payload.data.currentPage
+      };
+    }
+
+    case `${ACTIONS_Recipe.DELETE_RECIPE}_${FULFILLED}`: {
+      return {
+        ...state,
+        fetchingHeaders: false
+      };
+    }
+
+    case `${ACTIONS_Recipe.DELETE_RECIPE}_${REJECTED}`: {
+      return {
+        ...state,
+        fetchingHeaders: false
       };
     }
 

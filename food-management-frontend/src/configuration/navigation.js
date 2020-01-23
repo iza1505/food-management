@@ -14,7 +14,7 @@ const navigationItems = [
         text: "Create recipe",
         canAccess: [admin, user]
       },
-      { to: "/recipesProducts", text: "Ingredients", canAccess: [admin] }
+      { to: "/ingredients", text: "Ingredients", canAccess: [admin] }
     ]
   },
   {

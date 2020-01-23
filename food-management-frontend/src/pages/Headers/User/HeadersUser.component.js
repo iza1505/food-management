@@ -98,7 +98,7 @@ export const HeadersUser = props => {
                 <tr>
                   <th scope="col">Title</th>
                   <th scope="col">Missing ingredient amout</th>
-                  <th scope="col">Cookable %</th>
+                  <th scope="col">Cookable % (from possessed ingredients)</th>
                 </tr>
               </thead>
               <tbody>

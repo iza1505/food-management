@@ -1,33 +1,34 @@
 import React from "react";
-import { array, number, func } from "prop-types";
+import { array, number, func, string } from "prop-types";
 import { reduxForm, Field } from "redux-form";
 
 import {
   elementsOnPageOptions,
-  sortByOptionsAuthor,
+  sortByOptionsIngredient,
   ascendingSortOptions
-} from "../../../configuration/recipeConst";
+} from "../../configuration/recipeConst";
 
-import LayoutMain from "../../../components/layouts/MainLayout";
-import input from "../../../components/Fields/input";
-import select from "../../../components/Fields/select";
-import Pagination from "../../../components/Pagination/Pagination";
-import { renderBooelan } from "../../../configuration/helpers";
+import LayoutMain from "../../components/layouts/MainLayout";
+import input from "../../components/Fields/input";
+import select from "../../components/Fields/select";
+import Pagination from "../../components/Pagination/Pagination";
+import { renderBooelan } from "../../configuration/helpers";
 
-export const HeadersAuthor = props => {
+export const Ingredients = props => {
   const {
     pageCount,
-    recipeHeaders,
+    ingredients,
     currentPage,
-    handleDeleteRecipe,
+    handleActiveIngredient,
+    handleDeleteIngredient,
     handlePagination,
     paginationElem,
-    handleClick,
-    handleEditRecipe
+    handleClick
   } = props;
 
+  console.log("ingredients " + ingredients);
   return (
-    <LayoutMain title="My recipes">
+    <LayoutMain title="Recipes">
       <div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
@@ -37,7 +38,7 @@ export const HeadersAuthor = props => {
               type="text"
               label="Sort by:"
               component={select}
-              options={sortByOptionsAuthor}
+              options={sortByOptionsIngredient}
             />
             <Field
               className="form-control mb-2 mr-sm-4"
@@ -74,44 +75,46 @@ export const HeadersAuthor = props => {
           </button>
         </form>
         <div>
-          <table className="table table-striped">
+          <table className="table table-striped ">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Title</th>
+                <th scope="col">Name</th>
+                <th scope="col">Measure</th>
                 <th scope="col">Active</th>
-                <th scope="col">Waiting for accept</th>
-                <th scope="col">To improve</th>
-                <th scope="col"></th>
+                <th scope="col">Options</th>
               </tr>
             </thead>
             <tbody>
-              {recipeHeaders.map((elem, index) => (
-                <tr key={index}>
-                  <th scope="row">
-                    <a href={"/recipes/" + elem.id}>{elem.title}</a>
-                  </th>
+              {ingredients.map(elem => (
+                <tr key={elem.id}>
+                  <th scope="row">{elem.ingredientName}</th>
+                  <td>{elem.measure.measureName}</td>
                   <td>{renderBooelan(elem.active)}</td>
-                  <td>{renderBooelan(elem.waitingForAccept)}</td>
-                  <td>{elem.toImprove}</td>
-                  <td>
-                    <button
-                      className="btn btn-info btn-rounded btn-sm my-0 "
-                      text="Edit recipe"
-                      onClick={() => handleEditRecipe(elem.id)}
-                    >
-                      Edit recipe
-                    </button>
-                    <span className="table-remove">
+                  {elem.active ? (
+                    <td></td>
+                  ) : (
+                    <td>
                       <button
-                        //disabled={fetchingIngredients}
-                        type="button"
-                        className="btn btn-danger btn-rounded btn-sm my-0"
-                        onClick={() => handleDeleteRecipe(elem.id)}
+                        className="btn btn-info btn-rounded btn-sm my-0 "
+                        text="Activate"
+                        onClick={() =>
+                          handleActiveIngredient(elem.id, elem.version)
+                        }
                       >
-                        Remove
+                        Activate
                       </button>
-                    </span>
-                  </td>
+                      <span className="table-remove">
+                        <button
+                          //disabled={fetchingIngredients}
+                          type="button"
+                          className="btn btn-danger btn-rounded btn-sm my-0"
+                          onClick={() => handleDeleteIngredient(elem.id)}
+                        >
+                          Remove
+                        </button>
+                      </span>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -129,20 +132,20 @@ export const HeadersAuthor = props => {
   );
 };
 
-HeadersAuthor.propTypes = {
+Ingredients.propTypes = {
   currentPage: number,
+  handleActiveIngredient: func,
+  handleDeleteIngredient: func,
   handleClick: func,
-  handleDeleteRecipe: func,
-  handleEditRecipe: func,
   handlePagination: func,
+  ingredients: array,
   pageCount: number,
-  paginationElem: array,
-  recipeHeaders: array
+  paginationElem: array
 };
 
 export default reduxForm({
-  form: "headersform",
+  form: "ingredientsform",
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(HeadersAuthor);
+})(Ingredients);
 //export default HeadersUser;

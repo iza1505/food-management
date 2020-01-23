@@ -132,7 +132,9 @@ class HeadersAuthorContainer extends Component {
       .deleteRecipe(recipeId)
       .then(() => {
         toast.info("Recipe has been deleted.");
-        this.props.getHeaders(window.location.pathname + window.location.search);
+        this.props.getHeaders(
+          window.location.pathname + window.location.search
+        );
       })
       .catch(err => {
         if (!err.response) {
@@ -141,6 +143,13 @@ class HeadersAuthorContainer extends Component {
           toast.error("Can't get recipes headers.");
         }
       });
+  };
+
+  redirectToEditRecipe = id =>
+    this.props.history.push("/recipes/" + id + "/edit");
+
+  handleEditRecipe = id => {
+    return this.redirectToEditRecipe(id);
   };
 
   render() {
@@ -153,6 +162,7 @@ class HeadersAuthorContainer extends Component {
         paginationElem={this.state.paginationElem}
         handleClick={this.handleClick}
         handleDeleteRecipe={this.handleDeleteRecipe}
+        handleEditRecipe={this.handleEditRecipe}
       />
     );
   }

@@ -31,16 +31,6 @@ class RecipeContainer extends Component {
     });
   }
 
-  componentDidMount = () => {
-    this.props.getRecipeDetails(this.state.recipeId).catch(err => {
-      if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
-      } else {
-        toast.error("Can't get details.");
-      }
-    });
-  };
-
   state = {
     recipeId: this.props.match.params.recipeId
   };

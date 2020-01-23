@@ -8,11 +8,15 @@ const getFethingIngredients = state =>
 const getFetchingSortedIngredients = state =>
   get(state, "ingredients.fetchingSortedIngredients");
 const getMeasures = state => get(state, "ingredients.measures");
+const getPageCount = state => get(state, "ingredients.pageCount");
+const getCurrentPage = state => get(state, "ingredients.currentPage");
 
 export {
   getSortedIngredients,
   getIngredients,
   getFethingIngredients,
   getFetchingSortedIngredients,
-  getMeasures
+  getMeasures,
+  getPageCount,
+  getCurrentPage
 };

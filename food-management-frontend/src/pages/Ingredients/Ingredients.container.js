@@ -8,30 +8,30 @@ import _ from "lodash";
 
 import {
   getPageCount,
-  getRecipesHeaders,
-  getCurrentPage
-} from "../../../selectors/recipeHeaders.selectors";
-
-import { getRole } from "../../../selectors/user.selectors";
+  getCurrentPage,
+  getIngredients
+} from "../../selectors/ingredients.selectors";
 
 import {
-  getHeaders,
-  resetHeaders,
-  resetCurrentPageOnSubmit
-} from "../../../actions/recipeHeaders.actions";
-import HeadersUser from "./HeadersUser.component";
-import { userRoles } from "../../../configuration/roles";
+  resetCurrentPageOnSubmit,
+  resetIngredients,
+  getIngredientsAdmin,
+  deleteIngredient,
+  updateIngredient
+} from "../../actions/ingredients.actions";
+import Ingredients from "./Ingredients.component";
 
-class HeadersUserContainer extends Component {
+class IngredientsContainer extends Component {
   static propTypes = {
     currentPage: number,
-    getHeaders: func,
+    deleteIngredient: func,
+    getIngredientsAdmin: func,
     history: object,
+    ingredients: array,
     pageCount: number,
-    recipeHeaders: array,
-    resetHeaders: func,
     resetCurrentPageOnSubmit: func,
-    userRole: string
+    resetIngredients: func,
+    updateIngredient: func
   };
 
   state = {
@@ -40,7 +40,8 @@ class HeadersUserContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.props.resetHeaders();
+    console.log("constructor");
+    this.props.resetIngredients();
   }
 
   reloadData = newPage => {
@@ -51,9 +52,7 @@ class HeadersUserContainer extends Component {
         "?elementsOnPage=" +
         parsed.elementsOnPage +
         "&currentPage=" +
-        newPage +
-        "&possibleMissingIngredientsAmount=" +
-        parsed.possibleMissingIngredientsAmount;
+        newPage;
 
       if (parsed.sortBy) {
         url = url + "&sortBy=" + parsed.sortBy.replace(/"/g, "");
@@ -86,16 +85,10 @@ class HeadersUserContainer extends Component {
         url = url + "&currentPage=1";
       }
 
-      if (this.props.userRole === userRoles.user) {
-        url =
-          url +
-          "&possibleMissingIngredientsAmount=" +
-          parsed.possibleMissingIngredientsAmount;
-      }
-
       this.props
-        .getHeaders(url)
+        .getIngredientsAdmin(url)
         .then(() => {
+          console.log("creuje pginacje");
           this.createPagination();
         })
         .catch(err => {
@@ -134,34 +127,92 @@ class HeadersUserContainer extends Component {
     }
   };
 
+  handleActiveIngredient = (id, version) => {
+    this.props
+      .updateIngredient(id, version)
+      .then(() => {
+        this.props
+          .getIngredientsAdmin(
+            window.location.pathname + window.location.search
+          )
+          .catch(err => {
+            if (!err.response) {
+              toast.warn(
+                "Server is unreachable. Check your internet connection."
+              );
+            } else {
+              toast.error("Can't get ingredients.");
+            }
+          });
+        toast.info("Ingredient activated.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Can't update ingredient.");
+        }
+      });
+  };
+
+  handleDeleteIngredient = id => {
+    this.props
+      .deleteIngredient(id)
+      .then(() => {
+        toast.info("Ingredient has been deleted.");
+        this.props
+          .getIngredientsAdmin(
+            window.location.pathname + window.location.search
+          )
+          .catch(err => {
+            if (!err.response) {
+              toast.warn(
+                "Server is unreachable. Check your internet connection."
+              );
+            } else {
+              toast.error("Can't get ingredients.");
+            }
+          });
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Can't delete ingredients.");
+        }
+      });
+  };
+
   render() {
     return (
-      <HeadersUser
+      <Ingredients
         pageCount={this.props.pageCount}
-        recipeHeaders={this.props.recipeHeaders}
+        ingredients={this.props.ingredients}
         currentPage={this.props.currentPage}
         handlePagination={this.handlePagination}
         paginationElem={this.state.paginationElem}
-        userRole={this.props.userRole}
         handleClick={this.handleClick}
+        handleActiveIngredient={this.handleActiveIngredient}
+        handleDeleteIngredient={this.handleDeleteIngredient}
       />
     );
   }
 }
 
 const mapDispatchToProps = {
-  getHeaders,
-  resetHeaders,
-  resetCurrentPageOnSubmit
+  getIngredientsAdmin,
+  resetIngredients,
+  resetCurrentPageOnSubmit,
+  deleteIngredient,
+  updateIngredient
 };
 
 const mapStateToProps = state => ({
   pageCount: getPageCount(state),
-  recipeHeaders: getRecipesHeaders(state),
-  currentPage: getCurrentPage(state),
-  userRole: getRole(state)
+  ingredients: getIngredients(state),
+  currentPage: getCurrentPage(state)
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(HeadersUserContainer)
+  connect(mapStateToProps, mapDispatchToProps)(IngredientsContainer)
 );

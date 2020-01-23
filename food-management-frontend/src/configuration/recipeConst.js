@@ -13,7 +13,10 @@ const ascendingSortOptions = [
 const sortByOptionsUser = [
   { label: "Title", value: "title" },
   { label: "Missing ingredient amout", value: "missingIngredientsAmount" },
-  { label: "Cookable %", value: "percentageToCook" }
+  {
+    label: "Cookable % (from possessed ingredients)",
+    value: "percentageToCook"
+  }
 ];
 
 const sortByOptionsAdmin = [
@@ -27,6 +30,12 @@ const sortByOptionsAuthor = [
   { label: "Title", value: "title" },
   { label: "Active", value: "active" },
   { label: "Waiting for accept", value: "waitingForAccept" }
+];
+
+const sortByOptionsIngredient = [
+  { label: "Name", value: "ingredientName" },
+  { label: "Measure", value: "measure.measureName" },
+  { label: "Active", value: "active" }
 ];
 
 const possibleMissingIngredientsAmountOptions = [
@@ -50,5 +59,6 @@ export {
   sortByOptionsUser,
   ascendingSortOptions,
   sortByOptionsAdmin,
-  sortByOptionsAuthor
+  sortByOptionsAuthor,
+  sortByOptionsIngredient
 };

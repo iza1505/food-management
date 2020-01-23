@@ -7,7 +7,9 @@ const initialState = {
   measures: [],
   fetchingIngredients: false,
   fetchingSortedIngredients: false,
-  fetchingMeasures: false
+  fetchingMeasures: false,
+  pageCount: 1,
+  currentPage: 1
 };
 
 const ingredientsReducer = (state = initialState, action) => {
@@ -15,7 +17,10 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${PENDING}`:
       return { ...state, fetchingSortedIngredients: true };
     case `${ACTIONS.GET_INGREDIENTS_USER}_${PENDING}`:
-    case `${ACTIONS.UPDATE_INGREDIENT_USER}_${PENDING}`: {
+    case `${ACTIONS.GET_INGREDIENTS_ADMIN}_${PENDING}`:
+    case `${ACTIONS.UPDATE_INGREDIENT_USER}_${PENDING}`:
+    case `${ACTIONS.DELETE_INGREDIENT}_${PENDING}`:
+    case `${ACTIONS.UPDATE_INGREDIENT}_${PENDING}`: {
       return { ...state, fetchingIngredients: true };
     }
 
@@ -31,6 +36,15 @@ const ingredientsReducer = (state = initialState, action) => {
       };
     }
 
+    case `${ACTIONS.GET_INGREDIENTS_ADMIN}_${FULFILLED}`: {
+      return {
+        ...state,
+        fetchingIngredients: false,
+        ingredients: action.payload.data.headers,
+        pageCount: action.payload.data.pageCount,
+        currentPage: action.payload.data.currentPage
+      };
+    }
     case `${ACTIONS.GET_INGREDIENTS_USER}_${FULFILLED}`: {
       return {
         ...state,
@@ -39,6 +53,8 @@ const ingredientsReducer = (state = initialState, action) => {
       };
     }
 
+    case `${ACTIONS.DELETE_INGREDIENT}_${FULFILLED}`:
+    case `${ACTIONS.UPDATE_INGREDIENT}_${FULFILLED}`:
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${FULFILLED}`: {
       return {
         ...state,
@@ -55,9 +71,12 @@ const ingredientsReducer = (state = initialState, action) => {
       };
     }
 
+    case `${ACTIONS.GET_INGREDIENTS_ADMIN}_${REJECTED}`:
     case `${ACTIONS.GET_INGREDIENTS_USER}_${REJECTED}`:
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${REJECTED}`:
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${REJECTED}`:
+    case `${ACTIONS.DELETE_INGREDIENT}_${REJECTED}`:
+    case `${ACTIONS.UPDATE_INGREDIENT}_${REJECTED}`:
       return {
         ...state,
         fetchingIngredients: false
@@ -69,6 +88,17 @@ const ingredientsReducer = (state = initialState, action) => {
         ...state,
         fetchingMeasures: false
       };
+    }
+
+    case ACTIONS.RESET_CURRENTPAGE_ON_SUBMIT: {
+      return {
+        ...state,
+        currentPage: 1
+      };
+    }
+
+    case ACTIONS.RESET_INGREDIENTS: {
+      return initialState;
     }
 
     default:

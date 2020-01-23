@@ -12,6 +12,7 @@ import EditRecipe from "../pages/EditRecipe";
 import CreateRecipe from "../pages/CreateRecipe";
 import HeadersAuthor from "../pages/Headers/HeadersAuthor";
 import Fridge from "../pages/Fridge";
+import Ingredients from "../pages/Ingredients";
 
 const { admin, user } = userRoles;
 
@@ -67,6 +68,11 @@ const routes = [
     path: "/myFridge",
     component: Fridge,
     canAccess: [user]
+  },
+  {
+    path: "/ingredients",
+    component: Ingredients,
+    canAccess: [admin]
   }
 ];
 

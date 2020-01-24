@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { bool, func, string } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
 
-import input from "../../../components/Fields/input";
+import toggle from "../../../components/Fields/toggle";
+import textarea from "../../../components/Fields/textarea";
 import { validateRequired } from "../../Validators/Validators";
 
 const UpdateRecipeStatusModalForm = props => {
@@ -23,49 +24,43 @@ const UpdateRecipeStatusModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Edit details</h5>
+              <h5>Update recipe</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">Edit your account details.</h1>
+              <h1 className="email-information">Update recipe status.</h1>
               <Field
-                className="mb-2 mr-sm-2"
                 name="active"
                 id="active"
-                type="checkbox"
                 label="Active:"
-                component="input"
-                onClick={e => {
-                  change("waitingForAccept", !e.target.checked);
-
-                  if (e.target.checked) {
+                component={toggle}
+                onChange={e => {
+                  change("waitingForAccept", !e);
+                  if (e) {
                     change("toImprove", "");
                   }
                 }}
               />
               <Field
-                className="mb-2 mr-sm-2"
                 name="waitingForAccept"
                 id="waitingForAccept"
                 type="checkbox"
-                //placeholder="To improve"
-                label="Waiting for accept"
-                component="input"
-                //normalize={waitingForAcceptValue}
-                onClick={e => {
-                  if (e.target.checked) {
-                    change("active", !e.target.checked);
+                label="Waiting for accept:"
+                component={toggle}
+                onChange={e => {
+                  if (e) {
+                    change("active", !e);
                     change("toImprove", "");
                   }
                 }}
               />
               <Field
-                className="form-control mb-2 mr-sm-2"
+                className="form-control mb-2 mr-sm-2 textarea-autosize"
                 name="toImprove"
                 id="toImprove"
                 type="text"
-                placeholder="To improve"
+                placeholder="To improve:"
                 label="To improve"
-                component={input}
+                component={textarea}
                 disabled={isActive || isWaitingForAccept}
                 validate={
                   (!isWaitingForAccept && isActive) ||

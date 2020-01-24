@@ -1,5 +1,5 @@
 import React from "react";
-import { string, object } from "prop-types";
+import { bool, string, object } from "prop-types";
 import TextareaAutosize from "react-textarea-autosize";
 
 const renderTextArea = ({
@@ -8,6 +8,7 @@ const renderTextArea = ({
   placeholder,
   type,
   className,
+  disabled,
   meta: { touched, error, warning }
 }) => {
   return (
@@ -20,6 +21,7 @@ const renderTextArea = ({
           placeholder={placeholder}
           type={type}
           className={className}
+          disabled={disabled}
         />
         {touched &&
           ((error && <span style={{ color: "red" }}>{error}</span>) ||
@@ -30,6 +32,7 @@ const renderTextArea = ({
 };
 
 renderTextArea.propTypes = {
+  disabled: bool,
   input: object,
   label: string,
   placeholder: string,

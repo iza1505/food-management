@@ -300,7 +300,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeEntity.setActive(dto.getActive());
             recipeEntity.setWaitingForAccept(dto.getWaitingForAccept());
-            if (dto.getActive()) {
+            if ((dto.getActive() && !dto.getWaitingForAccept()) || (!dto.getActive() && dto.getWaitingForAccept())) {
                 recipeEntity.setToImprove("");
             } else {
                 recipeEntity.setToImprove(dto.getToImprove());

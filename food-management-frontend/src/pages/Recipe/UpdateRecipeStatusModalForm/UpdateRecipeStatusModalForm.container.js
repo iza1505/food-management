@@ -27,7 +27,10 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    if (this.state.recipeId === nextProps.recipe.id) {
+    if (
+      this.state.recipeId === nextProps.recipe.id &&
+      this.state.version === nextProps.recipe.version
+    ) {
       if (
         this.props.isActive !== nextProps.isActive ||
         this.props.isWaitingForAccept !== nextProps.isWaitingForAccept
@@ -49,18 +52,24 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
 
   handleSubmit = values => {
     console.log(JSON.stringify(values));
-    // return this.props
-    //   .updateRecipeStatus(this.state.recipeId, this.state.version, values.active, values.waitingForAccept, values.toImprove)
-    //   .then(() => {
-    //     toast.info("Recipe status has been changed.");
-    //   })
-    //   .catch(err => {
-    //     if (!err.response) {
-    //       toast.warn("Server is unreachable. Check your internet connection.");
-    //     } else {
-    //       toast.error("Cannot change recipe status.");
-    //     }
-    //   });
+    return this.props
+      .updateRecipeStatus(
+        this.state.recipeId,
+        this.state.version,
+        values.active,
+        values.waitingForAccept,
+        values.toImprove
+      )
+      .then(() => {
+        toast.info("Recipe status has been changed.");
+      })
+      .catch(err => {
+        if (!err.response) {
+          toast.warn("Server is unreachable. Check your internet connection.");
+        } else {
+          toast.error("Cannot change recipe status.");
+        }
+      });
   };
 
   render() {

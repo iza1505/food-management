@@ -30,7 +30,7 @@ public class IngredientController {
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @GetMapping(value = "/all")
-    ResponseEntity<List<IngredientDto>> getAll() {
+    ResponseEntity<List<IngredientDto>> getAllActive() {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }
@@ -38,7 +38,7 @@ public class IngredientController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
@@ -63,8 +63,8 @@ public class IngredientController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-    @DeleteMapping(params = {"id"})
-    ResponseEntity delete(@RequestParam(value = "id") Long id) {
+    @DeleteMapping(value = "/{id}")
+    ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.");
         }

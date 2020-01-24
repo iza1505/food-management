@@ -6,7 +6,7 @@ import LayoutMain from "../../components/layouts/MainLayout";
 import LabelWithData from "../../components/LabelWithData/LabelWithData";
 import { userRoles } from "../../configuration/roles";
 import { renderBooelan } from "../../configuration/helpers";
-//import UpdateRecipeStatusModal from "./UpdateRecipeStatusModal";
+import UpdateRecipeStatusModalForm from "./UpdateRecipeStatusModalForm";
 
 export const Recipe = props => {
   const { recipe, userRole, userLogin, handleEditRecipe } = props;
@@ -38,14 +38,17 @@ export const Recipe = props => {
                 Edit recipe
               </button>
             ) : (
-              <button
-                className="btn btn-success "
-                data-toggle="modal"
-                data-target="#updateRecipeStatusModal"
-                text="Edit recipe"
-              >
-                Update recipe status
-              </button>
+              <>
+                <button
+                  className="btn btn-success "
+                  data-toggle="modal"
+                  data-target="#updateRecipeStatusModalForm"
+                  text="Edit recipe"
+                >
+                  Update recipe status
+                </button>
+                <UpdateRecipeStatusModalForm />
+              </>
             )
           ) : (
             <></>
@@ -97,8 +100,8 @@ export const Recipe = props => {
           <>
             <LabelWithData loading={false} label="Ingredients:">
               {recipe.ingredients ? (
-                recipe.ingredients.map(elem => (
-                  <div style={{ color: "blue" }} key={elem.id}>
+                recipe.ingredients.map((elem, index) => (
+                  <div style={{ color: "blue" }} key={index}>
                     {elem.ingredient.ingredientName}: {elem.amount}{" "}
                     {elem.ingredient.measure.measureName}
                   </div>
@@ -131,7 +134,9 @@ export const Recipe = props => {
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
                       {elem.ingredient.measure.measureName} / You have:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}{" "}
-                      {"(" + ((elem.hasGot / elem.amount)*100).toFixed(0) + "%)"}
+                      {"(" +
+                        ((elem.hasGot / elem.amount) * 100).toFixed(0) +
+                        "%)"}
                     </div>
                   )
                 )

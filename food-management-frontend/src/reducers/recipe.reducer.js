@@ -29,6 +29,11 @@ const recipeReducer = (state = initialState, action) => {
         //errors: action.payload.response.data
       };
 
+    case `${ACTIONS.ADD_RECIPE}_${REJECTED}`: {
+      //console.log("rejected: " + JSON.stringify(action.payload.response.data));
+      return state;
+    }
+
     default:
       return state;
   }

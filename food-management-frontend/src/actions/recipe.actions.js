@@ -3,7 +3,9 @@ import { APIService } from "../services/RequestCreator";
 export const ACTIONS = {
   GET_RECIPE: "RECIPE_GET_HEADERS_RECIPE",
   UPDATE_RECIPE: "RECIPE_RESET_HEADERS",
-  DELETE_RECIPE: "RECIPE_DELETE_RECIPE"
+  DELETE_RECIPE: "RECIPE_DELETE_RECIPE",
+  ADD_RECIPE: "RECIPE_ADD_RECIPE",
+  UPDATE_RECIPE_STATUS: "RECIPE_UPDATE_RECIPE_STATUS"
 };
 
 const getRecipeDetails = recipeId => dispatch => {
@@ -52,7 +54,7 @@ const addRecipe = (
   ingredients
 ) => dispatch =>
   dispatch(
-    APIService.post(ACTIONS.LOGIN_USER, {
+    APIService.post(ACTIONS.ADD_RECIPE, {
       url: "/recipes",
       needAuth: true,
       headers: {
@@ -78,4 +80,35 @@ const deleteRecipe = recipeId => dispatch => {
     })
   );
 };
-export { getRecipeDetails, deleteRecipe, updateRecipe, addRecipe };
+
+const updateRecipeStatus = (
+  id,
+  version,
+  active,
+  waitingForAccept,
+  toImprove
+) => dispatch => {
+  return dispatch(
+    APIService.put(ACTIONS.UPDATE_RECIPE_STATUS, {
+      url: `/recipes/${id}/updateStatus`,
+      headers: {
+        "Content-type": "application/json"
+      },
+      needAuth: true,
+      data: {
+        version: version,
+        active: active,
+        waitingForAccept: waitingForAccept,
+        toImprove: toImprove
+      }
+    })
+  );
+};
+
+export {
+  getRecipeDetails,
+  deleteRecipe,
+  updateRecipe,
+  addRecipe,
+  updateRecipeStatus
+};

@@ -89,11 +89,11 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientDto update(IngredientDto dto) {
         IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
         Validator.validateVersion(ingredientToUpdate, dto.getVersion());
-        MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
-
-        ingredientToUpdate.setIngredientName(dto.getIngredientName());
-        ingredientToUpdate.setMeasure(measureEntity);
-        ingredientToUpdate.setActive(dto.getActive());
+//        MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
+//
+//        ingredientToUpdate.setIngredientName(dto.getIngredientName());
+//        ingredientToUpdate.setMeasure(measureEntity);
+        ingredientToUpdate.setActive(true);
         ingredientToUpdate = repository.saveAndFlush(ingredientToUpdate);
         return convertToDto(ingredientToUpdate);
     }

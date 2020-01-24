@@ -127,7 +127,6 @@ class HeadersAuthorContainer extends Component {
   };
 
   handleDeleteRecipe = recipeId => {
-    console.log(window.location.pathname + window.location.search);
     this.props
       .deleteRecipe(recipeId)
       .then(() => {

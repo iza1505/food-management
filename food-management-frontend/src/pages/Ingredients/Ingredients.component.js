@@ -13,6 +13,7 @@ import input from "../../components/Fields/input";
 import select from "../../components/Fields/select";
 import Pagination from "../../components/Pagination/Pagination";
 import { renderBooelan } from "../../configuration/helpers";
+import IngredientProposition from "../Fridge/IngredientPropositionModalForm";
 
 export const Ingredients = props => {
   const {
@@ -26,10 +27,23 @@ export const Ingredients = props => {
     handleClick
   } = props;
 
-  console.log("ingredients " + ingredients);
   return (
     <LayoutMain title="Recipes">
       <div>
+        <div className="center-align-elem">
+          <button
+            className="btn btn-success "
+            data-toggle="modal"
+            data-target="#ingredientPropositionModal"
+            text="Edit details"
+            style={{
+              marginLeft: "5px"
+            }}
+          >
+            Add new ingredient
+          </button>
+          <IngredientProposition />
+        </div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
             <Field

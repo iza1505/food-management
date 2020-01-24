@@ -26,7 +26,6 @@ export class IngredientPropositionModalFormContainer extends Component {
     this.props
       .getMeasuresAction()
       .then(() => {
-        console.log("pobieram measures");
         this.createMeasuresOptions();
       })
       .catch(err => {

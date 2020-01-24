@@ -1,5 +1,5 @@
 import React from "react";
-import { string, object } from "prop-types";
+import { bool, string, object } from "prop-types";
 
 const renderInput = ({
   input,
@@ -7,6 +7,7 @@ const renderInput = ({
   placeholder,
   type,
   className,
+  disabled,
   meta: { touched, error, warning }
 }) => {
   return (
@@ -19,6 +20,7 @@ const renderInput = ({
           placeholder={placeholder}
           type={type}
           className={className}
+          disabled={disabled}
         />
         {touched &&
           ((error && <span style={{ color: "red" }}>{error}</span>) ||
@@ -29,6 +31,7 @@ const renderInput = ({
 };
 
 renderInput.propTypes = {
+  disabled: bool,
   input: object,
   label: string,
   placeholder: string,

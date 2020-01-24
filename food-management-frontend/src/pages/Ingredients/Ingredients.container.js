@@ -40,7 +40,6 @@ class IngredientsContainer extends Component {
 
   constructor(props) {
     super(props);
-    console.log("constructor");
     this.props.resetIngredients();
   }
 
@@ -88,7 +87,6 @@ class IngredientsContainer extends Component {
       this.props
         .getIngredientsAdmin(url)
         .then(() => {
-          console.log("creuje pginacje");
           this.createPagination();
         })
         .catch(err => {

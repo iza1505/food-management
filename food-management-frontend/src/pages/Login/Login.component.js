@@ -1,14 +1,15 @@
 import React from "react";
 import { reduxForm, Form, Field } from "redux-form";
-import { func } from "prop-types";
+import { bool, func } from "prop-types";
 
 import { validateRequired } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
+import MyLoader from "../../components/Loader/loader.component";
 import background from "../../assets/backgroundUnauth.jpg";
 
 export const Login = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, fetching } = props;
 
   return (
     <LayoutMain title="Log in" hideTitle fullContent>
@@ -36,10 +37,12 @@ export const Login = props => {
             type="password"
             component={input}
           />
-          <button className="btn btn-success" type="submit">
+
+          <button className="btn btn-success" type="submit" disabled={fetching}>
             {" "}
             Log in{" "}
           </button>
+          <MyLoader visible={fetching} />
         </Form>
       </div>
     </LayoutMain>
@@ -47,6 +50,7 @@ export const Login = props => {
 };
 
 Login.propTypes = {
+  fetching: bool,
   handleSubmit: func
 };
 

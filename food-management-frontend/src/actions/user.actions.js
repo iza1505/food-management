@@ -92,7 +92,7 @@ const confirmAccount = url => dispatch => {
   );
 };
 
-const register = (login, email, password) => dispatch => {
+const register = (login, email, password, role) => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.REGISTER_USER, {
       url: "/auth/registration",
@@ -103,7 +103,8 @@ const register = (login, email, password) => dispatch => {
       data: {
         login: login,
         email: email,
-        password: password
+        password: password,
+        role: role
       }
     })
   );

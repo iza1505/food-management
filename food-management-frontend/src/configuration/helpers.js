@@ -15,4 +15,9 @@ function IsJsonString(str) {
   return true;
 }
 
-export { renderBooelan, IsJsonString };
+function isPositiveInteger(value) {
+  const floatN = parseFloat(value);
+  return !isNaN(floatN) && isFinite(value) && floatN > 0 && floatN % 1 === 0;
+}
+
+export { renderBooelan, IsJsonString, isPositiveInteger };

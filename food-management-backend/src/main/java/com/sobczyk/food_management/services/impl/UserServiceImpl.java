@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
         if (registrationDto.getRole() == null) {
             userEntity.setRole(roleService.findByName("USER"));
         } else {
-            userEntity.setRole(roleService.findByName(registrationDto.getRole().getName()));
+            userEntity.setRole(roleService.findByName(registrationDto.getRole()));
         }
 
         repository.save(userEntity);
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
         SimpleMailMessage emailToSend = new SimpleMailMessage();
         if(hashedPassword == null){
             emailToSend = emailProvider
-                    .constructResetPasswordEmail(null, email, null, "Account activation information",
+                    .constructResetPasswordEmail("", email, "", "Account activation information",
                                                  "You can't active account because it is deactivated by administrator. "
                                                 );
         } else {
@@ -254,7 +254,14 @@ public class UserServiceImpl implements UserService {
     public void resetForgottenPassword(String newPassword, String token) {
         String userEmail = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(userEmail);
-        userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
+        if (passwordEncoder
+                .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
+            userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
+        } else {
+            throw new IncompatibilityDataException("The password cannot be reset again. To do it resend reset " +
+                                                           "password email.");
+        }
+
     }
 
     @Override
@@ -308,7 +315,11 @@ public class UserServiceImpl implements UserService {
             if(!userEntity.getActive() && userEntity.getConfrimationDate() == null){
                 sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
             } else {
+                if(!userEntity.getActive() && userEntity.getConfrimationDate() != null)
                 sendActivationEmail(null, userEntity.getEmail());
+            }
+            if(userEntity.getActive()){
+                throw  new IncompatibilityDataException("Your account is active.");
             }
         } else {
             throw new IncompatibilityDataException("User with this login and email not exists.");

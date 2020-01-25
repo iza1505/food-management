@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { func } from "prop-types";
+import { bool, func } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -8,11 +8,13 @@ import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
 
 import { resetPassword } from "../../actions/user.actions";
+import { getFetchingUser } from "../../selectors/user.selectors";
 import ChangePasswordMail from "./ChangePasswordMail.component";
 
 class ChangePasswordMailContainer extends Component {
   static propTypes = {
     dispatch: func,
+    fetching: bool,
     resetPassword: func
   };
 
@@ -44,9 +46,18 @@ class ChangePasswordMailContainer extends Component {
   };
 
   render() {
-    return <ChangePasswordMail onSubmit={this.handleSubmit} />;
+    return (
+      <ChangePasswordMail
+        onSubmit={this.handleSubmit}
+        fetching={this.props.fetching}
+      />
+    );
   }
 }
+
+const mapStateToProps = state => ({
+  fetching: getFetchingUser(state)
+});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -56,5 +67,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default withRouter(
-  connect(null, mapDispatchToProps)(ChangePasswordMailContainer)
+  connect(mapStateToProps, mapDispatchToProps)(ChangePasswordMailContainer)
 );

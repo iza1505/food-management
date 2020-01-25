@@ -26,8 +26,7 @@ const navigationItems = [
     text: "Users",
     canAccess: [admin],
     subItems: [
-      { to: "/users", text: "All users", canAccess: [admin] },
-      { to: "/users/add", text: "Add user", canAccess: [admin] }
+      { to: "/users", text: "All users", canAccess: [admin] }
     ]
   }
 ];

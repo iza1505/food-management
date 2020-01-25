@@ -17,6 +17,7 @@ import {
   getFethingIngredients,
   getSortedIngredients
 } from "../../selectors/ingredients.selectors";
+import { isPositiveInteger } from "../../configuration/helpers";
 
 class FridgeContainer extends Component {
   static propTypes = {
@@ -64,6 +65,10 @@ class FridgeContainer extends Component {
 
   updateAvaliableIngredientsToAdd() {
     const ingredientsOptionsCopy = [];
+    ingredientsOptionsCopy.push({
+      label: "Select ingredient...",
+      value: ""
+    });
     this.props.allSortedIngredients.forEach(elem => {
       let iterator = 0;
       this.props.ingredients.forEach(ingr => {
@@ -121,7 +126,6 @@ class FridgeContainer extends Component {
   }
 
   handleSaveChangesIngredient(e) {
-    this.setState({ zmienna: 2 });
     const ingredientId = Number(e.target.name);
     if (isPositiveInteger(e.target.value)) {
       const ingredientToUpdate = this.props.ingredients.find(e =>
@@ -170,11 +174,6 @@ class FridgeContainer extends Component {
       />
     );
   }
-}
-
-function isPositiveInteger(value) {
-  const floatN = parseFloat(value);
-  return !isNaN(floatN) && isFinite(value) && floatN > 0 && floatN % 1 === 0;
 }
 
 const mapDispatchToProps = {

@@ -7,12 +7,17 @@ import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
 
 import { loginUser } from "../../actions/user.actions";
-import { getLoggedStatus, getToken } from "../../selectors/user.selectors";
+import {
+  getLoggedStatus,
+  getToken,
+  getFetchingUser
+} from "../../selectors/user.selectors";
 import Login from "./Login.component";
 
 class LoginContainer extends Component {
   static propTypes = {
     dispatch: func,
+    fetching: bool,
     history: object,
     loggedStatus: bool,
     loginUser: func,
@@ -50,17 +55,19 @@ class LoginContainer extends Component {
   };
 
   render() {
-    return <Login onSubmit={this.handleSubmit} />;
+    return (
+      <Login onSubmit={this.handleSubmit} fetching={this.props.fetching} />
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
     loggedStatus: getLoggedStatus(state),
-    token: getToken(state)
+    token: getToken(state),
+    fetching: getFetchingUser(state)
   };
 };
-
 
 function mapDispatchToProps(dispatch) {
   return { dispatch, loginUser: bindActionCreators(loginUser, dispatch) };

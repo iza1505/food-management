@@ -10,7 +10,6 @@ const renderToggle = ({ input, label }) => {
         <Switch
           checked={input.value}
           onChange={input.onChange}
-          icons={false}
           height={20}
           width={48}
         />

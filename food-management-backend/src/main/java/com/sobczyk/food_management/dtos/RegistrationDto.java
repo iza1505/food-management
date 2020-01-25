@@ -13,5 +13,5 @@ public class RegistrationDto {
 
     public String password;
 
-    public RoleDto role;
+    public String role;
 }

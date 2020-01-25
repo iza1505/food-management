@@ -292,6 +292,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) {
         RecipeEntity recipeEntity = repository.getOne(id);
+        UserEntity userEntity = userSessionService.getUser();
+
+        if(recipeEntity.getUser().getId().equals(userEntity.getId())){
+            throw new IncompatibilityDataException("Can't update status of your own recipe.");
+        }
+
         Validator.validateVersion(recipeEntity, dto.getVersion());
 
         if (dto.getActive() && dto.getWaitingForAccept()) {

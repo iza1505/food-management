@@ -9,13 +9,14 @@ import { getRecipeDetails } from "../../actions/recipe.actions";
 import { bindActionCreators } from "redux";
 import EditRecipe from "./EditRecipe.component";
 import { updateRecipe } from "../../actions/recipe.actions";
-import { getRecipe, getEditableRecipe } from "../../selectors/recipe.selectors";
+import { getRecipe, getFethingRecipe } from "../../selectors/recipe.selectors";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
+import { isPositiveInteger } from "../../configuration/helpers";
 
 export class EditRecipeContainer extends Component {
   static propTypes = {
-    editable: bool,
+    fetching: bool,
     getRecipeDetails: func,
     getSortedIngredientsAction: func,
     ingredients: array,
@@ -35,6 +36,10 @@ export class EditRecipeContainer extends Component {
 
     this.props.getSortedIngredientsAction().then(() => {
       let ingredientsOptionsCopy = [];
+      ingredientsOptionsCopy.push({
+        label: "Select ingredient...",
+        value: ""
+      });
       this.props.ingredients.map(elem =>
         elem.measure.measureName
           ? ingredientsOptionsCopy.push({
@@ -120,7 +125,12 @@ export class EditRecipeContainer extends Component {
   }
 
   handleAmountIngredient(e) {
-    this.setState({ selectedAmount: e.target.value });
+    if (isPositiveInteger(e.target.value)) {
+      this.setState({ selectedAmount: e.target.value });
+    } else {
+      this.setState({ selectedAmount: null });
+      toast.error("Amount must be positive integer.");
+    }
   }
 
   handleAddIngredientToList(e) {
@@ -128,7 +138,7 @@ export class EditRecipeContainer extends Component {
       _.isEmpty(this.state.selectedIngredient) ||
       !this.state.selectedAmount
     ) {
-      toast.warn("Select ingredient and type amount to add to list.");
+      toast.warn("Select ingredient and type correct amount to add to list.");
     } else {
       let iterator = 0;
       this.state.selectedIngredients.forEach((elem, index) => {
@@ -158,7 +168,7 @@ export class EditRecipeContainer extends Component {
         onSubmit={this.handleSubmit}
         initialValues={this.props.initialValues}
         ingredientsOptions={this.state.ingredientsOptions}
-        editable={this.props.editable}
+        fetching={this.props.fetching}
         selectedIngredients={this.state.selectedIngredients}
         handleSelectIngredient={this.handleSelectIngredient}
         handleAmountIngredient={this.handleAmountIngredient}
@@ -178,7 +188,7 @@ const mapStateToProps = state => ({
   },
   recipe: getRecipe(state),
   ingredients: getSortedIngredients(state),
-  editable: getEditableRecipe(state)
+  fetching: getFethingRecipe(state)
 });
 
 function mapDispatchToProps(dispatch) {

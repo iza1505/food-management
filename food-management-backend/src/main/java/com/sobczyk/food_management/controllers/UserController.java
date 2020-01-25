@@ -74,7 +74,7 @@ public class UserController {
     }
 
 //    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
-//    @DeleteMapping(value = "/changeActiveStatus")
+//    @DeleteMapping(value = "/deactivateAccount")
 //    public ResponseEntity changeActiveStatus() {
 //        userService.changeActiveStatus();
 //        return ResponseEntity.ok("Account has been deactivated.");

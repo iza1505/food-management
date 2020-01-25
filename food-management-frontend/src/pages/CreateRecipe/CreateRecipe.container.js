@@ -9,13 +9,16 @@ import { bindActionCreators } from "redux";
 import CreateRecipe from "./CreateRecipe.component";
 import { addRecipe } from "../../actions/recipe.actions";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
+import { getFethingRecipe } from "../../selectors/recipe.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
+import { isPositiveInteger } from "../../configuration/helpers";
 
 export class CreateRecipeContainer extends Component {
   static propTypes = {
     addRecipe: func,
     dispatch: func,
     editable: bool,
+    fetching: bool,
     getSortedIngredientsAction: func,
     ingredients: array,
     initialValues: object
@@ -32,6 +35,10 @@ export class CreateRecipeContainer extends Component {
 
     this.props.getSortedIngredientsAction().then(() => {
       let ingredientsOptionsCopy = [];
+      ingredientsOptionsCopy.push({
+        label: "Select ingredient...",
+        value: ""
+      });
       this.props.ingredients.map(elem =>
         elem.measure.measureName
           ? ingredientsOptionsCopy.push({
@@ -72,9 +79,6 @@ export class CreateRecipeContainer extends Component {
           toast.info("Recipe has been added.");
           this.props.dispatch(reset("createRecipeForm"));
           this.redirectToMyRecipes();
-          //this.setState({ selectedIngredients: {} });
-          //window.location.reload();
-          //TODO: przeniesc sie do moich przepisow
         })
         .catch(err => {
           if (!err.response) {
@@ -103,7 +107,12 @@ export class CreateRecipeContainer extends Component {
   }
 
   handleAmountIngredient(e) {
-    this.setState({ selectedAmount: e.target.value });
+    if (isPositiveInteger(e.target.value)) {
+      this.setState({ selectedAmount: e.target.value });
+    } else {
+      this.setState({ selectedAmount: null });
+      toast.error("Amount must be positive integer.");
+    }
   }
 
   handleAddIngredientToList(e) {
@@ -111,7 +120,7 @@ export class CreateRecipeContainer extends Component {
       _.isEmpty(this.state.selectedIngredient) ||
       !this.state.selectedAmount
     ) {
-      toast.warn("Select ingredient and type amount to add to list.");
+      toast.warn("Select ingredient and type corrent amount to add to list.");
     } else {
       let iterator = 0;
       this.state.selectedIngredients.forEach((elem, index) => {
@@ -141,7 +150,7 @@ export class CreateRecipeContainer extends Component {
         onSubmit={this.handleSubmit}
         initialValues={this.props.initialValues}
         ingredientsOptions={this.state.ingredientsOptions}
-        editable={this.props.editable}
+        fetching={this.props.fetching}
         selectedIngredients={this.state.selectedIngredients}
         handleSelectIngredient={this.handleSelectIngredient}
         handleAmountIngredient={this.handleAmountIngredient}
@@ -156,7 +165,8 @@ export class CreateRecipeContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  ingredients: getSortedIngredients(state)
+  ingredients: getSortedIngredients(state),
+  fetching: getFethingRecipe(state)
 });
 
 function mapDispatchToProps(dispatch) {

@@ -17,10 +17,14 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     //case `${ACTIONS.REFRESH_TOKEN}_${PENDING}`:CHANGE_PASSWORD
+    case `${ACTIONS.REGISTER_USER}_${PENDING}`:
     case `${ACTIONS.LOGIN_USER}_${PENDING}`:
     case `${ACTIONS.GET_DETAILS}_${PENDING}`:
     case `${ACTIONS.UPDATE_DETAILS}_${PENDING}`:
     case `${ACTIONS.CHANGE_PASSWORD}_${PENDING}`:
+    case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${PENDING}`:
+    case `${ACTIONS.RESET_PASSWORD}_${PENDING}`:
+    case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${PENDING}`:
       return { ...state, fetchingUser: true };
 
     //case `${ACTIONS.REFRESH_TOKEN}_${FULFILLED}`:
@@ -53,6 +57,20 @@ const userReducer = (state = initialState, action) => {
         ...state,
         email: action.payload.data.email,
         version: action.payload.data.version
+      };
+    }
+
+    case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${FULFILLED}`:
+    case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${REJECTED}`:
+    case `${ACTIONS.RESET_PASSWORD}_${FULFILLED}`:
+    case `${ACTIONS.RESET_PASSWORD}_${REJECTED}`:
+    case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${FULFILLED}`:
+    case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${REJECTED}`:
+    case `${ACTIONS.REGISTER_USER}_${FULFILLED}`:
+    case `${ACTIONS.REGISTER_USER}_${REJECTED}`: {
+      return {
+        ...state,
+        fetchingUser: false
       };
     }
 

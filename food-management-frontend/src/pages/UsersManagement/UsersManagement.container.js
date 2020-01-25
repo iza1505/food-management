@@ -1,46 +1,55 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, object, number } from "prop-types";
+import { array, bool, func, object, number } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
 import {
+  getUsers,
+  getFetchingUsers,
   getPageCount,
-  getCurrentPage,
-  getIngredients
-} from "../../selectors/ingredients.selectors";
+  getCurrentPage
+} from "../../selectors/users.selectors";
 
 import {
+  getUsers as getUsersAction,
+  changeAccountStatus,
   resetCurrentPageOnSubmit,
-  resetIngredients,
-  getIngredientsAdmin,
-  deleteIngredient,
-  updateIngredient
-} from "../../actions/ingredients.actions";
-import Ingredients from "./Ingredients.component";
+  resetUsers
+} from "../../actions/users.actions";
 
-class IngredientsContainer extends Component {
+import { getId } from "../../selectors/user.selectors";
+import { getDetails } from "../../actions/user.actions";
+
+import UsersManagement from "./UsersManagement.component";
+
+class UsersManagementContainer extends Component {
   static propTypes = {
+    changeAccountStatus: func,
     currentPage: number,
-    deleteIngredient: func,
-    getIngredientsAdmin: func,
+    fetching: bool,
+    getDetails: func,
+    getUsersAction: func,
     history: object,
-    ingredients: array,
     pageCount: number,
     resetCurrentPageOnSubmit: func,
-    resetIngredients: func,
-    updateIngredient: func
+    resetUsers: func,
+    userId: number,
+    users: array
   };
 
   state = {
-    paginationElem: []
+    paginationElem: [],
+    usersCopy: []
   };
 
   constructor(props) {
     super(props);
-    this.props.resetIngredients();
+    this.props.resetUsers();
+    this.handleChangeStatus = this.handleChangeStatus.bind(this);
+    this.props.getDetails();
   }
 
   reloadData = newPage => {
@@ -64,6 +73,32 @@ class IngredientsContainer extends Component {
     }
   };
 
+  createUrl() {
+    const defaultUrl = window.location.pathname;
+    const parsed = querySearch.parse(this.props.location.search);
+    if (!_.isEmpty(parsed)) {
+      let url =
+        window.location.pathname + "?elementsOnPage=" + parsed.elementsOnPage;
+
+      if (parsed.sortBy) {
+        url = url + "&sortBy=" + parsed.sortBy.replace(/"/g, "");
+      }
+
+      if (parsed.ascendingSort) {
+        url = url + "&ascendingSort=" + parsed.ascendingSort;
+      }
+
+      if (parsed.currentPage) {
+        url = url + "&currentPage=" + parsed.currentPage;
+      } else {
+        url = url + "&currentPage=1";
+      }
+
+      return url;
+    }
+    return defaultUrl;
+  }
+
   componentDidMount() {
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
@@ -85,8 +120,9 @@ class IngredientsContainer extends Component {
       }
 
       this.props
-        .getIngredientsAdmin(url)
+        .getUsersAction(url)
         .then(() => {
+          this.setState({ usersCopy: this.props.users });
           this.createPagination();
         })
         .catch(err => {
@@ -95,9 +131,24 @@ class IngredientsContainer extends Component {
               "Server is unreachable. Check your internet connection."
             );
           } else {
-            toast.error("Can't get recipes headers.");
+            toast.error("Can't get users.");
           }
         });
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.fetching !== nextProps.fetching) {
+      return true;
+    }
+    if (this.state.usersCopy !== nextProps.users) {
+      this.setState({ usersCopy: this.props.users });
+      return true;
+    } else {
+      if (this.state.paginationElem !== nextState.paginationElem) {
+        return true;
+      }
+      return false;
     }
   }
 
@@ -125,92 +176,55 @@ class IngredientsContainer extends Component {
     }
   };
 
-  handleActiveIngredient = (id, version) => {
+  handleChangeStatus(id, version, e) {
     this.props
-      .updateIngredient(id, version)
+      .changeAccountStatus(id, e.target.checked, version)
       .then(() => {
-        this.props
-          .getIngredientsAdmin(
-            window.location.pathname + window.location.search
-          )
-          .catch(err => {
-            if (!err.response) {
-              toast.warn(
-                "Server is unreachable. Check your internet connection."
-              );
-            } else {
-              toast.error("Can't get ingredients.");
-            }
-          });
-        toast.info("Ingredient activated.");
+        this.props.getUsersAction(this.createUrl());
+        toast.info("User status has been changed.");
       })
       .catch(err => {
         if (!err.response) {
           toast.warn("Server is unreachable. Check your internet connection.");
         } else {
-          toast.error("Can't update ingredient.");
+          toast.error("Cannot change user status.");
         }
       });
-  };
-
-  handleDeleteIngredient = id => {
-    this.props
-      .deleteIngredient(id)
-      .then(() => {
-        toast.info("Ingredient has been deleted.");
-        this.props
-          .getIngredientsAdmin(
-            window.location.pathname + window.location.search
-          )
-          .catch(err => {
-            if (!err.response) {
-              toast.warn(
-                "Server is unreachable. Check your internet connection."
-              );
-            } else {
-              toast.error("Can't get ingredients.");
-            }
-          });
-      })
-      .catch(err => {
-        if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
-        } else {
-          toast.error("Can't delete ingredients.");
-        }
-      });
-  };
+  }
 
   render() {
     return (
-      <Ingredients
+      <UsersManagement
         pageCount={this.props.pageCount}
-        ingredients={this.props.ingredients}
+        users={this.state.usersCopy}
         currentPage={this.props.currentPage}
         handlePagination={this.handlePagination}
         paginationElem={this.state.paginationElem}
         handleClick={this.handleClick}
-        handleActiveIngredient={this.handleActiveIngredient}
-        handleDeleteIngredient={this.handleDeleteIngredient}
+        handleChangeStatus={this.handleChangeStatus}
+        fetching={this.props.fetching}
+        userId={this.props.userId}
       />
     );
   }
 }
 
 const mapDispatchToProps = {
-  getIngredientsAdmin,
-  resetIngredients,
+  getDetails,
+  getUsersAction,
+  resetUsers,
   resetCurrentPageOnSubmit,
-  deleteIngredient,
-  updateIngredient
+  changeAccountStatus
 };
 
 const mapStateToProps = state => ({
   pageCount: getPageCount(state),
-  ingredients: getIngredients(state),
-  currentPage: getCurrentPage(state)
+  users: getUsers(state),
+  currentPage: getCurrentPage(state),
+  fetching: getFetchingUsers(state),
+  userId: getId(state)
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(IngredientsContainer)
+  connect(mapStateToProps, mapDispatchToProps)(UsersManagementContainer)
 );

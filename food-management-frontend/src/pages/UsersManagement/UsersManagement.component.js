@@ -1,32 +1,31 @@
 import React from "react";
-import { array, number, func } from "prop-types";
+import { array, bool, number, func } from "prop-types";
 import { reduxForm, Field } from "redux-form";
 
 import {
   elementsOnPageOptions,
-  sortByOptionsIngredient,
+  userSortByOptionsAdmin,
   ascendingSortOptions
 } from "../../configuration/recipeConst";
 
 import LayoutMain from "../../components/layouts/MainLayout";
-import input from "../../components/Fields/input";
 import select from "../../components/Fields/select";
 import Pagination from "../../components/Pagination/Pagination";
-import { renderBooelan } from "../../configuration/helpers";
-import IngredientProposition from "../Fridge/IngredientPropositionModalForm";
 
-export const Ingredients = props => {
+import RegistrationModalForm from "../registrationAndMore/RegistrationModalForm";
+
+export const UsersManagement = props => {
   const {
     pageCount,
-    ingredients,
+    users,
     currentPage,
-    handleActiveIngredient,
-    handleDeleteIngredient,
+    handleChangeStatus,
     handlePagination,
     paginationElem,
-    handleClick
+    handleClick,
+    fetching,
+    userId
   } = props;
-
   return (
     <LayoutMain title="Recipes">
       <div>
@@ -34,17 +33,17 @@ export const Ingredients = props => {
           <button
             className="btn btn-success "
             data-toggle="modal"
-            data-target="#ingredientPropositionModal"
-            text="Edit details"
+            data-target="#registrationModal"
+            text="Add new user"
             style={{
               marginLeft: "5px"
             }}
           >
-            Add new ingredient
+            Add new user
           </button>
-          <IngredientProposition />
+          <RegistrationModalForm />
         </div>
-        <form autoComplete="on" className="form-container">
+        <form autoComplete="on" className="form-container ">
           <div className="center-align-elem">
             <Field
               className="form-control mb-2 mr-sm-4"
@@ -52,7 +51,7 @@ export const Ingredients = props => {
               type="text"
               label="Sort by:"
               component={select}
-              options={sortByOptionsIngredient}
+              options={userSortByOptionsAdmin}
             />
             <Field
               className="form-control mb-2 mr-sm-4"
@@ -92,45 +91,39 @@ export const Ingredients = props => {
           <table className="table table-striped ">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Measure</th>
+                <th scope="col">Login</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
                 <th scope="col">Active</th>
-                <th scope="col">Options</th>
               </tr>
             </thead>
             <tbody>
-              {ingredients.map(elem => (
-                <tr key={elem.id}>
-                  <th scope="row">{elem.ingredientName}</th>
-                  <td>{elem.measure.measureName}</td>
-                  <td>{renderBooelan(elem.active)}</td>
-                  {elem.active ? (
-                    <td></td>
-                  ) : (
+              {users &&
+                users.map((elem, index) => (
+                  <tr
+                    key={index}
+                    className={elem.id === userId ? "font-weight-bold text-success" : null}
+                  >
+                    <th scope="row">{elem.login}</th>
+                    <td>{elem.role}</td>
+                    <td>{elem.email}</td>
                     <td>
-                      <button
-                        className="btn btn-info btn-rounded btn-sm my-0 "
-                        text="Activate"
-                        onClick={() =>
-                          handleActiveIngredient(elem.id, elem.version)
+                      <input
+                        type="checkbox"
+                        id="activeStatus"
+                        name="activeStatus"
+                        className="form-control"
+                        data-swchoff-text="OFF"
+                        data-swchon-text="ON"
+                        checked={elem.active}
+                        disabled={elem.id === userId ? true : fetching}
+                        onChange={e =>
+                          handleChangeStatus(elem.id, elem.version, e)
                         }
-                      >
-                        Activate
-                      </button>
-                      <span className="table-remove">
-                        <button
-                          //disabled={fetchingIngredients}
-                          type="button"
-                          className="btn btn-danger btn-rounded btn-sm my-0"
-                          onClick={() => handleDeleteIngredient(elem.id)}
-                        >
-                          Remove
-                        </button>
-                      </span>
+                      ></input>
                     </td>
-                  )}
-                </tr>
-              ))}
+                  </tr>
+                ))}
             </tbody>
           </table>
 
@@ -146,20 +139,20 @@ export const Ingredients = props => {
   );
 };
 
-Ingredients.propTypes = {
+UsersManagement.propTypes = {
   currentPage: number,
-  handleActiveIngredient: func,
-  handleDeleteIngredient: func,
+  fetching: bool,
+  handleChangeStatus: func,
   handleClick: func,
   handlePagination: func,
-  ingredients: array,
   pageCount: number,
-  paginationElem: array
+  paginationElem: array,
+  userId: number,
+  users: array
 };
 
 export default reduxForm({
-  form: "ingredientsform",
+  form: "usersManagementForm",
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(Ingredients);
-//export default HeadersUser;
+})(UsersManagement);

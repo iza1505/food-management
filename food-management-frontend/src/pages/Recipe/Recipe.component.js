@@ -31,9 +31,8 @@ export const Recipe = props => {
             recipe.user && recipe.user.login === userLogin ? (
               <button
                 className="btn btn-success "
-                data-toggle="modal"
-                data-target="#editRecipeModal"
                 text="Edit recipe"
+                onClick={() => handleEditRecipe()}
               >
                 Edit recipe
               </button>

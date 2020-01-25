@@ -1,20 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, string } from "prop-types";
+import { array, bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
+import { reset } from "redux-form";
+import { bindActionCreators } from "redux";
 
 import IngredientPropositionModalForm from "./IngredientPropositionModalForm.component";
 import {
   getMeasures as getMeasuresAction,
   addIngredientToDatabase
 } from "../../../actions/ingredients.actions";
-import { getMeasures } from "../../../selectors/ingredients.selectors";
+import {
+  getMeasures,
+  getFethingIngredients
+} from "../../../selectors/ingredients.selectors";
 import { getRole } from "../../../selectors/user.selectors";
 import { userRoles } from "../../../configuration/roles";
 
 export class IngredientPropositionModalFormContainer extends Component {
   static propTypes = {
     addIngredientToDatabase: func,
+    dispatch: func,
+    fetching: bool,
     getMeasuresAction: func,
     measures: array,
     userRole: string
@@ -43,6 +50,10 @@ export class IngredientPropositionModalFormContainer extends Component {
 
   createMeasuresOptions() {
     const measureOptionsCopy = [];
+    measureOptionsCopy.push({
+      label: "Select measure...",
+      value: ""
+    });
     this.props.measures.forEach(elem => {
       elem.measureName
         ? measureOptionsCopy.push({
@@ -66,6 +77,7 @@ export class IngredientPropositionModalFormContainer extends Component {
         JSON.parse(values.measure)
       )
       .then(() => {
+        this.props.dispatch(reset("ingredientPropositionModalForm"));
         this.props.userRole === userRoles.user
           ? toast.info("Ingredient has been proposed")
           : toast.info("Ingredient has been added.");
@@ -85,6 +97,7 @@ export class IngredientPropositionModalFormContainer extends Component {
         onSubmit={this.handleSubmit}
         userRole={this.props.userRole}
         measures={this.state.measureOptions}
+        fetching={this.props.fetching}
       />
     );
   }
@@ -92,13 +105,20 @@ export class IngredientPropositionModalFormContainer extends Component {
 
 const mapStateToProps = state => ({
   userRole: getRole(state),
-  measures: getMeasures(state)
+  measures: getMeasures(state),
+  fetching: getFethingIngredients(state)
 });
 
-const mapDispatchToProps = {
-  getMeasuresAction,
-  addIngredientToDatabase
-};
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    getMeasuresAction: bindActionCreators(getMeasuresAction, dispatch),
+    addIngredientToDatabase: bindActionCreators(
+      addIngredientToDatabase,
+      dispatch
+    )
+  };
+}
 
 export default connect(
   mapStateToProps,

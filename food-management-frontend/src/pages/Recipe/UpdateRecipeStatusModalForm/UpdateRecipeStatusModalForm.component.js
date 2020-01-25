@@ -1,16 +1,20 @@
 import React from "react";
-import { connect } from "react-redux";
-import { bool, func, string } from "prop-types";
+import { bool, func } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
 
 import toggle from "../../../components/Fields/toggle";
+import MyLoader from "../../../components/Loader/loader.component";
 import textarea from "../../../components/Fields/textarea";
 import { validateRequired } from "../../Validators/Validators";
 
 const UpdateRecipeStatusModalForm = props => {
-  const { handleSubmit, change, isActive, isWaitingForAccept } = props;
-  console.log("is active: " + JSON.stringify(isActive));
-  //console.log("field val " + JSON.stringify(activeFieldValue));
+  const {
+    handleSubmit,
+    change,
+    isActive,
+    isWaitingForAccept,
+    fetching
+  } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -70,13 +74,19 @@ const UpdateRecipeStatusModalForm = props => {
                 }
               />
               <div className="modal-footer">
-                <button className="btn btn-success" type="submit">
+                <MyLoader visible={fetching} />
+                <button
+                  className="btn btn-success"
+                  type="submit"
+                  disabled={fetching}
+                >
                   Send
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
+                  disabled={fetching}
                 >
                   Close
                 </button>
@@ -91,6 +101,7 @@ const UpdateRecipeStatusModalForm = props => {
 
 UpdateRecipeStatusModalForm.propTypes = {
   change: func,
+  fetching: bool,
   handleSubmit: func,
   isActive: bool,
   isWaitingForAccept: bool
@@ -99,6 +110,4 @@ UpdateRecipeStatusModalForm.propTypes = {
 export default reduxForm({
   form: "updateRecipeStatusModalForm",
   enableReinitialize: true
-  // onSubmitSuccess: (result, dispatch) =>
-  //   dispatch(reset("updateRecipeStatusModalForm"))
 })(UpdateRecipeStatusModalForm);

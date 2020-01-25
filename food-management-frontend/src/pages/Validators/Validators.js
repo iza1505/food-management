@@ -1,7 +1,9 @@
+import _ from "lodash";
+
 const validator = require("email-validator");
 
 const validateRequired = value =>
-  value ? undefined : "This field is required.";
+  value && !_.isEqual(value, '""') ? undefined : "This field is required.";
 
 const validateConfirmedPassword = (passwordConfirm, allValues) =>
   allValues.password1 === passwordConfirm

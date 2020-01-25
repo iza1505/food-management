@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { func } from "prop-types";
+import { bool, func } from "prop-types";
 import { toast } from "react-toastify";
+import { bindActionCreators } from "redux";
+import { reset } from "redux-form";
 
 import ResetPasswordModalForm from "./ResetPasswordModalForm.component";
 import { sendResetPasswordMail } from "../../../actions/user.actions";
+import { getFetchingUser } from "../../../selectors/user.selectors";
 
 export class ResetPasswordModalFormContainer extends Component {
   static propTypes = {
+    dispatch: func,
+    fetching: bool,
     sendResetPasswordMail: func
   };
 
@@ -15,6 +20,7 @@ export class ResetPasswordModalFormContainer extends Component {
     return this.props
       .sendResetPasswordMail(values.login, values.email)
       .then(() => {
+        this.props.dispatch(reset("resetPasswordModalForm"));
         toast.info("Change password email was send.");
       })
       .catch(err => {
@@ -27,15 +33,27 @@ export class ResetPasswordModalFormContainer extends Component {
   };
 
   render() {
-    return <ResetPasswordModalForm onSubmit={this.handleSubmit} />;
+    return (
+      <ResetPasswordModalForm
+        onSubmit={this.handleSubmit}
+        fetching={this.props.fetching}
+      />
+    );
   }
 }
 
-const mapDispatchToProps = {
-  sendResetPasswordMail
-};
+const mapStateToProps = state => ({
+  fetching: getFetchingUser(state)
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    sendResetPasswordMail: bindActionCreators(sendResetPasswordMail, dispatch)
+  };
+}
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ResetPasswordModalFormContainer);

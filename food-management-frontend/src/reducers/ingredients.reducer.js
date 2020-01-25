@@ -20,7 +20,9 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_INGREDIENTS_ADMIN}_${PENDING}`:
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${PENDING}`:
     case `${ACTIONS.DELETE_INGREDIENT}_${PENDING}`:
-    case `${ACTIONS.UPDATE_INGREDIENT}_${PENDING}`: {
+    case `${ACTIONS.UPDATE_INGREDIENT}_${PENDING}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${PENDING}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${PENDING}`: {
       return { ...state, fetchingIngredients: true };
     }
 
@@ -55,7 +57,9 @@ const ingredientsReducer = (state = initialState, action) => {
 
     case `${ACTIONS.DELETE_INGREDIENT}_${FULFILLED}`:
     case `${ACTIONS.UPDATE_INGREDIENT}_${FULFILLED}`:
-    case `${ACTIONS.UPDATE_INGREDIENT_USER}_${FULFILLED}`: {
+    case `${ACTIONS.UPDATE_INGREDIENT_USER}_${FULFILLED}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${FULFILLED}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${FULFILLED}`: {
       return {
         ...state,
         fetchingIngredients: false
@@ -77,6 +81,8 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${REJECTED}`:
     case `${ACTIONS.DELETE_INGREDIENT}_${REJECTED}`:
     case `${ACTIONS.UPDATE_INGREDIENT}_${REJECTED}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${REJECTED}`:
+    case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${REJECTED}`:
       return {
         ...state,
         fetchingIngredients: false

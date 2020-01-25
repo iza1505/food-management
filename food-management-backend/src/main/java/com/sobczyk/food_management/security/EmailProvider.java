@@ -25,8 +25,8 @@ public class EmailProvider {
     public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address, String title,
                                                          String message) {
         String url;
-        if(token == null && address == null){
-            url = null;
+        if(token.equals("") && address.equals("")){
+            url = "";
         } else {
             url = applicationPath + address + token;
         }

@@ -6,11 +6,13 @@ import _ from "lodash";
 import { validateRequired, validateInteger } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
+import MyLoader from "../../components/Loader/loader.component";
 import select from "../../components/Fields/select";
 import textarea from "../../components/Fields/textarea";
 
 export const CreateRecipe = props => {
   const {
+    fetching,
     handleSubmit,
     ingredientsOptions,
     selectedIngredients,
@@ -106,7 +108,14 @@ export const CreateRecipe = props => {
             component={textarea}
           />
           <div className="d-flex justify-content-center">
-            <button className="btn btn-success " type="submit">
+            <MyLoader visible={fetching} />
+          </div>
+          <div className="d-flex justify-content-center">
+            <button
+              className="btn btn-success "
+              type="submit"
+              disabled={fetching}
+            >
               {" "}
               Create{" "}
             </button>
@@ -118,7 +127,7 @@ export const CreateRecipe = props => {
 };
 
 CreateRecipe.propTypes = {
-  editable: bool,
+  fetching: bool,
   handleAddIngredientToList: func,
   handleAmountIngredient: func,
   handleDeteleIngredientFromListButton: func,

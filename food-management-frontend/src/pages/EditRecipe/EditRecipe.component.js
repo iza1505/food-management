@@ -3,20 +3,18 @@ import { reduxForm, Form, Field } from "redux-form";
 import { bool, func, object, array } from "prop-types";
 import _ from "lodash";
 
-import {
-  validateRequired,
-  validateInteger
-} from "./../Validators/Validators";
+import { validateRequired, validateInteger } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
+import MyLoader from "../../components/Loader/loader.component";
 import select from "../../components/Fields/select";
 import textarea from "../../components/Fields/textarea";
 
 export const EditRecipe = props => {
   const {
+    fetching,
     handleSubmit,
     ingredientsOptions,
-    editable,
     selectedIngredients,
     handleSelectIngredient,
     handleAmountIngredient,
@@ -110,10 +108,13 @@ export const EditRecipe = props => {
             component={textarea}
           />
           <div className="d-flex justify-content-center">
+            <MyLoader visible={fetching} />
+          </div>
+          <div className="d-flex justify-content-center">
             <button
               className="btn btn-success "
               type="submit"
-              disabled={!editable}
+              disabled={fetching}
             >
               {" "}
               Update{" "}
@@ -126,7 +127,7 @@ export const EditRecipe = props => {
 };
 
 EditRecipe.propTypes = {
-  editable: bool,
+  fetching: bool,
   handleAddIngredientToList: func,
   handleAmountIngredient: func,
   handleDeteleIngredientFromListButton: func,

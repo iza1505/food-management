@@ -1,8 +1,11 @@
 import React from "react";
-import { func } from "prop-types";
-import { Form, reduxForm, reset, Field } from "redux-form";
+import { bool, func, string } from "prop-types";
+import { Form, reduxForm, Field } from "redux-form";
 
 import input from "../../../components/Fields/input";
+import select from "../../../components/Fields/select";
+import MyLoader from "../../../components/Loader/loader.component";
+
 import {
   validateRequired,
   validateConfirmedPassword,
@@ -12,9 +15,10 @@ import {
   validatePasswordUpperLowerCase,
   validatePasswordDidits
 } from "../../Validators/Validators";
+import { roleOptionsRegistration } from "../../../configuration/recipeConst";
 
 const RegistrationModalForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, userRole, fetching } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -32,8 +36,23 @@ const RegistrationModalForm = props => {
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Type required information and sign in.
+                Type required information and create account.
               </h1>
+              {userRole === "ADMINISTRATOR" ? (
+                <Field
+                  className="form-control"
+                  name="role"
+                  id="role"
+                  type="text"
+                  label="Select role:"
+                  validate={[validateRequired]}
+                  component={select}
+                  options={roleOptionsRegistration}
+                />
+              ) : (
+                <></>
+              )}
+
               <Field
                 className="form-control mb-2 mr-sm-2"
                 name="login"
@@ -82,13 +101,19 @@ const RegistrationModalForm = props => {
             </div>
 
             <div className="modal-footer">
-              <button className="btn btn-success" type="submit">
-                Sign in
+              <MyLoader visible={fetching} />
+              <button
+                className="btn btn-success"
+                type="submit"
+                disabled={fetching}
+              >
+                Create account
               </button>
               <button
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                disabled={fetching}
               >
                 Close
               </button>
@@ -101,12 +126,14 @@ const RegistrationModalForm = props => {
 };
 
 RegistrationModalForm.propTypes = {
-  handleSubmit: func
+  fetching: bool,
+  handleSubmit: func,
+  userRole: string
 };
 
 export default reduxForm({
   form: "registrationModalForm",
-  enableReinitialize: true,
-  onSubmitSuccess: (result, dispatch) =>
-    dispatch(reset("registrationModalForm"))
+  enableReinitialize: true
+  // onSubmitSuccess: (result, dispatch) =>
+  //   dispatch(reset("registrationModalForm"))
 })(RegistrationModalForm);

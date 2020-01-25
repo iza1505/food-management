@@ -32,10 +32,22 @@ const sortByOptionsAuthor = [
   { label: "Waiting for accept", value: "waitingForAccept" }
 ];
 
+const userSortByOptionsAdmin = [
+  { label: "Login", value: "login" },
+  { label: "Role", value: "role" },
+  { label: "Active", value: "active" }
+];
+
 const sortByOptionsIngredient = [
   { label: "Name", value: "ingredientName" },
   { label: "Measure", value: "measure.measureName" },
   { label: "Active", value: "active" }
+];
+
+const roleOptionsRegistration = [
+  { label: "Select role...", value: "" },
+  { label: "Admin", value: "ADMINISTRATOR" },
+  { label: "User", value: "USER" }
 ];
 
 const possibleMissingIngredientsAmountOptions = [
@@ -60,5 +72,7 @@ export {
   ascendingSortOptions,
   sortByOptionsAdmin,
   sortByOptionsAuthor,
-  sortByOptionsIngredient
+  sortByOptionsIngredient,
+  roleOptionsRegistration,
+  userSortByOptionsAdmin
 };

@@ -1,14 +1,15 @@
 import React from "react";
-import { array, func } from "prop-types";
+import { array, bool, func } from "prop-types";
 import { Form, reduxForm, reset, Field } from "redux-form";
 
 import input from "../../../components/Fields/input";
+import MyLoader from "../../../components/Loader/loader.component";
 import { validateRequired, validateInteger } from "../../Validators/Validators";
 
 import select from "../../../components/Fields/select";
 
 const AddIngredientToFridgeModalForm = props => {
-  const { handleSubmit, avaliableIngredientsToAddToFridge } = props;
+  const { handleSubmit, avaliableIngredientsToAddToFridge, fetching } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -48,13 +49,19 @@ const AddIngredientToFridgeModalForm = props => {
               />
 
               <div className="modal-footer">
-                <button className="btn btn-success" type="submit">
+                <MyLoader visible={fetching} />
+                <button
+                  className="btn btn-success"
+                  type="submit"
+                  disabled={fetching}
+                >
                   Add
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
+                  disabled={fetching}
                 >
                   Close
                 </button>
@@ -69,8 +76,8 @@ const AddIngredientToFridgeModalForm = props => {
 
 AddIngredientToFridgeModalForm.propTypes = {
   avaliableIngredientsToAddToFridge: array,
-  handleSubmit: func,
-  ingredientsOptions: array
+  fetching: bool,
+  handleSubmit: func
 };
 
 export default reduxForm({

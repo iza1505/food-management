@@ -1,8 +1,9 @@
 import React from "react";
-import { func } from "prop-types";
-import { Form, reduxForm, reset, Field } from "redux-form";
+import { bool, func } from "prop-types";
+import { Form, reduxForm, Field } from "redux-form";
 
 import input from "../../../components/Fields/input";
+import MyLoader from "../../../components/Loader/loader.component";
 import {
   validateRequired,
   validateEmail,
@@ -10,7 +11,7 @@ import {
 } from "../../Validators/Validators";
 
 const ResetPasswordModalForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, fetching } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -52,13 +53,19 @@ const ResetPasswordModalForm = props => {
               />
 
               <div className="modal-footer">
-                <button className="btn btn-success" type="submit">
+                <MyLoader visible={fetching} />
+                <button
+                  className="btn btn-success"
+                  type="submit"
+                  disabled={fetching}
+                >
                   Reset
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
+                  disabled={fetching}
                 >
                   Close
                 </button>
@@ -72,12 +79,11 @@ const ResetPasswordModalForm = props => {
 };
 
 ResetPasswordModalForm.propTypes = {
+  fetching: bool,
   handleSubmit: func
 };
 
 export default reduxForm({
   form: "resetPasswordModalForm",
-  enableReinitialize: true,
-  onSubmitSuccess: (result, dispatch) =>
-    dispatch(reset("resetPasswordModalForm"))
+  enableReinitialize: true
 })(ResetPasswordModalForm);

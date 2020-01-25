@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, func, number, object, string } from "prop-types";
+import { bool, func, object } from "prop-types";
 import { toast } from "react-toastify";
 import { formValueSelector } from "redux-form";
 
 import UpdateRecipeStatusModalForm from "./UpdateRecipeStatusModalForm.component";
-import { getRecipe } from "../../../selectors/recipe.selectors";
+import {
+  getRecipe,
+  getFethingRecipe
+} from "../../../selectors/recipe.selectors";
 import { updateRecipeStatus } from "../../../actions/recipe.actions";
 
 const selector = formValueSelector("updateRecipeStatusModalForm");
 
 export class UpdateRecipeStatusModalFormContainer extends Component {
   static propTypes = {
+    fetching: bool,
     isActive: bool,
     isWaitingForAccept: bool,
     recipe: object,
@@ -27,31 +31,34 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    if (
-      this.state.recipeId === nextProps.recipe.id &&
-      this.state.version === nextProps.recipe.version
-    ) {
+    if (this.props.fetching === nextProps.fetching) {
       if (
-        this.props.isActive !== nextProps.isActive ||
-        this.props.isWaitingForAccept !== nextProps.isWaitingForAccept
+        this.state.recipeId === nextProps.recipe.id &&
+        this.state.version === nextProps.recipe.version
       ) {
+        if (
+          this.props.isActive !== nextProps.isActive ||
+          this.props.isWaitingForAccept !== nextProps.isWaitingForAccept
+        ) {
+          return true;
+        }
+        return false;
+      } else {
+        this.setState({
+          active: nextProps.recipe.active,
+          waitingForAccept: nextProps.recipe.waitingForAccept,
+          toImprove: nextProps.recipe.toImprove,
+          version: nextProps.recipe.version,
+          recipeId: nextProps.recipe.id
+        });
         return true;
       }
-      return false;
     } else {
-      this.setState({
-        active: nextProps.recipe.active,
-        waitingForAccept: nextProps.recipe.waitingForAccept,
-        toImprove: nextProps.recipe.toImprove,
-        version: nextProps.recipe.version,
-        recipeId: nextProps.recipe.id
-      });
       return true;
     }
   }
 
   handleSubmit = values => {
-    console.log(JSON.stringify(values));
     return this.props
       .updateRecipeStatus(
         this.state.recipeId,
@@ -83,6 +90,7 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
         }}
         isActive={this.props.isActive}
         isWaitingForAccept={this.props.isWaitingForAccept}
+        fetching={this.props.fetching}
       />
     );
   }
@@ -91,7 +99,8 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
 const mapStateToProps = state => ({
   recipe: getRecipe(state),
   isActive: selector(state, "active"),
-  isWaitingForAccept: selector(state, "waitingForAccept")
+  isWaitingForAccept: selector(state, "waitingForAccept"),
+  fetching: getFethingRecipe(state)
 });
 
 const mapDispatchToProps = {

@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func } from "prop-types";
+import { array, bool, func } from "prop-types";
 import { toast } from "react-toastify";
 
 import AddIngredientToFridgeModalForm from "./AddIngredientToFridgeModalForm.component";
 import { addIngredientToFridge } from "../../../actions/ingredients.actions";
+import { getFethingIngredients } from "../../../selectors/ingredients.selectors";
 
 export class AddIngredientToFridgeModalFormContainer extends Component {
   static propTypes = {
     addIngredientToFridge: func,
     avaliableIngredientsToAddToFridge: array,
+    fetching: bool,
     getIngredientsUser: func
   };
 
@@ -36,16 +38,23 @@ export class AddIngredientToFridgeModalFormContainer extends Component {
         avaliableIngredientsToAddToFridge={
           this.props.avaliableIngredientsToAddToFridge
         }
+        fetching={this.props.fetching}
       />
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    fetching: getFethingIngredients(state)
+  };
+};
 
 const mapDispatchToProps = {
   addIngredientToFridge
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(AddIngredientToFridgeModalFormContainer);

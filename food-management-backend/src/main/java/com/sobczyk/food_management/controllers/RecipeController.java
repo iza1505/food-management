@@ -107,8 +107,7 @@ public class RecipeController {
         }
 
         service.updateRecipe(id, dto);
-        return ResponseEntity.ok("Recipe has been updated."); //TODO: zwraca przepis z podanym id zzeby mi sie
-        // updateowalo w state
+        return ResponseEntity.ok("Recipe has been updated.");
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")

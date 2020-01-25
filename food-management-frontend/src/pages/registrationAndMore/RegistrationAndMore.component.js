@@ -9,7 +9,7 @@ import ConfirmationEmailModalForm from "./ConfirmationEmailModalForm";
 
 export const RegistrationAndMore = props => {
   return (
-    <LayoutMain title="Sign in" hideTitle fullContent>
+    <LayoutMain title="Dołącz | Więcej" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <button
           className="btn btn-success"

@@ -20,10 +20,10 @@ const EditDetailsModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Edit details</h5>
+              <h5>Edytuj dane</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">Edit your account details.</h1>
+              <h1 className="email-information">Edytuj swoje dane.</h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
                 name="email"
@@ -36,14 +36,14 @@ const EditDetailsModalForm = props => {
               />
               <div className="modal-footer">
                 <button className="btn btn-success" type="submit">
-                  Send
+                  Wyślij
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

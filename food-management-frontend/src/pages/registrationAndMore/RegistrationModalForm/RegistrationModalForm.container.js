@@ -29,13 +29,13 @@ export class RegistrationModalFormContainer extends Component {
       .register(values.login, values.email, values.password1, role)
       .then(() => {
         this.props.dispatch(reset("registrationModalForm"));
-        toast.info("Confirmation email was send.");
+        toast.info("Email aktywujący konto został wysłany.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
         } else {
-          toast.error("Invalid registration data.");
+          toast.error("Niepoprawne dane.");
         }
       });
   };

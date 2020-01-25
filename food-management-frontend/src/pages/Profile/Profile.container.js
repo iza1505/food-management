@@ -23,9 +23,9 @@ class ProfileContainer extends Component {
     super(props);
     this.props.getDetails().catch(err => {
       if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
+        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
       } else {
-        toast.error("Can't get details.");
+        toast.error("Nie można pobrać danych.");
       }
     });
 
@@ -36,9 +36,9 @@ class ProfileContainer extends Component {
   componentDidMount = () => {
     this.props.getDetails().catch(err => {
       if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
+        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
       } else {
-        toast.error("Can't get details.");
+        toast.error("Nie można pobrać danych.");
       }
     });
   };

@@ -21,13 +21,15 @@ export class ResetPasswordModalFormContainer extends Component {
       .sendResetPasswordMail(values.login, values.email)
       .then(() => {
         this.props.dispatch(reset("resetPasswordModalForm"));
-        toast.info("Change password email was send.");
+        toast.info("Email zmieniający hasło został wysłany.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Invalid data.");
+          toast.error("Niepoprawne dane.");
         }
       });
   };

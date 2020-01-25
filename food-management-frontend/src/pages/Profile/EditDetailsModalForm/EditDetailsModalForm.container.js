@@ -18,13 +18,13 @@ export class EditDetailsModalFormContainer extends Component {
     return this.props
       .updateDetails(values.email, this.props.version)
       .then(() => {
-        toast.info("Details have been changed.");
+        toast.info("Dane zostały zmienione.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
         } else {
-          toast.error("Invalid data.");
+          toast.error("Niepoprawne dane.");
         }
       });
   };

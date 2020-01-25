@@ -32,11 +32,11 @@ const RegistrationModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Registration</h5>
+              <h5>Rejestracja</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Type required information and create account.
+                Podaj wymagane informacje i utwórz konto.
               </h1>
               {userRole === "ADMINISTRATOR" ? (
                 <Field
@@ -44,7 +44,7 @@ const RegistrationModalForm = props => {
                   name="role"
                   id="role"
                   type="text"
-                  label="Select role:"
+                  label="Wybierz rolę:"
                   validate={[validateRequired]}
                   component={select}
                   options={roleOptionsRegistration}
@@ -77,8 +77,8 @@ const RegistrationModalForm = props => {
                 className="form-control mb-2 mr-sm-2"
                 name="password1"
                 id="password1"
-                placeholder="Password"
-                label="Password:"
+                placeholder="Hasło"
+                label="Hasło:"
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -92,8 +92,8 @@ const RegistrationModalForm = props => {
                 className="form-control mb-2 mr-sm-2"
                 name="passwordConfirm"
                 id="passwordConfirm"
-                placeholder="Repeat password"
-                label="Repeat password:"
+                placeholder="Potwierdzenie hasła"
+                label="Potwierdzenie hasła:"
                 validate={[validateRequired, validateConfirmedPassword]}
                 type="password"
                 component={input}
@@ -107,7 +107,7 @@ const RegistrationModalForm = props => {
                 type="submit"
                 disabled={fetching}
               >
-                Create account
+                Utwórz konto
               </button>
               <button
                 type="button"
@@ -115,7 +115,7 @@ const RegistrationModalForm = props => {
                 data-dismiss="modal"
                 disabled={fetching}
               >
-                Close
+                Zamknij
               </button>
             </div>
           </div>

@@ -26,19 +26,19 @@ const ChangePasswordModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Change password</h5>
+              <h5>Zmień hasło</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Type old password and new password to change.
+                Zmień hasło podając stare i nowe spełniające wymagane kryteria.
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
                 name="oldPassword"
                 id="oldPassword"
                 type="password"
-                placeholder="Old Password"
-                label="Old Password:"
+                placeholder="Stare hasło"
+                label="Stare hasło:"
                 validate={[validateRequired]}
                 component={input}
               />
@@ -47,8 +47,8 @@ const ChangePasswordModalForm = props => {
                 name="password1"
                 id="password1"
                 type="password"
-                placeholder="New Password"
-                label="New Password:"
+                placeholder="Nowe hasło"
+                label="Nowe hasło:"
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -62,22 +62,22 @@ const ChangePasswordModalForm = props => {
                 name="passwordConfirm"
                 id="passwordConfirm"
                 type="password"
-                placeholder="Confirm new password"
-                label="Confirm new password:"
+                placeholder="Nowe hasło"
+                label="Potwierdź nowe hasło:"
                 validate={[validateRequired, validateConfirmedPassword]}
                 component={input}
               />
 
               <div className="modal-footer">
                 <button className="btn btn-success" type="submit">
-                  Reset
+                  Zmień
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

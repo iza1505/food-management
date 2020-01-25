@@ -24,14 +24,14 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
             aria-labelledby="usernavmenu"
           >
             <Link to="/profile" className="dropdown-item">
-              Profile
+              Profil
             </Link>
             <hr />
             <li
               className={[styles["logout-item"], "dropdown-item"].join(" ")}
               onClick={logout}
             >
-              Logout
+              Wyloguj
             </li>
           </div>
         </div>
@@ -39,10 +39,10 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
         <div className="unauth-button-container">
           <nav>
             <a className="btn btn-success" href="/login">
-              Log in
+              Zaloguj
             </a>
             <a className="btn btn-success" href="/registrationAndMore">
-              Sign in/More..
+              Dołącz/Więcej...
             </a>
           </nav>
         </div>

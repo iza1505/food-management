@@ -52,9 +52,11 @@ class FridgeContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't get ingredients.");
+          toast.error("Nie można pobrać produktów.");
         }
       });
   }
@@ -66,7 +68,7 @@ class FridgeContainer extends Component {
   updateAvaliableIngredientsToAdd() {
     const ingredientsOptionsCopy = [];
     ingredientsOptionsCopy.push({
-      label: "Select ingredient...",
+      label: "Wybierz składnik...",
       value: ""
     });
     this.props.allSortedIngredients.forEach(elem => {
@@ -84,7 +86,7 @@ class FridgeContainer extends Component {
               value: elem
             })
           : ingredientsOptionsCopy.push({
-              label: elem.ingredientName + " (pieces)",
+              label: elem.ingredientName + " (sztuki)",
               value: elem
             });
       }
@@ -108,19 +110,21 @@ class FridgeContainer extends Component {
         this.props.getIngredientsUser().catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't get ingredients.");
+            toast.error("Nie można pobrać produktów.");
           }
         });
         this.updateAvaliableIngredientsToAdd();
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't delete ingredients.");
+          toast.error("Nie można usunąć produktu.");
         }
       });
   }
@@ -138,25 +142,25 @@ class FridgeContainer extends Component {
           this.props.getIngredientsUser().catch(err => {
             if (!err.response) {
               toast.warn(
-                "Server is unreachable. Check your internet connection."
+                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
               );
             } else {
-              toast.error("Can't get ingredients.");
+              toast.error("Nie można pobrać produktów.");
             }
           });
-          toast.info("Amount changed.");
+          toast.info("Ilość została zmieniona.");
         })
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't update ingredient.");
+            toast.error("Nie można zaktualizować produktu.");
           }
         });
     } else {
-      toast.error("Amount must be positive integer.");
+      toast.error("Ilość musi być liczbą całkowitą większą od 0.");
     }
   }
 

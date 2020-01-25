@@ -11,7 +11,7 @@ export const Profile = props => {
   const { id, login, email } = props;
 
   return (
-    <LayoutMain title="Profile">
+    <LayoutMain title="Profil">
       <div>
         <div className="center-align-elem">
           <button
@@ -20,7 +20,7 @@ export const Profile = props => {
             data-target="#editDetailsModal"
             text="Edit details"
           >
-            Edit details
+            Edytuj dane
           </button>
           <EditDetailsModalForm />
 
@@ -33,7 +33,7 @@ export const Profile = props => {
               marginLeft: "5px"
             }}
           >
-            Change password
+            Zmień hasło
           </button>
           <ChangePasswordModalForm />
         </div>

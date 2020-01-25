@@ -19,14 +19,16 @@ export class AddIngredientToFridgeModalFormContainer extends Component {
     return this.props
       .addIngredientToFridge(JSON.parse(values.ingredient), values.amount)
       .then(() => {
-        toast.info("Ingredient has been added.");
+        toast.info("Produkt został dodany.");
         this.props.getIngredientsUser();
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Invalid data.");
+          toast.error("Niepoprawne dane.");
         }
       });
   };

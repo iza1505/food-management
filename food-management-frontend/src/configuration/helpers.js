@@ -1,8 +1,8 @@
 function renderBooelan(value) {
   if (value) {
-    return "yes";
+    return "tak";
   } else {
-    return "no";
+    return "nie";
   }
 }
 

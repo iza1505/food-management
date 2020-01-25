@@ -23,16 +23,16 @@ const AddIngredientToFridgeModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Add ingredient</h5>
+              <h5>Dodaj produkt</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">Add ingredient to fridge.</h1>
+              <h1 className="email-information">Dodaj produkt do lodówki</h1>
               <Field
                 className="form-control "
                 name="ingredient"
                 id="ingredient"
                 type="text"
-                label="Select ingredient"
+                label="Wybierz produkt:"
                 validate={[validateRequired]}
                 component={select}
                 options={avaliableIngredientsToAddToFridge}
@@ -42,8 +42,8 @@ const AddIngredientToFridgeModalForm = props => {
                 name="amount"
                 id="amount"
                 type="number"
-                placeholder="Amount"
-                label="Amount:"
+                placeholder="Ilość"
+                label="Ilość:"
                 validate={[validateInteger]}
                 component={input}
               />
@@ -55,7 +55,7 @@ const AddIngredientToFridgeModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Add
+                  Dodaj
                 </button>
                 <button
                   type="button"
@@ -63,7 +63,7 @@ const AddIngredientToFridgeModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

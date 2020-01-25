@@ -11,7 +11,7 @@ import UpdateRecipeStatusModalForm from "./UpdateRecipeStatusModalForm";
 export const Recipe = props => {
   const { recipe, userRole, userLogin, handleEditRecipe } = props;
   return (
-    <LayoutMain title="Recipe">
+    <LayoutMain title="Przepis">
       <div>
         <div className="center-align-elem">
           {recipe &&
@@ -22,7 +22,7 @@ export const Recipe = props => {
               text="Edit recipe"
               onClick={() => handleEditRecipe()}
             >
-              Edit recipe
+              Edytuj przepis
             </button>
           ) : (
             <></>
@@ -77,27 +77,27 @@ export const Recipe = props => {
           <></>
         )}
 
-        <LabelWithData loading={false} label="Title:">
+        <LabelWithData loading={false} label="Tytuł:">
           {recipe ? <>{recipe.title}</> : <></>}
         </LabelWithData>
 
-        <LabelWithData loading={false} label="Preparation (mins):">
+        <LabelWithData loading={false} label="Czas przygotowania (min):">
           {recipe ? <>{recipe.preparationMins}</> : <></>}
         </LabelWithData>
 
         {recipe && recipe.user ? (
-          <LabelWithData loading={false} label="Author:">
+          <LabelWithData loading={false} label="Autor:">
             {recipe.user.login}
           </LabelWithData>
         ) : (
-          <LabelWithData loading={false} label="Author:">
+          <LabelWithData loading={false} label="Autor:">
             {recipe ? <>{recipe.userName}</> : <></>}
           </LabelWithData>
         )}
 
         {recipe && userRole === userRoles.admin ? (
           <>
-            <LabelWithData loading={false} label="Ingredients:">
+            <LabelWithData loading={false} label="Składniki:">
               {recipe.ingredients ? (
                 recipe.ingredients.map((elem, index) => (
                   <div style={{ color: "blue" }} key={index}>
@@ -113,25 +113,25 @@ export const Recipe = props => {
         ) : (
           <>
             {" "}
-            <LabelWithData loading={false} label="Ingredients:">
+            <LabelWithData loading={false} label="Składniki:">
               {recipe && recipe.ingredients ? (
                 recipe.ingredients.map((elem, index) =>
                   elem.amount <= elem.hasGot ? (
                     <div style={{ color: "green" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.ingredient.measure.measureName} / Posiadasz:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}
                     </div>
                   ) : elem.hasGot === 0 ? (
                     <div style={{ color: "red" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.ingredient.measure.measureName} / Posiadasz:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}
                     </div>
                   ) : (
                     <div style={{ color: "orange" }} key={index}>
                       {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                      {elem.ingredient.measure.measureName} / You have:{" "}
+                      {elem.ingredient.measure.measureName} / Posiadasz:{" "}
                       {elem.hasGot} {elem.ingredient.measure.measureName}{" "}
                       {"(" +
                         ((elem.hasGot / elem.amount) * 100).toFixed(0) +
@@ -145,7 +145,7 @@ export const Recipe = props => {
             </LabelWithData>
           </>
         )}
-        <LabelWithData loading={false} label="Description:">
+        <LabelWithData loading={false} label="Opis:">
           {recipe ? <>{recipe.description}</> : <></>}
         </LabelWithData>
       </div>

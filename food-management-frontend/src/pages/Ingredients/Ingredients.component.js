@@ -28,7 +28,7 @@ export const Ingredients = props => {
   } = props;
 
   return (
-    <LayoutMain title="Recipes">
+    <LayoutMain title="Produkty">
       <div>
         <div className="center-align-elem">
           <button
@@ -40,7 +40,7 @@ export const Ingredients = props => {
               marginLeft: "5px"
             }}
           >
-            Add new ingredient
+            Dodaj nowy produkt
           </button>
           <IngredientProposition />
         </div>
@@ -50,7 +50,7 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sort by:"
+              label="Sortuj po:"
               component={select}
               options={sortByOptionsIngredient}
             />
@@ -58,7 +58,7 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Sort option:"
+              label="Opcje sortowania:"
               component={select}
               options={ascendingSortOptions}
             />
@@ -73,7 +73,7 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Elements on page:"
+              label="Ilość elementów na stronie:"
               component={select}
               options={elementsOnPageOptions}
             />
@@ -85,17 +85,17 @@ export const Ingredients = props => {
             onClick={handleClick}
           >
             {" "}
-            Search{" "}
+            Szukaj{" "}
           </button>
         </form>
         <div>
           <table className="table table-striped ">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Measure</th>
-                <th scope="col">Active</th>
-                <th scope="col">Options</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Miara</th>
+                <th scope="col">Aktywny</th>
+                <th scope="col">Opcje</th>
               </tr>
             </thead>
             <tbody>
@@ -115,7 +115,7 @@ export const Ingredients = props => {
                           handleActiveIngredient(elem.id, elem.version)
                         }
                       >
-                        Activate
+                        Aktywuj
                       </button>
                       <span className="table-remove">
                         <button
@@ -124,7 +124,7 @@ export const Ingredients = props => {
                           className="btn btn-danger btn-rounded btn-sm my-0"
                           onClick={() => handleDeleteIngredient(elem.id)}
                         >
-                          Remove
+                          Usuń
                         </button>
                       </span>
                     </td>

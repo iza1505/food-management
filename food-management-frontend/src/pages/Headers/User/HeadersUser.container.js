@@ -101,10 +101,10 @@ class HeadersUserContainer extends Component {
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't get recipes headers.");
+            toast.error("Nie można pobrać przepisów.");
           }
         });
     }

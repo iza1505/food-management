@@ -31,8 +31,8 @@ export const Login = props => {
           <Field
             className="form-control mb-2 mr-sm-2"
             name="password"
-            placeholder="Password"
-            label="Password:"
+            placeholder="Hasło"
+            label="Hasło:"
             validate={validateRequired}
             type="password"
             component={input}
@@ -40,7 +40,7 @@ export const Login = props => {
 
           <button className="btn btn-success" type="submit" disabled={fetching}>
             {" "}
-            Log in{" "}
+            Zaloguj{" "}
           </button>
           <MyLoader visible={fetching} />
         </Form>

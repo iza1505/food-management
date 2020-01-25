@@ -23,15 +23,15 @@ export const CreateRecipe = props => {
     selectedIngredient
   } = props;
   return (
-    <LayoutMain title="Create recipe">
+    <LayoutMain title="Utwórz przepis">
       <div className="d-flex flex-column bd-highlight mb-3">
         <Form onSubmit={handleSubmit} autoComplete="on">
           <Field
             className="form-control p-2 bd-highlight"
             name="recipe.title"
             type="text"
-            placeholder="Title"
-            label="Title:"
+            placeholder="Tytuł"
+            label="Tytuł:"
             validate={validateRequired}
             component={input}
           />
@@ -39,12 +39,12 @@ export const CreateRecipe = props => {
             className="form-control mb-2 mr-sm-2"
             name="recipe.preparationMins"
             type="text"
-            placeholder="Preparation in mins"
-            label="Preparation (mins):"
+            placeholder="Czas przygotownia (min)"
+            label="Czas przygotownia (min):"
             validate={[validateRequired, validateInteger]}
             component={input}
           />
-          <label>Ingredients:</label>
+          <label>Składniki:</label>
           {selectedIngredients ? (
             selectedIngredients.map((elem, index) => (
               <div key={index}>
@@ -56,7 +56,7 @@ export const CreateRecipe = props => {
                   title="Add ingr to list"
                   onClick={() => handleDeteleIngredientFromListButton(index)}
                 >
-                  Delete ingredient
+                  Usuń składnik
                 </button>
               </div>
             ))
@@ -65,23 +65,23 @@ export const CreateRecipe = props => {
           )}
 
           <div className="d-flex justify-content-end">
-            <h5 className="mr-2">Add new ingredient to recipe:</h5>
+            <h5 className="mr-2">Dodaj nowy składnik do przepisu:</h5>
             <Field
               className="form-control mr-auto p-2 bd-highlight"
               name="selectIngredient"
               type="text"
               label={
                 _.isEmpty(selectedIngredient)
-                  ? "Select ingredient: (nothing selected)"
-                  : "Select ingredient:"
+                  ? "Wybierz składnik: (brak wybranego)"
+                  : "Wybierz składnik:"
               }
               component={select}
               options={ingredientsOptions}
               onBlur={e => handleSelectIngredient(e)}
             />
             <Field
-              placeholder="Amount"
-              label="Ingredient amount: "
+              placeholder="Ilość"
+              label="Ilość: "
               component={input}
               className="form-control p-2 bd-highlight"
               name="selectedIngredientAmount"
@@ -94,7 +94,7 @@ export const CreateRecipe = props => {
               title="Add ingr to list"
               onClick={() => handleAddIngredientToList()}
             >
-              Add ingredient to list
+              Dodaj składnik do listy
             </button>
           </div>
 
@@ -102,8 +102,8 @@ export const CreateRecipe = props => {
             className="form-control mb-2 mr-sm-2 textarea-autosize"
             name="recipe.description"
             type="text"
-            placeholder="Description"
-            label="Description:"
+            placeholder="Opis"
+            label="Opis:"
             validate={validateRequired}
             component={textarea}
           />
@@ -117,7 +117,7 @@ export const CreateRecipe = props => {
               disabled={fetching}
             >
               {" "}
-              Create{" "}
+              Utwórz{" "}
             </button>
           </div>
         </Form>

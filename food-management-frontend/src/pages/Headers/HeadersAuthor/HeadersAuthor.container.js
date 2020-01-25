@@ -93,10 +93,10 @@ class HeadersAuthorContainer extends Component {
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't get recipes headers.");
+            toast.error("Nie można pobrać przepisów.");
           }
         });
     }
@@ -130,16 +130,18 @@ class HeadersAuthorContainer extends Component {
     this.props
       .deleteRecipe(recipeId)
       .then(() => {
-        toast.info("Recipe has been deleted.");
+        toast.info("Przepis został usunięty.");
         this.props.getHeaders(
           window.location.pathname + window.location.search
         );
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't get recipes headers.");
+          toast.error("Nie można pobrać przepisów.");
         }
       });
   };

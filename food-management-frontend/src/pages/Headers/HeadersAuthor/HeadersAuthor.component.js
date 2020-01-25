@@ -27,7 +27,7 @@ export const HeadersAuthor = props => {
   } = props;
 
   return (
-    <LayoutMain title="My recipes">
+    <LayoutMain title="Moje przepisy">
       <div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
@@ -35,7 +35,7 @@ export const HeadersAuthor = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sort by:"
+              label="Sortuj po:"
               component={select}
               options={sortByOptionsAuthor}
             />
@@ -43,7 +43,7 @@ export const HeadersAuthor = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Sort option:"
+              label="Opcje sortowania:"
               component={select}
               options={ascendingSortOptions}
             />
@@ -58,7 +58,7 @@ export const HeadersAuthor = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Elements on page:"
+              label="Ilość elementów na stronie:"
               component={select}
               options={elementsOnPageOptions}
             />
@@ -70,17 +70,17 @@ export const HeadersAuthor = props => {
             onClick={handleClick}
           >
             {" "}
-            Search{" "}
+            Szukaj{" "}
           </button>
         </form>
         <div>
           <table className="table table-striped">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Active</th>
-                <th scope="col">Waiting for accept</th>
-                <th scope="col">To improve</th>
+                <th scope="col">Tytuł</th>
+                <th scope="col">Aktywny</th>
+                <th scope="col">Oczekuje na sprawdzenie</th>
+                <th scope="col">Zgłoszone uwagi</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -99,7 +99,7 @@ export const HeadersAuthor = props => {
                       text="Edit recipe"
                       onClick={() => handleEditRecipe(elem.id)}
                     >
-                      Edit recipe
+                      Edytuj przepis
                     </button>
                     <span className="table-remove">
                       <button
@@ -108,7 +108,7 @@ export const HeadersAuthor = props => {
                         className="btn btn-danger btn-rounded btn-sm my-0"
                         onClick={() => handleDeleteRecipe(elem.id)}
                       >
-                        Remove
+                        Usuń
                       </button>
                     </span>
                   </td>

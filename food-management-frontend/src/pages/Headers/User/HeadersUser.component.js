@@ -29,7 +29,7 @@ export const HeadersUser = props => {
   } = props;
 
   return (
-    <LayoutMain title="Recipes">
+    <LayoutMain title="Przepisy">
       <div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
@@ -37,7 +37,7 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sort by:"
+              label="Sortuj po:"
               component={select}
               options={
                 userRole === userRoles.user
@@ -49,7 +49,7 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Sort option:"
+              label="Opcje sortowania:"
               component={select}
               options={ascendingSortOptions}
             />
@@ -64,7 +64,7 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Elements on page:"
+              label="Ilość elementów na stronie:"
               component={select}
               options={elementsOnPageOptions}
             />
@@ -73,7 +73,7 @@ export const HeadersUser = props => {
                 className="form-control mb-2 mr-sm-4"
                 name="possibleMissingIngredientsAmount"
                 type="text"
-                label="Max possible missing ingredients:"
+                label="Max. możliwa ilość brakujących składników:"
                 component={select}
                 options={possibleMissingIngredientsAmountOptions}
               />
@@ -88,7 +88,7 @@ export const HeadersUser = props => {
             onClick={handleClick}
           >
             {" "}
-            Search{" "}
+            Szukaj{" "}
           </button>
         </form>
         <div>
@@ -96,9 +96,9 @@ export const HeadersUser = props => {
             <table className="table table-striped ">
               <thead className="bg-success">
                 <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Missing ingredient amout</th>
-                  <th scope="col">Cookable % (from possessed ingredients)</th>
+                  <th scope="col">Tytuł</th>
+                  <th scope="col">Ilość brakujących składników</th>
+                  <th scope="col">Możliwy % do ugotowania (z posiadanych produktów)</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,11 +117,11 @@ export const HeadersUser = props => {
             <table className="table table-striped">
               <thead className="bg-success">
                 <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">User login</th>
-                  <th scope="col">Active</th>
-                  <th scope="col">Waiting for accept</th>
-                  <th scope="col">To improve</th>
+                  <th scope="col">Tytuł</th>
+                  <th scope="col">Login autora</th>
+                  <th scope="col">Aktywny</th>
+                  <th scope="col">Oczekuje na sprawdzenie</th>
+                  <th scope="col">Zgłoszone uwagi</th>
                 </tr>
               </thead>
               <tbody>

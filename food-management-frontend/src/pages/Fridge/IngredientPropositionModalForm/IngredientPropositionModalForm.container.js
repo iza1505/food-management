@@ -8,7 +8,8 @@ import { bindActionCreators } from "redux";
 import IngredientPropositionModalForm from "./IngredientPropositionModalForm.component";
 import {
   getMeasures as getMeasuresAction,
-  addIngredientToDatabase
+  addIngredientToDatabase,
+  getIngredientsAdmin
 } from "../../../actions/ingredients.actions";
 import {
   getMeasures,
@@ -22,6 +23,7 @@ export class IngredientPropositionModalFormContainer extends Component {
     addIngredientToDatabase: func,
     dispatch: func,
     fetching: bool,
+    getIngredientsAdmin: func,
     getMeasuresAction: func,
     measures: array,
     userRole: string
@@ -37,9 +39,11 @@ export class IngredientPropositionModalFormContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't get measures types.");
+          toast.error("Nie można pobrać listy miar.");
         }
       });
   }
@@ -51,7 +55,7 @@ export class IngredientPropositionModalFormContainer extends Component {
   createMeasuresOptions() {
     const measureOptionsCopy = [];
     measureOptionsCopy.push({
-      label: "Select measure...",
+      label: "Wybierz miarę...",
       value: ""
     });
     this.props.measures.forEach(elem => {
@@ -61,7 +65,7 @@ export class IngredientPropositionModalFormContainer extends Component {
             value: elem
           })
         : measureOptionsCopy.push({
-            label: "pieces",
+            label: "sztuki",
             value: elem
           });
     });
@@ -77,16 +81,24 @@ export class IngredientPropositionModalFormContainer extends Component {
         JSON.parse(values.measure)
       )
       .then(() => {
+        this.props.getIngredientsAdmin(
+          window.location.pathname + window.location.search
+        );
+        console.log(
+          "patj " + window.location.pathname + window.location.search
+        );
         this.props.dispatch(reset("ingredientPropositionModalForm"));
         this.props.userRole === userRoles.user
-          ? toast.info("Ingredient has been proposed")
-          : toast.info("Ingredient has been added.");
+          ? toast.info("Produkt został dodany do listy oczekujących.")
+          : toast.info("Produkt został dodany.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Invalid data.");
+          toast.error("Niepoprawne dane.");
         }
       });
   };
@@ -116,7 +128,8 @@ function mapDispatchToProps(dispatch) {
     addIngredientToDatabase: bindActionCreators(
       addIngredientToDatabase,
       dispatch
-    )
+    ),
+    getIngredientsAdmin: bindActionCreators(getIngredientsAdmin, dispatch)
   };
 }
 

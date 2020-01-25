@@ -25,11 +25,11 @@ const ResetPasswordModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Reset password</h5>
+              <h5>Resetuj hasło</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Type required information and send reset password email.
+                Podaj wymagane informacje aby wysłać email resetujący hasło.
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
@@ -59,7 +59,7 @@ const ResetPasswordModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Reset
+                  Resetuj
                 </button>
                 <button
                   type="button"
@@ -67,7 +67,7 @@ const ResetPasswordModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

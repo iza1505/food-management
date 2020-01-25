@@ -20,7 +20,7 @@ export const Fridge = props => {
   const ingredientSizeHalf = (ingredients.length / 2).toFixed();
 
   return (
-    <LayoutMain title="My fridge">
+    <LayoutMain title="Moja lodówka">
       <div className="">
         <div className="center-align-elem">
           <button
@@ -29,7 +29,7 @@ export const Fridge = props => {
             data-target="#addIngredientToFridgeModal"
             text="Edit details"
           >
-            Add ingredient to fridge
+            Dodaj produkt do lodówki
           </button>
           <AddIngredientToFridge
             avaliableIngredientsToAddToFridge={
@@ -46,7 +46,7 @@ export const Fridge = props => {
               marginLeft: "5px"
             }}
           >
-            Suggest a new ingredient
+            Zasugeruj nowy produkt
           </button>
         </div>
         <div className="row">
@@ -56,9 +56,9 @@ export const Fridge = props => {
               <table className="table table-striped ">
                 <thead className="bg-success">
                   <tr>
-                    <th scope="col">Ingredient</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Options</th>
+                    <th scope="col">Produkt</th>
+                    <th scope="col">Ilość</th>
+                    <th scope="col">Opcje</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -97,7 +97,7 @@ export const Fridge = props => {
                                 handleDeleteIngredient(elem.ingredient.id)
                               }
                             >
-                              Remove
+                              Usuń
                             </button>
                           </span>
                         </td>
@@ -112,9 +112,9 @@ export const Fridge = props => {
               <table className="table table-striped ">
                 <thead className="bg-success">
                   <tr>
-                    <th scope="col">Ingredient</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Options</th>
+                  <th scope="col">Produkt</th>
+                    <th scope="col">Ilość</th>
+                    <th scope="col">Opcje</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,7 +155,7 @@ export const Fridge = props => {
                                   handleDeleteIngredient(elem.ingredient.id)
                                 }
                               >
-                                Remove
+                                Usuń
                               </button>
                             </span>
                           </td>

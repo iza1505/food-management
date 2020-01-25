@@ -23,14 +23,14 @@ const IngredientPropositionModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Add ingredient</h5>
+              <h5>Nowy produkt</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
                 {userRole && userRole === userRoles.user ? (
-                  <>Suggest a new ingredient.</>
+                  <>Zasugeruj nowy produkt.</>
                 ) : (
-                  <>Add a new ingredient.</>
+                  <>Dodaj nowy produkt.</>
                 )}
               </h1>
               <Field
@@ -38,8 +38,8 @@ const IngredientPropositionModalForm = props => {
                 name="ingredientName"
                 id="ingredientName"
                 type="text"
-                placeholder="Ingredient name:"
-                label="Ingredient name:"
+                placeholder="Nazwa produktu:"
+                label="Nazwa produktu:"
                 validate={validateRequired}
                 component={input}
               />
@@ -48,7 +48,7 @@ const IngredientPropositionModalForm = props => {
                 name="measure"
                 id="measure"
                 type="text"
-                label="Select measure type:"
+                label="Wybierz miarę:"
                 validate={validateRequired}
                 component={select}
                 options={measures}
@@ -61,7 +61,7 @@ const IngredientPropositionModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Add
+                  Dodaj
                 </button>
                 <button
                   type="button"
@@ -69,7 +69,7 @@ const IngredientPropositionModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

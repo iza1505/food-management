@@ -25,11 +25,11 @@ const ConfirmationEmailModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Send confirmation account email</h5>
+              <h5>Email aktywacyjny</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Type required information and send confirmation account email.
+                Podaj wymagane informacje aby wysłać email aktywujący konto.
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
@@ -59,7 +59,7 @@ const ConfirmationEmailModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Send
+                  Wyślij
                 </button>
                 <button
                   type="button"
@@ -67,7 +67,7 @@ const ConfirmationEmailModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>

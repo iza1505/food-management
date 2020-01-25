@@ -4,29 +4,33 @@ const { admin, user } = userRoles;
 
 const navigationItems = [
   {
-    text: "Recipes",
+    text: "Przepisy",
     canAccess: [admin, user],
     subItems: [
-      { to: "/recipes/all", text: "All recipes", canAccess: [admin, user] },
-      { to: "/recipes/my", text: "My recipes", canAccess: [admin, user] },
       {
-        to: "/recipes/create",
-        text: "Create recipe",
+        to: "/recipes/all",
+        text: "Wszystkie przepisy",
         canAccess: [admin, user]
       },
-      { to: "/ingredients", text: "Ingredients", canAccess: [admin] }
+      { to: "/recipes/my", text: "Moje przepisy", canAccess: [admin, user] },
+      {
+        to: "/recipes/create",
+        text: "Utwórz przepis",
+        canAccess: [admin, user]
+      },
+      { to: "/ingredients", text: "Produkty", canAccess: [admin] }
     ]
   },
   {
-    text: "Fridge",
+    text: "Lodówka",
     canAccess: [user],
-    subItems: [{ to: "/myFridge", text: "My fridge", canAccess: [user] }]
+    subItems: [{ to: "/myFridge", text: "Moja lodówka", canAccess: [user] }]
   },
   {
-    text: "Users",
+    text: "Użytkownicy",
     canAccess: [admin],
     subItems: [
-      { to: "/users", text: "All users", canAccess: [admin] }
+      { to: "/users", text: "Wszyscy użytkownicy", canAccess: [admin] }
     ]
   }
 ];

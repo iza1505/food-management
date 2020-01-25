@@ -47,9 +47,9 @@ class LoginContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
         } else {
-          toast.error("Invalid Username or Password");
+          toast.error("Niepoprawny login lub hasło.");
         }
       });
   };

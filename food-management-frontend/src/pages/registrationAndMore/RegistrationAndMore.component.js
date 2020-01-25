@@ -17,7 +17,7 @@ export const RegistrationAndMore = props => {
           data-target="#registrationModal"
           text="Registration"
         >
-          Registration
+          Rejestracja
         </button>
         <RegistrationModalForm />
         <button
@@ -29,7 +29,7 @@ export const RegistrationAndMore = props => {
             marginLeft: "5px"
           }}
         >
-          Reset password
+          Resetuj hasło
         </button>
         <ResetPasswordModalForm />
         <button
@@ -41,7 +41,7 @@ export const RegistrationAndMore = props => {
             marginLeft: "5px"
           }}
         >
-          Confirmation account email
+          Wyślij email aktywujący konto
         </button>
         <ConfirmationEmailModalForm />
       </div>

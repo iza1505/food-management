@@ -27,7 +27,7 @@ export const UsersManagement = props => {
     userId
   } = props;
   return (
-    <LayoutMain title="Recipes">
+    <LayoutMain title="Użytkownicy">
       <div>
         <div className="center-align-elem">
           <button
@@ -39,7 +39,7 @@ export const UsersManagement = props => {
               marginLeft: "5px"
             }}
           >
-            Add new user
+            Dodaj nowego użytkownika
           </button>
           <RegistrationModalForm />
         </div>
@@ -49,7 +49,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sort by:"
+              label="Sortuj po:"
               component={select}
               options={userSortByOptionsAdmin}
             />
@@ -57,7 +57,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Sort option:"
+              label="Opcje sortowania:"
               component={select}
               options={ascendingSortOptions}
             />
@@ -72,7 +72,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Elements on page:"
+              label="Ilość elementów na stronie:"
               component={select}
               options={elementsOnPageOptions}
             />
@@ -84,7 +84,7 @@ export const UsersManagement = props => {
             onClick={handleClick}
           >
             {" "}
-            Search{" "}
+            Szukaj{" "}
           </button>
         </form>
         <div>
@@ -92,9 +92,9 @@ export const UsersManagement = props => {
             <thead className="bg-success">
               <tr>
                 <th scope="col">Login</th>
-                <th scope="col">Role</th>
+                <th scope="col">Rola</th>
                 <th scope="col">Email</th>
-                <th scope="col">Active</th>
+                <th scope="col">Aktywny</th>
               </tr>
             </thead>
             <tbody>
@@ -102,7 +102,11 @@ export const UsersManagement = props => {
                 users.map((elem, index) => (
                   <tr
                     key={index}
-                    className={elem.id === userId ? "font-weight-bold text-success" : null}
+                    className={
+                      elem.id === userId
+                        ? "font-weight-bold text-success"
+                        : null
+                    }
                   >
                     <th scope="row">{elem.login}</th>
                     <td>{elem.role}</td>

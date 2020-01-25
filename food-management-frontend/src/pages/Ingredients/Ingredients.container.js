@@ -64,6 +64,32 @@ class IngredientsContainer extends Component {
     }
   };
 
+  createUrl() {
+    const defaultUrl = window.location.pathname;
+    const parsed = querySearch.parse(this.props.location.search);
+    if (!_.isEmpty(parsed)) {
+      let url =
+        window.location.pathname + "?elementsOnPage=" + parsed.elementsOnPage;
+
+      if (parsed.sortBy) {
+        url = url + "&sortBy=" + parsed.sortBy.replace(/"/g, "");
+      }
+
+      if (parsed.ascendingSort) {
+        url = url + "&ascendingSort=" + parsed.ascendingSort;
+      }
+
+      if (parsed.currentPage) {
+        url = url + "&currentPage=" + parsed.currentPage;
+      } else {
+        url = url + "&currentPage=1";
+      }
+
+      return url;
+    }
+    return defaultUrl;
+  }
+
   componentDidMount() {
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
@@ -92,10 +118,10 @@ class IngredientsContainer extends Component {
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't get recipes headers.");
+            toast.error("Nie można pobrać przepisów.");
           }
         });
     }
@@ -136,19 +162,21 @@ class IngredientsContainer extends Component {
           .catch(err => {
             if (!err.response) {
               toast.warn(
-                "Server is unreachable. Check your internet connection."
+                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
               );
             } else {
-              toast.error("Can't get ingredients.");
+              toast.error("Nie można pobrać produktów.");
             }
           });
-        toast.info("Ingredient activated.");
+        toast.info("Produkt aktywowany.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't update ingredient.");
+          toast.error("Nie można zaktualizować produktu.");
         }
       });
   };
@@ -157,7 +185,7 @@ class IngredientsContainer extends Component {
     this.props
       .deleteIngredient(id)
       .then(() => {
-        toast.info("Ingredient has been deleted.");
+        toast.info("Produkt został usunięty.");
         this.props
           .getIngredientsAdmin(
             window.location.pathname + window.location.search
@@ -165,18 +193,20 @@ class IngredientsContainer extends Component {
           .catch(err => {
             if (!err.response) {
               toast.warn(
-                "Server is unreachable. Check your internet connection."
+                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
               );
             } else {
-              toast.error("Can't get ingredients.");
+              toast.error("Nie można pobrać produktów.");
             }
           });
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Can't delete ingredients.");
+          toast.error("Nie można usunąć produktu.");
         }
       });
   };

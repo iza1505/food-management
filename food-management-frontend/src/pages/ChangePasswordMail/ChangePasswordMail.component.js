@@ -15,20 +15,20 @@ export const ChangePasswordMail = props => {
   const { handleSubmit, fetching } = props;
 
   return (
-    <LayoutMain title="Password change" hideTitle fullContent>
+    <LayoutMain title="Resetowanie hasła" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <Form
           onSubmit={handleSubmit}
           className="form-container"
           autoComplete="on"
         >
-          <h1 className="email-information">Type new password. </h1>
+          <h1 className="email-information">Podaj nowe hasło. </h1>
           <Field
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="password1"
             type="password"
-            placeholder="Password"
-            label="Password:"
+            placeholder="Hasło"
+            label="Hasło:"
             validate={validateRequired}
             component={input}
           />
@@ -36,8 +36,8 @@ export const ChangePasswordMail = props => {
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="password2"
             type="password"
-            placeholder="Password confirmation"
-            label="Password confirmation:"
+            placeholder="Potwierdzenie hasła"
+            label="Potwierdzenie hasła:"
             validate={validateConfirmedPassword}
             component={input}
           />
@@ -47,7 +47,7 @@ export const ChangePasswordMail = props => {
             name="changePassword"
             disabled={fetching}
           >
-            Change password
+            Resetuj hasło
           </button>
           <MyLoader visible={fetching} />
         </Form>

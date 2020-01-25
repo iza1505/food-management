@@ -36,7 +36,7 @@ export class CreateRecipeContainer extends Component {
     this.props.getSortedIngredientsAction().then(() => {
       let ingredientsOptionsCopy = [];
       ingredientsOptionsCopy.push({
-        label: "Select ingredient...",
+        label: "Wybierz składnik...",
         value: ""
       });
       this.props.ingredients.map(elem =>
@@ -47,7 +47,7 @@ export class CreateRecipeContainer extends Component {
               value: elem
             })
           : ingredientsOptionsCopy.push({
-              label: elem.ingredientName + " (pieces)",
+              label: elem.ingredientName + " (sztuki)",
               value: elem
             })
       );
@@ -76,21 +76,21 @@ export class CreateRecipeContainer extends Component {
           copySelectedIngredients
         )
         .then(() => {
-          toast.info("Recipe has been added.");
+          toast.info("Przepis został utworzony.");
           this.props.dispatch(reset("createRecipeForm"));
           this.redirectToMyRecipes();
         })
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Invalid data.");
+            toast.error("Niepoprawne dane.");
           }
         });
     } else {
-      toast.error("Ingredients list cannot be empty.");
+      toast.error("Lista składników nie może być pusta.");
     }
   };
 
@@ -111,7 +111,7 @@ export class CreateRecipeContainer extends Component {
       this.setState({ selectedAmount: e.target.value });
     } else {
       this.setState({ selectedAmount: null });
-      toast.error("Amount must be positive integer.");
+      toast.error("Ilość musi być liczbą całkowitą większą od 0.");
     }
   }
 
@@ -120,13 +120,13 @@ export class CreateRecipeContainer extends Component {
       _.isEmpty(this.state.selectedIngredient) ||
       !this.state.selectedAmount
     ) {
-      toast.warn("Select ingredient and type corrent amount to add to list.");
+      toast.warn("Wybierz składnik i podaj poprawną ilość aby dodać do listy.");
     } else {
       let iterator = 0;
       this.state.selectedIngredients.forEach((elem, index) => {
         if (_.isEqual(elem.ingredient.id, this.state.selectedIngredient.id)) {
           toast.warn(
-            "This ingredient is already on list. (position " +
+            "Składnik znajduje się już na liście. (pozycja " +
               Number(index + 1) +
               ")"
           );

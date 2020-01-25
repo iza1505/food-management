@@ -7,7 +7,7 @@ import background from "../../assets/background-home.jpg";
 export const Home = props => {
   const { login } = props;
   return (
-    <LayoutMain title="Home" hideTitle fullContent>
+    <LayoutMain title="Strona główna" hideTitle fullContent>
       <div>
         <div
           id="login-screen"
@@ -15,7 +15,7 @@ export const Home = props => {
         />
         <div className="home-container">
           <h1 className="title-text-home">
-            Welcome <br /> {login}{" "}
+            Witaj <br /> {login}{" "}
           </h1>
         </div>
       </div>

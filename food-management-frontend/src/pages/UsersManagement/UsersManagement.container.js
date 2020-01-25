@@ -128,28 +128,29 @@ class UsersManagementContainer extends Component {
         .catch(err => {
           if (!err.response) {
             toast.warn(
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Can't get users.");
+            toast.error("Nie można pobrać użytkowników.");
           }
         });
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.fetching !== nextProps.fetching) {
-      return true;
-    }
-    if (this.state.usersCopy !== nextProps.users) {
+    if (
+      this.props.fetching !== nextProps.fetching ||
+      this.state.usersCopy !== nextProps.users
+    ) {
       this.setState({ usersCopy: this.props.users });
       return true;
-    } else {
-      if (this.state.paginationElem !== nextState.paginationElem) {
-        return true;
-      }
-      return false;
     }
+
+    if (this.state.paginationElem !== nextState.paginationElem) {
+      return true;
+    }
+
+    return false;
   }
 
   createPagination() {
@@ -181,13 +182,15 @@ class UsersManagementContainer extends Component {
       .changeAccountStatus(id, e.target.checked, version)
       .then(() => {
         this.props.getUsersAction(this.createUrl());
-        toast.info("User status has been changed.");
+        toast.info("Status użytkownika został zmieniony.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Cannot change user status.");
+          toast.error("Nie można zmienić statusu użytkownika.");
         }
       });
   }

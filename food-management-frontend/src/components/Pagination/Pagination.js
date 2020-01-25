@@ -25,7 +25,7 @@ const renderInput = ({
               onClick={() => handlePagination(currentPage - 1)}
               tabIndex="-1"
             >
-              Previous
+              Poprzednia
             </a>
           </li>
           {paginationElem.map(page => (
@@ -58,7 +58,7 @@ const renderInput = ({
               className="page-link"
               onClick={() => handlePagination(Number(currentPage) + Number(1))}
             >
-              Next
+              Następna
             </a>
           </li>
         </ul>

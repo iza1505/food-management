@@ -6,52 +6,52 @@ const elementsOnPageOptions = [
 ];
 
 const ascendingSortOptions = [
-  { label: "Ascending", value: true },
-  { label: "Descending", value: false }
+  { label: "Rosnąco", value: true },
+  { label: "Malejąco", value: false }
 ];
 
 const sortByOptionsUser = [
-  { label: "Title", value: "title" },
-  { label: "Missing ingredient amout", value: "missingIngredientsAmount" },
+  { label: "Tytuł", value: "title" },
+  { label: "Ilość brakujących składników", value: "missingIngredientsAmount" },
   {
-    label: "Cookable % (from possessed ingredients)",
+    label: "Możliwy % do ugotowania (z posiadanych produktów)",
     value: "percentageToCook"
   }
 ];
 
 const sortByOptionsAdmin = [
-  { label: "Title", value: "title" },
-  { label: "User login", value: "userLogin" },
-  { label: "Active", value: "active" },
-  { label: "Waiting for accept", value: "waitingForAccept" }
+  { label: "Tytuł", value: "title" },
+  { label: "Login autora", value: "userLogin" },
+  { label: "Aktywny", value: "active" },
+  { label: "Oczekuje na sprawdzenie", value: "waitingForAccept" }
 ];
 
 const sortByOptionsAuthor = [
-  { label: "Title", value: "title" },
-  { label: "Active", value: "active" },
-  { label: "Waiting for accept", value: "waitingForAccept" }
+  { label: "Tytuł", value: "title" },
+  { label: "Aktywny", value: "active" },
+  { label: "Oczekuje na sprawdzenie", value: "waitingForAccept" }
 ];
 
 const userSortByOptionsAdmin = [
   { label: "Login", value: "login" },
-  { label: "Role", value: "role" },
-  { label: "Active", value: "active" }
+  { label: "Rola", value: "role" },
+  { label: "Aktywny", value: "active" }
 ];
 
 const sortByOptionsIngredient = [
-  { label: "Name", value: "ingredientName" },
-  { label: "Measure", value: "measure.measureName" },
-  { label: "Active", value: "active" }
+  { label: "Nazwa", value: "ingredientName" },
+  { label: "Miara", value: "measure.measureName" },
+  { label: "Aktywny", value: "active" }
 ];
 
 const roleOptionsRegistration = [
-  { label: "Select role...", value: "" },
-  { label: "Admin", value: "ADMINISTRATOR" },
-  { label: "User", value: "USER" }
+  { label: "Wybierz rolę...", value: "" },
+  { label: "Administrator", value: "ADMINISTRATOR" },
+  { label: "Użytkownik", value: "USER" }
 ];
 
 const possibleMissingIngredientsAmountOptions = [
-  { label: "Any amount", value: -1 },
+  { label: "Dowolna ilość", value: -1 },
   { label: "0", value: 0 },
   { label: "1", value: 1 },
   { label: "2", value: 2 },

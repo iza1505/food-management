@@ -12,10 +12,6 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface RoleRepository extends MyJpaRepository<RoleEntity, Long> {
 
-    List<RoleEntity> findAll();
-
-    Optional<RoleEntity> findById(Long id);
-
-    RoleEntity findByName(String name);
+    Optional<RoleEntity> findByName(String name);
 
 }

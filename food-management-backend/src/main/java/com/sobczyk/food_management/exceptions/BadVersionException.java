@@ -11,7 +11,7 @@ public class BadVersionException extends FoodManagementException {
 //        super();
 //    }
 
-    public BadVersionException(String message) {
-        super(message,HttpStatus.PRECONDITION_FAILED);
+    public BadVersionException(String message, String messageToShow) {
+        super(message,messageToShow,HttpStatus.PRECONDITION_FAILED);
     }
 }

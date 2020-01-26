@@ -5,6 +5,7 @@ import com.sobczyk.food_management.dtos.NewPasswordDto;
 import com.sobczyk.food_management.dtos.RegistrationDto;
 import com.sobczyk.food_management.entities.UserEntity;
 import com.sobczyk.food_management.exceptions.InactiveAccountException;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.security.*;
 import com.sobczyk.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RestController
@@ -37,29 +37,29 @@ public class AuthController {
     }
 
     @PostMapping(value = "/registration", params = {"token"})
-    public ResponseEntity registration(@RequestParam(value = "token") String token) throws Exception {
-        System.out.println(token);
+    public ResponseEntity registration(@RequestParam(value = "token") String token) {
         userService.confirmAccount(token);
         return ResponseEntity.ok("Account has been confirmed.");
     }
 
     @PostMapping("/login")
-    public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        UserEntity userEntity = userService.findByLogin(loginRequest.getLogin());
+    public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginReq) {
+        UserEntity userEntity = userService.findByLogin(loginReq.getLogin());
         if (userEntity != null) {
             if (userEntity.getActive()) {
-                Authentication authentication =
-                        userService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                String jwt = tokenProvider.generateToken(authentication);
-                JwtAuthenticationResponse response = new JwtAuthenticationResponse();
-                response.setAccessToken(jwt);
-                return ResponseEntity.ok(response);
+                Authentication authenticationToSystem =
+                        userService.authenticate(loginReq.getLogin(), loginReq.getPassword());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
+                String loginJWT = tokenProvider.generateToken(authenticationToSystem);
+                JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
+                loginResponse.setAccessToken(loginJWT);
+                return ResponseEntity.ok(loginResponse);
             } else {
-                throw new InactiveAccountException("Inactive account");
+                throw new InactiveAccountException("Inactive account","Konto niekatywne.");
             }
         } else {
-            throw new EntityNotFoundException("User with login: " + loginRequest.getLogin() + " not found");
+            throw new FMEntityNotFoundException("User with login: " + loginReq.getLogin() + " not found","U" +
+                    "żytkownik z podanym loginem nie istnieje.");
         }
 
     }

@@ -21,5 +21,5 @@ public interface UserIngredientService {
 
     IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto);
 
-    UserIngredientDto findById(UserIngredientKey id);
+    UserIngredientEntity findById(UserIngredientKey id);
 }

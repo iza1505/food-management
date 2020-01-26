@@ -27,7 +27,7 @@ public class RecipeController {
     @GetMapping(value = "/{id}")
     ResponseEntity<?> getById(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         String role = userSessionService.getUser().getRole().getName();
@@ -36,7 +36,7 @@ public class RecipeController {
         } else if (role.equals("USER")) {
             return ResponseEntity.ok(service.getRecipeUser(id));
         } else {
-            throw new UnknowRoleException("Unknow role.");
+            throw new UnknowRoleException("Unknow role.","Nieznana rola.");
         }
 
     }
@@ -50,7 +50,7 @@ public class RecipeController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
         return ResponseEntity
                 .ok(service.findAllForUser(possibleMissingIngredientsAmount, elementsOnPage, currentPage, sortBy,
@@ -66,22 +66,21 @@ public class RecipeController {
                                                @RequestParam(value = "ascendingSort", required = false)
                                                        Boolean ascendingSort) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @GetMapping(value = "/my")
-        // zwraca hedery przepisow uzytkownika zalogowanego
+    @GetMapping(value = "/my")// zwraca hedery przepisow uzytkownika zalogowanego
     ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                 @RequestParam(value = "currentPage") Integer currentPage,
                                                 @RequestParam(value = "sortBy", required = false) String sortBy,
                                                 @RequestParam(value = "ascendingSort", required = false)
                                                         Boolean ascendingSort) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(service.findAllForAuthor(elementsOnPage, currentPage, sortBy, ascendingSort));
@@ -92,18 +91,17 @@ public class RecipeController {
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id,
                                            @RequestBody RecipeChangeStatusDto dto){
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(service.updateStatus(id, dto));
     }
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
-    @PutMapping(value = "/{id}")
-        // upadte robi update dla wlasciciela
+    @PutMapping(value = "/{id}") // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         service.updateRecipe(id, dto);
@@ -114,7 +112,7 @@ public class RecipeController {
     @PostMapping
     ResponseEntity add(@RequestBody RecipeDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
         service.add(dto);
         return ResponseEntity.ok("Recipe has been added.");
@@ -124,7 +122,7 @@ public class RecipeController {
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
         service.delete(id);
         return ResponseEntity.ok("Recipe has been deleted.");

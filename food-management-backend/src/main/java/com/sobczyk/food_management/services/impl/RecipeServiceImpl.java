@@ -4,6 +4,7 @@ import com.sobczyk.food_management.dtos.*;
 import com.sobczyk.food_management.entities.*;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.RecipeIngredientRepository;
 import com.sobczyk.food_management.repositories.RecipeRepository;
 import com.sobczyk.food_management.security.UserSessionService;
@@ -51,6 +52,13 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public RecipeEntity findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(()-> new FMEntityNotFoundException("Recipe with id " + id + " not found.","Przepis nie " +
+                        "istnieje."));
+    }
+
+    @Override
     public RecipeDto convertToDto(RecipeEntity entity) {
         return modelMapper.map(entity, RecipeDto.class);
     }
@@ -76,13 +84,15 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto getRecipeAdmin(Long id) {
-        return convertToDto(repository.getOne(id));
+        RecipeEntity recipeEntity = findById(id);
+
+        return convertToDto(recipeEntity);
     }
 
     @Override
     public RecipeGetUserDto getRecipeUser(Long id) {
         UserEntity userEntity = userSessionService.getUser();
-        RecipeEntity recipeEntity = repository.getOne(id);
+        RecipeEntity recipeEntity = findById(id);
         RecipeGetUserDto recipeDto =
                 new RecipeGetUserDto(recipeEntity.getId(), recipeEntity.getVersion(), recipeEntity.getTitle(),
                                      recipeEntity.getPreparationMins(), recipeEntity.getDescription(),
@@ -188,16 +198,19 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void updateRecipe(Long id, RecipeUpdateDto recipeUpdateDto) {
         if (!id.equals(recipeUpdateDto.getId())) {
-            throw new IncompatibilityDataException("Incompatible recipe data.");
+            throw new IncompatibilityDataException("Id recipe is different with id from path.","Niepoprawne dane " +
+                    "przepisu do zaktualizowania.");
         }
 
-        RecipeEntity recipeEntity = repository.getOne(id);
+        RecipeEntity recipeEntity = findById(id);
 
         Validator.validateVersion(recipeEntity, recipeUpdateDto.getVersion());
 
         UserEntity userEntity = userSessionService.getUser();
         if (!recipeEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new IncompatibilityDataException("Incompatible data: id recipe's author is different with your.");
+            throw new IncompatibilityDataException("ID recipe author (" + recipeEntity.getUser().getId() +") and user" +
+                                                           " ("+userEntity.getId()+") are different.","Nie można " +
+                    "zaktualizować przepisu innego autora.");
         }
 
         if (userEntity.getRole().getName().equals("USER")) {
@@ -226,7 +239,7 @@ public class RecipeServiceImpl implements RecipeService {
         int i = 0;
         for (IngredientInFridgeAndRecipeDto ingredient : ingredients) {
             recipeEntity.getRecipeIngredients().add(new RecipeIngredientEntity(
-                    new RecipeIngredientKey(repository.getOne(id),
+                    new RecipeIngredientKey(findById(id),
                                             ingredientService.findById(ingredient.getIngredient().getId())
                     ), ingredient.getAmount(), ingredient.getVersion()));
             recipeIngredientRepository.save(recipeEntity.getRecipeIngredients().get(i));
@@ -259,7 +272,8 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void add(RecipeDto dto) {
         if (repository.existsByTitle(dto.getTitle())) {
-            throw new EntityAlreadyExistsException("Recipe with title  " + dto.getTitle() + " already exists.");
+            throw new EntityAlreadyExistsException("Recipe with title  " + dto.getTitle() + " already exists.",
+                                                   "Przepis o podanej nazwie istnieje.");
         }
 
         RecipeEntity recipeEntity = convertToEntity(dto);
@@ -291,17 +305,19 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto updateStatus(Long id, RecipeChangeStatusDto dto) {
-        RecipeEntity recipeEntity = repository.getOne(id);
+        RecipeEntity recipeEntity = findById(id);
         UserEntity userEntity = userSessionService.getUser();
 
         if(recipeEntity.getUser().getId().equals(userEntity.getId())){
-            throw new IncompatibilityDataException("Can't update status of your own recipe.");
+            throw new IncompatibilityDataException("Can't update status of your own recipe.","Nie można zaktualizować" +
+                    " statusu swojego przepisu.");
         }
 
         Validator.validateVersion(recipeEntity, dto.getVersion());
 
         if (dto.getActive() && dto.getWaitingForAccept()) {
-            throw new IncompatibilityDataException("Can't set active and waiting recipe.");
+            throw new IncompatibilityDataException("Can't set active and waiting recipe.","Nie można ustawić statusu " +
+                    "przepisu jako aktywny i oczekujący na sprawdzenie.");
         } else {
 
             recipeEntity.setActive(dto.getActive());
@@ -321,11 +337,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void delete(Long id) {
         UserEntity userEntity = userSessionService.getUser();
-        RecipeEntity recipeEntity = repository.getOne(id);
+        RecipeEntity recipeEntity = findById(id);
+
         if (recipeEntity != null && userEntity.getId()==recipeEntity.getUser().getId()) {
             repository.deleteById(id);
         } else {
-            throw new IncompatibilityDataException("Can't delete recipe");
+            throw new IncompatibilityDataException("Can't delete recipe", "Nie można usunąć przepisu.");
         }
     }
 }

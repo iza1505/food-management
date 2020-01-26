@@ -28,7 +28,7 @@ public class RoleController {
     @GetMapping
     ResponseEntity<List<RoleDto>> findAll() {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(service.findAll());

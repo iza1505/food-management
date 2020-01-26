@@ -16,10 +16,4 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface UserIngredientRepository extends MyJpaRepository<UserIngredientEntity, UserIngredientKey> {
 
-    Optional<UserIngredientEntity> findById(UserIngredientKey id);
-
-    boolean existsById(UserIngredientKey id);
-
-    void deleteById(UserIngredientKey id);
-
 }

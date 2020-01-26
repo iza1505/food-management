@@ -12,8 +12,6 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface UserRepository extends MyJpaRepository<UserEntity, Long> {
 
-    List<UserEntity> findAll();
-
     Optional<UserEntity> findByLogin(String login);
 
     Optional<UserEntity> findByEmail(String email);
@@ -21,7 +19,5 @@ public interface UserRepository extends MyJpaRepository<UserEntity, Long> {
     boolean existsByLogin(String login);
 
     boolean existsByEmail(String email);
-
-    Optional<UserEntity> findById(Long id);
 
 }

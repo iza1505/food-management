@@ -30,7 +30,7 @@ public class UserController {
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
                                        @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(userService.findAll(elementsOnPage, currentPage, sortBy, ascendingSort));
@@ -40,7 +40,7 @@ public class UserController {
     @PutMapping
     ResponseEntity<ChangeActiveStatusDto> updateActiveStatus(@RequestBody ChangeActiveStatusDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(userService.updateActiveStatus(dto));
@@ -50,7 +50,7 @@ public class UserController {
     @PutMapping(value = "/myAccount")
     ResponseEntity<UserDetailsToChangeDto> updateDetails(@RequestBody UserDetailsToChangeDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(userService.updateDetails(dto));
@@ -60,7 +60,7 @@ public class UserController {
     @GetMapping(value = "/myAccount")
     ResponseEntity<MyDetailsUserDto> getMyDetails() {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.");
+            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }
 
         return ResponseEntity.ok(userService.getMyDetails());

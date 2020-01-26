@@ -77,7 +77,7 @@ public class UserIngredientServiceImpl implements UserIngredientService {
         for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
             if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
                 i++;
-                UserIngredientEntity savedEntity = repository.getOne(userIngredient.getUserIngredientKey());
+                UserIngredientEntity savedEntity = findById(userIngredient.getUserIngredientKey());
                 Validator.validateVersionUserIngredientEntity(savedEntity, dto.getVersion());
                 savedEntity.setAmount(dto.getAmount());
                 UserIngredientEntity newEntity = repository.saveAndFlush(savedEntity);
@@ -90,7 +90,8 @@ public class UserIngredientServiceImpl implements UserIngredientService {
 
         if (i == 0) {
             throw new EntityAlreadyExistsException(
-                    "Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge.");
+                    "Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge.", "Brak produktu w " +
+                    "lodówce.");
         } else
             return updatedDto;
     }
@@ -108,7 +109,8 @@ public class UserIngredientServiceImpl implements UserIngredientService {
             }
         }
         if (i == 0) {
-            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists.");
+            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists.", "Produkt nie istnieje" +
+                    ".");
         }
     }
 
@@ -118,7 +120,8 @@ public class UserIngredientServiceImpl implements UserIngredientService {
 
         for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
             if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
-                throw new EntityAlreadyExistsException("Ingredient exists in fridge.");
+                throw new EntityAlreadyExistsException("Ingredient exists in fridge.", "Produkt jest już dodany do " +
+                        "lodówki.");
             }
         }
 
@@ -137,11 +140,10 @@ public class UserIngredientServiceImpl implements UserIngredientService {
     }
 
     @Override
-    public UserIngredientDto findById(UserIngredientKey id) {
-        UserIngredientEntity model = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+    public UserIngredientEntity findById(UserIngredientKey id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Entity with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() +
                         "  not found."));
-        return convertToDto(model);
     }
 
 }

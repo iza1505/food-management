@@ -12,9 +12,6 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface IngredientRepository extends MyJpaRepository<IngredientEntity, Long> {
 
-    List<IngredientEntity> findAll();
-
-    Optional<IngredientEntity> findById(Long id);
-
     boolean existsByIngredientName(String ingredientName);
+
 }

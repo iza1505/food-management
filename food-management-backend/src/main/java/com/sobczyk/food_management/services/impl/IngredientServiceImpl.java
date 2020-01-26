@@ -6,8 +6,8 @@ import com.sobczyk.food_management.entities.*;
 import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.UnknowRoleException;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.IngredientRepository;
-import com.sobczyk.food_management.repositories.MeasureRepository;
 import com.sobczyk.food_management.security.UserSessionService;
 import com.sobczyk.food_management.services.interfaces.IngredientService;
 import com.sobczyk.food_management.services.interfaces.MeasureService;
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -61,11 +60,12 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientDto add(IngredientDto ingredient) {
         if (repository.existsByIngredientName(ingredient.getIngredientName())) {
             throw new EntityAlreadyExistsException(
-                    "Ingredient with name " + ingredient.getIngredientName() + " already exists.");
+                    "Ingredient with name " + ingredient.getIngredientName() + " already exists.", "Produkt z podaną " +
+                    "nazwą już istnieje.");
         }
 
         if (ingredient.getMeasure() == null) {
-            throw new EmptyFieldException("Measure cannot be null");
+            throw new EmptyFieldException("Measure cannot be null", "Miara nie może być pusta.");
         }
 
         IngredientEntity ingredientEntity = convertToEntity(ingredient);
@@ -79,7 +79,7 @@ public class IngredientServiceImpl implements IngredientService {
         } else if (userEntity.getRole().getName().equals("USER")) {
             ingredientEntity.setActive(false);
         } else {
-            throw new UnknowRoleException("Unknow role.");
+            throw new UnknowRoleException("Unknow role.","Nieznana rola.");
         }
 
         return convertToDto(repository.saveAndFlush(ingredientEntity));
@@ -87,12 +87,9 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientDto update(IngredientDto dto) {
-        IngredientEntity ingredientToUpdate = repository.getOne(dto.getId());
+        IngredientEntity ingredientToUpdate = findById(dto.getId());
+
         Validator.validateVersion(ingredientToUpdate, dto.getVersion());
-//        MeasureEntity measureEntity = measureService.findById(dto.getMeasure().getId());
-//
-//        ingredientToUpdate.setIngredientName(dto.getIngredientName());
-//        ingredientToUpdate.setMeasure(measureEntity);
         ingredientToUpdate.setActive(true);
         ingredientToUpdate = repository.saveAndFlush(ingredientToUpdate);
         return convertToDto(ingredientToUpdate);
@@ -120,7 +117,7 @@ public class IngredientServiceImpl implements IngredientService {
                 return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
 
             } else {
-                throw new UnknowRoleException("Unknow role.");
+                throw new UnknowRoleException("Unknow role.","Nieznana rola.");
             }
         }
     }
@@ -134,21 +131,20 @@ public class IngredientServiceImpl implements IngredientService {
                 .filter(dto -> dto.active.equals(true))
                 .sorted(Comparator.comparing(IngredientDto::getIngredientName))
                 .collect(Collectors.toList());
-        //dtos.sort(Comparator.comparing(IngredientDto::getIngredientName));
-        //return dtos;
     }
 
     @Override
     public IngredientEntity findById(Long id) {
         return repository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not exists."));
+                .orElseThrow(() -> new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","Produkt" +
+                        " nie istnieje."));
     }
 
     @Override
     public void deleteById(Long id) {
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Ingredient with id " + id + " not exists.");
+            throw new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","Produkt nie istnieje.");
         }
         repository.deleteById(id);
     }

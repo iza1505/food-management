@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface RecipeRepository extends MyJpaRepository<RecipeEntity, Long> {
+
     boolean existsByTitle(String title);
 
 }

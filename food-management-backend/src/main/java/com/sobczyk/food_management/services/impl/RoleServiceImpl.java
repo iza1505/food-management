@@ -2,6 +2,7 @@ package com.sobczyk.food_management.services.impl;
 
 import com.sobczyk.food_management.dtos.RoleDto;
 import com.sobczyk.food_management.entities.RoleEntity;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.RoleRepository;
 import com.sobczyk.food_management.services.interfaces.RoleService;
 import org.modelmapper.ModelMapper;
@@ -47,6 +48,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleEntity findByName(String name) {
-        return repository.findByName(name);
+        return repository.findByName(name).orElseThrow(() -> new FMEntityNotFoundException("Role with name " + name +
+                                                                                                   " " +
+                                                                                                   "not found.",
+                                                                                           "Rola" +
+                " nie istnieje."));
     }
 }

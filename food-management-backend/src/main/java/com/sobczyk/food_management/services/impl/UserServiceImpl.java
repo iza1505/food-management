@@ -1,14 +1,13 @@
 package com.sobczyk.food_management.services.impl;
 
 import com.sobczyk.food_management.dtos.*;
-import com.sobczyk.food_management.entities.RoleEntity;
 import com.sobczyk.food_management.entities.UserEntity;
 import com.sobczyk.food_management.entities.UserIngredientEntity;
 import com.sobczyk.food_management.exceptions.ConfirmedAccountException;
 import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
-import com.sobczyk.food_management.repositories.UserIngredientRepository;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.UserRepository;
 import com.sobczyk.food_management.security.*;
 import com.sobczyk.food_management.services.interfaces.RoleService;
@@ -23,12 +22,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,7 +40,6 @@ public class UserServiceImpl implements UserService {
     private EmailProvider emailProvider;
     private ModelMapper modelMapper;
     private HeadersPaginationImpl headersPagination;
-    private UserIngredientRepository userIngredientRepository;
     private LoginValidator loginValidator;
     private PasswordValidator passwordValidator;
 
@@ -56,7 +52,7 @@ public class UserServiceImpl implements UserService {
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
             EmailProvider emailProvider, ModelMapper modelMapper, HeadersPaginationImpl headersPagination,
-            UserIngredientRepository userIngredientRepository, LoginValidator loginValidator,
+            LoginValidator loginValidator,
             PasswordValidator passwordValidator) {
         this.userSessionService = userSessionService;
         this.authenticationManager = authenticationManager;
@@ -67,7 +63,6 @@ public class UserServiceImpl implements UserService {
         this.emailProvider = emailProvider;
         this.modelMapper = modelMapper;
         this.headersPagination = headersPagination;
-        this.userIngredientRepository = userIngredientRepository;
         this.loginValidator = loginValidator;
         this.passwordValidator = passwordValidator;
     }
@@ -85,26 +80,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public void add(RegistrationDto registrationDto) {
         if (registrationDto.getLogin() == null) {
-            throw new EmptyFieldException("Login cannot be null");
+            throw new EmptyFieldException("Login cannot be null", "Login nie może być pusty.");
         }
 
         if (repository.existsByLogin(registrationDto.getLogin())) {
             throw new EntityAlreadyExistsException(
-                    "User with login " + registrationDto.getLogin() + " already exists.");
+                    "User with login " + registrationDto.getLogin() + " already exists.", "Użytkownik z podanym " +
+                    "loginem już istnieje");
         } else {
             loginValidator.checkBasicConditions(registrationDto.getLogin());
         }
 
         if (registrationDto.getEmail() == null) {
-            throw new EmptyFieldException("Email cannot be null");
+            throw new EmptyFieldException("Email cannot be null", "Email nie może być pusty.");
         }
         if (repository.existsByEmail(registrationDto.getEmail())) {
             throw new EntityAlreadyExistsException(
-                    "User with email " + registrationDto.getEmail() + " already exists.");
+                    "User with email " + registrationDto.getEmail() + " already exists.", "Użytkownik z podanym " +
+                    "mailem już istnieje.");
         }
 
         if (registrationDto.getPassword() == null) {
-            throw new EmptyFieldException("Password cannot be null");
+            throw new EmptyFieldException("Password cannot be null", "Hasło nie może być puste.");
         } else {
             passwordValidator.checkBasicConditions(registrationDto.getPassword());
         }
@@ -130,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendActivationEmail(String hashedPassword, String email) {
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        SimpleMailMessage emailToSend;
         if(hashedPassword == null){
             emailToSend = emailProvider
                     .constructResetPasswordEmail("", email, "", "Account activation information",
@@ -154,7 +151,8 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = findByEmail(email);
         if (userEntity != null) {
             if (userEntity.getConfrimationDate() != null) {
-                throw new ConfirmedAccountException("Account is confirmed");
+                throw new ConfirmedAccountException("Account with id " + userEntity.getId() + " is confirmed",
+                                                    "Konto jest już zatwierdzone.");
             }
             if (passwordEncoder
                     .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
@@ -163,13 +161,16 @@ public class UserServiceImpl implements UserService {
                     userEntity.setConfrimationDate(new Date(System.currentTimeMillis()));
                     repository.save(userEntity);
                 } else {
-                    throw new ConfirmedAccountException("Account is activated.");
+                    throw new ConfirmedAccountException("Account with id " + userEntity.getId() + " is activated.",
+                                                        "Konto jest już aktywne.");
                 }
             } else {
-                throw new ConfirmedAccountException("Registration password is different with current password.");
+                throw new ConfirmedAccountException("Registration password is different with current password for " +
+                                                            "account with id " + userEntity.getId(), "Hasło podane " +
+                        "podczas rejestracji i obecne różnią się.");
             }
         } else {
-            throw new EntityNotFoundException("User with email " + email + " not exists.");
+            throw new FMEntityNotFoundException("User with email " + email + " not exists.","Użytkownik nie istnieje.");
         }
     }
 
@@ -199,19 +200,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByLogin(String login) {
         return repository.findByLogin(login)
-                .orElseThrow(() -> new EntityNotFoundException("User with login " + login + " not found."));
+                .orElseThrow(() -> new FMEntityNotFoundException("User with login " + login + " not found.","U" +
+                        "żytkownik nie jestnieje."));
     }
 
     @Override
     public UserEntity findByEmail(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found."));
+                .orElseThrow(() -> new FMEntityNotFoundException("User with email " + email + " not found.","U" +
+                        "żytkownik nie istnieje."));
     }
 
     @Override
     public UserEntity findById(Long id) {
-        Optional<UserEntity> userOptional = repository.findById(id);
-        return userOptional.orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+        return repository.findById(id).orElseThrow(() -> new FMEntityNotFoundException("User with id " + id + " not found.","Użytkownik nie istnieje."));
     }
 
     @Override
@@ -234,7 +236,9 @@ public class UserServiceImpl implements UserService {
     public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByEmail(dto.getEmail());
         if(userEntity.getConfrimationDate()==null){
-            throw new IncompatibilityDataException("If you want reset password, first confirm your account.");
+            throw new IncompatibilityDataException("Can't reset password of not confirmed account. Id account: " + userEntity.getId(),
+                                                   "Aby " +
+                    "zresetować hasło potwierdź utworzone konto.");
         }
         if(userEntity.getLogin().equals(dto.getLogin())){
             String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
@@ -245,7 +249,11 @@ public class UserServiceImpl implements UserService {
                                                 );
             emailProvider.sendEmail(emailToSend);
         } else {
-            throw new IncompatibilityDataException("User with this login ang email not exists.");
+            throw new IncompatibilityDataException("User with this login "+dto.getLogin()+" and email "+dto.getEmail()+" not " +
+                    "exists.",
+                                                   "Brak konta " +
+                    "dla " +
+                    "podanego loginu i hasła");
         }
 
     }
@@ -258,8 +266,9 @@ public class UserServiceImpl implements UserService {
                 .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
             userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
         } else {
-            throw new IncompatibilityDataException("The password cannot be reset again. To do it resend reset " +
-                                                           "password email.");
+            throw new IncompatibilityDataException("The password cannot be reset again using the same token.","Hasło " +
+                    "nie może być ponownie resetowane " +
+                    "przy użyciu tego samego linku. Aby zresetować hasło wyślij ponownie maila resetującego hasło.");
         }
 
     }
@@ -273,7 +282,10 @@ public class UserServiceImpl implements UserService {
             userEntity.setPasswordHash(newPasswordHash);
             repository.save(userEntity);
         } else {
-            throw new IncompatibilityDataException("Your old password is incorrect.");
+            throw new IncompatibilityDataException("Old password is incorrect. User id: " + userEntity.getId(),"Podaj " +
+                    "poprawne " +
+                    "stare hasło aby " +
+                    "zmienić je na nowe.");
         }
     }
 
@@ -288,9 +300,12 @@ public class UserServiceImpl implements UserService {
     public ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto) {
         UserEntity userEntitySession = userSessionService.getUser();
         if (userEntitySession.getId().equals(dto.getId())) {
-            throw new IncompatibilityDataException("You can't change the status of your account.");
+            throw new IncompatibilityDataException("Can't change status own account. User id " + userEntitySession.getId(),
+                                                   "Nie można " +
+                    "zmienić " +
+                    "statusu własnego konta.");
         }
-        UserEntity userEntity = repository.getOne(dto.getId());
+        UserEntity userEntity = findById(dto.getId());
         Validator.validateVersion(userEntity, dto.getVersion());
 
         userEntity.setActive(dto.getActive());
@@ -319,10 +334,16 @@ public class UserServiceImpl implements UserService {
                 sendActivationEmail(null, userEntity.getEmail());
             }
             if(userEntity.getActive()){
-                throw  new IncompatibilityDataException("Your account is active.");
+                throw  new IncompatibilityDataException("Account with id " + userEntity.getId()+" is active.","Twoje " +
+                        "konto jest aktywne.");
             }
         } else {
-            throw new IncompatibilityDataException("User with this login and email not exists.");
+            throw new IncompatibilityDataException("User with this login "+ userEntity.getLogin() +" and email "+userEntity.getEmail()+
+                                                           " not " +
+                                                           "exists.","Brak " +
+                    "użytkownika " +
+                    "o " +
+                    "podanym loginie i emailu.");
         }
 
 

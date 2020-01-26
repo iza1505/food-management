@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface RecipeService {
 
+    RecipeEntity findById(Long id);
+
     RecipeDto convertToDto(RecipeEntity entity);
 
     RecipeEntity convertToEntity(RecipeDto dto);

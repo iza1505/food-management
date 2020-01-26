@@ -13,9 +13,4 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface MeasureRepository extends MyJpaRepository<MeasureEntity, Long> {
 
-    List<MeasureEntity> findAll();
-
-    Optional<MeasureEntity> findById(Long id);
-
-    boolean existsByMeasureName(String measureName);
 }

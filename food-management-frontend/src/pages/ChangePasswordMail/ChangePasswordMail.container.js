@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, func } from "prop-types";
+import { bool, func, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -8,12 +8,13 @@ import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
 
 import { resetPassword } from "../../actions/user.actions";
-import { getFetchingUser } from "../../selectors/user.selectors";
+import { getFetchingUser, getError } from "../../selectors/user.selectors";
 import ChangePasswordMail from "./ChangePasswordMail.component";
 
 class ChangePasswordMailContainer extends Component {
   static propTypes = {
     dispatch: func,
+    error: string,
     fetching: bool,
     resetPassword: func
   };
@@ -34,13 +35,15 @@ class ChangePasswordMailContainer extends Component {
     this.props
       .resetPassword(url, values.password1)
       .then(() => {
-        toast.info("Your password has been changed");
+        toast.info("Hasło zostało zmienione.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Invalid data.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -56,7 +59,8 @@ class ChangePasswordMailContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  fetching: getFetchingUser(state)
+  fetching: getFetchingUser(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

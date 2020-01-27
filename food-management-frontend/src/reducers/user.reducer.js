@@ -62,6 +62,7 @@ const userReducer = (state = initialState, action) => {
 
     case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${FULFILLED}`:
     case `${ACTIONS.RESET_PASSWORD}_${FULFILLED}`:
+    case `${ACTIONS.CHANGE_PASSWORD}_${FULFILLED}`:
     case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${FULFILLED}`:
     case `${ACTIONS.REGISTER_USER}_${FULFILLED}`: {
       return {
@@ -77,7 +78,8 @@ const userReducer = (state = initialState, action) => {
     case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${REJECTED}`:
     case `${ACTIONS.REGISTER_USER}_${REJECTED}`:
     case `${ACTIONS.LOGIN_USER}_${REJECTED}`:
-    case `${ACTIONS.CONFIRMATION_EMAIL}_${REJECTED}`: {
+    case `${ACTIONS.CONFIRMATION_EMAIL}_${REJECTED}`:
+    case `${ACTIONS.CHANGE_PASSWORD}_${REJECTED}`: {
       return {
         ...state,
         fetchingUser: false,

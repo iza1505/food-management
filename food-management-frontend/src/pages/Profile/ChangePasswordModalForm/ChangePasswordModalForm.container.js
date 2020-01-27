@@ -1,41 +1,56 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { func } from "prop-types";
+import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 
 import ChangePasswordModalForm from "./ChangePasswordModalForm.component";
 import { changePassword } from "../../../actions/user.actions";
+import { getError, getFetchingUser } from "../../../selectors/user.selectors";
 
 export class ChangePasswordModalFormContainer extends Component {
   static propTypes = {
-    changePassword: func
+    changePassword: func,
+    error: string,
+    fetching: bool
   };
 
   handleSubmit = values => {
     return this.props
       .changePassword(values.oldPassword, values.password1)
       .then(() => {
-        toast.info("Password has been changed.");
+        toast.info("Hasło zostało zmienione.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Invalid data.");
+          toast.error(this.props.error);
         }
       });
   };
 
   render() {
-    return <ChangePasswordModalForm onSubmit={this.handleSubmit} />;
+    return (
+      <ChangePasswordModalForm
+        onSubmit={this.handleSubmit}
+        fetching={this.props.fetching}
+      />
+    );
   }
 }
+
+const mapStateToProps = state => ({
+  error: getError(state),
+  fetching: getFetchingUser(state)
+});
 
 const mapDispatchToProps = {
   changePassword
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ChangePasswordModalFormContainer);

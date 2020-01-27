@@ -15,6 +15,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest req,
                          HttpServletResponse resp,
                          AuthenticationException exception) throws IOException {
-        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage());
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Wymagana autoryzacja.");
     }
 }

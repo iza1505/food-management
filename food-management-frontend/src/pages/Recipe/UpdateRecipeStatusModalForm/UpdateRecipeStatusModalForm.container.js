@@ -68,13 +68,15 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
         values.toImprove
       )
       .then(() => {
-        toast.info("Recipe status has been changed.");
+        toast.info("Status przepisu został zmieniony.");
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Server is unreachable. Check your internet connection.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Cannot change recipe status.");
+          toast.error("Nie można zmienic statusu przepisu.");
         }
       });
   };

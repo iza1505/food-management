@@ -1,5 +1,5 @@
 import React from "react";
-import { array, number, func } from "prop-types";
+import { array, bool, number, func } from "prop-types";
 import { reduxForm, Field } from "redux-form";
 
 import {
@@ -20,6 +20,7 @@ export const Ingredients = props => {
     pageCount,
     ingredients,
     currentPage,
+    fetching,
     handleActiveIngredient,
     handleDeleteIngredient,
     handlePagination,
@@ -109,6 +110,7 @@ export const Ingredients = props => {
                   ) : (
                     <td>
                       <button
+                        disabled={fetching}
                         className="btn btn-info btn-rounded btn-sm my-0 "
                         text="Activate"
                         onClick={() =>
@@ -119,7 +121,7 @@ export const Ingredients = props => {
                       </button>
                       <span className="table-remove">
                         <button
-                          //disabled={fetchingIngredients}
+                          disabled={fetching}
                           type="button"
                           className="btn btn-danger btn-rounded btn-sm my-0"
                           onClick={() => handleDeleteIngredient(elem.id)}
@@ -148,6 +150,7 @@ export const Ingredients = props => {
 
 Ingredients.propTypes = {
   currentPage: number,
+  fetching: bool,
   handleActiveIngredient: func,
   handleDeleteIngredient: func,
   handleClick: func,
@@ -162,4 +165,3 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(Ingredients);
-//export default HeadersUser;

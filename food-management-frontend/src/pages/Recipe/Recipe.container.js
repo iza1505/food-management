@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { func, number, object, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
-//import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
 
 import { getRecipe } from "../../selectors/recipe.selectors";
@@ -24,9 +23,9 @@ class RecipeContainer extends Component {
     super(props);
     this.props.getRecipeDetails(this.state.recipeId).catch(err => {
       if (!err.response) {
-        toast.warn("Server is unreachable. Check your internet connection.");
+        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
       } else {
-        toast.error("Can't get details.");
+        toast.error("Nie można pobrać przepisu.");
       }
     });
   }

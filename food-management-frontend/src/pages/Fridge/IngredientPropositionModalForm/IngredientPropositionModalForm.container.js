@@ -13,7 +13,8 @@ import {
 } from "../../../actions/ingredients.actions";
 import {
   getMeasures,
-  getFethingIngredients
+  getFethingIngredients,
+  getError
 } from "../../../selectors/ingredients.selectors";
 import { getRole } from "../../../selectors/user.selectors";
 import { userRoles } from "../../../configuration/roles";
@@ -22,6 +23,7 @@ export class IngredientPropositionModalFormContainer extends Component {
   static propTypes = {
     addIngredientToDatabase: func,
     dispatch: func,
+    error: string,
     fetching: bool,
     getIngredientsAdmin: func,
     getMeasuresAction: func,
@@ -56,7 +58,7 @@ export class IngredientPropositionModalFormContainer extends Component {
     const measureOptionsCopy = [];
     measureOptionsCopy.push({
       label: "Wybierz miarę...",
-      value: ""
+      value: null
     });
     this.props.measures.forEach(elem => {
       elem.measureName
@@ -98,7 +100,7 @@ export class IngredientPropositionModalFormContainer extends Component {
             "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           );
         } else {
-          toast.error("Niepoprawne dane.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -118,7 +120,8 @@ export class IngredientPropositionModalFormContainer extends Component {
 const mapStateToProps = state => ({
   userRole: getRole(state),
   measures: getMeasures(state),
-  fetching: getFethingIngredients(state)
+  fetching: getFethingIngredients(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

@@ -10,6 +10,8 @@ const getLogin = state => get(state, "user.login");
 const getFetchingUser = state => get(state, "user.fetchingUser");
 const getEmail = state => get(state, "user.email");
 const getVersion = state => get(state, "user.version");
+const getError = state => get(state, "user.error");
+
 
 const isUserUser = state => getRole(state) === userRoles.user;
 const isUserAdmin = state => getRole(state) === userRoles.admin;
@@ -25,5 +27,6 @@ export {
   isUserUser,
   isUserAdmin,
   getEmail,
-  getVersion
+  getVersion,
+  getError
 };

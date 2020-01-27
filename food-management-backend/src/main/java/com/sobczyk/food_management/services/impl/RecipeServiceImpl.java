@@ -2,6 +2,7 @@ package com.sobczyk.food_management.services.impl;
 
 import com.sobczyk.food_management.dtos.*;
 import com.sobczyk.food_management.entities.*;
+import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
 import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
@@ -204,7 +205,18 @@ public class RecipeServiceImpl implements RecipeService {
 
         RecipeEntity recipeEntity = findById(id);
 
+        if(recipeUpdateDto.getDescription() == ""
+                || recipeUpdateDto.getPreparationMins()== null
+                || recipeUpdateDto.getTitle() ==""
+                || recipeUpdateDto.getIngredients().isEmpty()){
+            throw new EmptyFieldException("Empty recipe fields.","Wypełnij wszystkie pola. Lista składników nie może " +
+                    "być pusta.");
+        }
+
         Validator.validateVersion(recipeEntity, recipeUpdateDto.getVersion());
+
+
+
 
         UserEntity userEntity = userSessionService.getUser();
         if (!recipeEntity.getUser().getId().equals(userEntity.getId())) {
@@ -274,6 +286,14 @@ public class RecipeServiceImpl implements RecipeService {
         if (repository.existsByTitle(dto.getTitle())) {
             throw new EntityAlreadyExistsException("Recipe with title  " + dto.getTitle() + " already exists.",
                                                    "Przepis o podanej nazwie istnieje.");
+        }
+
+        if(dto.getDescription() == ""
+                || dto.getPreparationMins()== null
+                || dto.getTitle() ==""
+                || dto.getIngredients().isEmpty()){
+            throw new EmptyFieldException("Empty recipe fields.","Wypełnij wszystkie pola. Lista składników nie może " +
+                    "być pusta.");
         }
 
         RecipeEntity recipeEntity = convertToEntity(dto);

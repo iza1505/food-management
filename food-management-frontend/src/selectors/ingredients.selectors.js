@@ -10,6 +10,8 @@ const getFetchingSortedIngredients = state =>
 const getMeasures = state => get(state, "ingredients.measures");
 const getPageCount = state => get(state, "ingredients.pageCount");
 const getCurrentPage = state => get(state, "ingredients.currentPage");
+const getError = state => get(state, "ingredients.error");
+
 
 export {
   getSortedIngredients,
@@ -18,5 +20,6 @@ export {
   getFetchingSortedIngredients,
   getMeasures,
   getPageCount,
-  getCurrentPage
+  getCurrentPage,
+  getError
 };

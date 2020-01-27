@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, func } from "prop-types";
+import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
 import { reset } from "redux-form";
 
 import ConfirmationEmailModalForm from "./ConfirmationEmailModalForm.component";
 import { sendConfirmationMail } from "../../../actions/user.actions";
-import { getFetchingUser } from "../../../selectors/user.selectors";
+import { getFetchingUser, getError } from "../../../selectors/user.selectors";
 
 export class ConfirmationEmailModalFormContainer extends Component {
   static propTypes = {
     dispatch: func,
+    error: string,
     fetching: bool,
     sendConfirmationMail: func
   };
@@ -25,9 +26,11 @@ export class ConfirmationEmailModalFormContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Niepoprawne dane.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -43,7 +46,8 @@ export class ConfirmationEmailModalFormContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  fetching: getFetchingUser(state)
+  fetching: getFetchingUser(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

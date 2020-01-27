@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, bool, func, object } from "prop-types";
+import { array, bool, func, object, string } from "prop-types";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { reset } from "redux-form";
@@ -9,7 +9,7 @@ import { bindActionCreators } from "redux";
 import CreateRecipe from "./CreateRecipe.component";
 import { addRecipe } from "../../actions/recipe.actions";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
-import { getFethingRecipe } from "../../selectors/recipe.selectors";
+import { getFethingRecipe, getError } from "../../selectors/recipe.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
 import { isPositiveInteger } from "../../configuration/helpers";
 
@@ -18,6 +18,7 @@ export class CreateRecipeContainer extends Component {
     addRecipe: func,
     dispatch: func,
     editable: bool,
+    error: string,
     fetching: bool,
     getSortedIngredientsAction: func,
     ingredients: array,
@@ -37,7 +38,7 @@ export class CreateRecipeContainer extends Component {
       let ingredientsOptionsCopy = [];
       ingredientsOptionsCopy.push({
         label: "Wybierz składnik...",
-        value: ""
+        value: null
       });
       this.props.ingredients.map(elem =>
         elem.measure.measureName
@@ -86,7 +87,7 @@ export class CreateRecipeContainer extends Component {
               "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Niepoprawne dane.");
+            toast.error(this.props.error);
           }
         });
     } else {
@@ -166,7 +167,8 @@ export class CreateRecipeContainer extends Component {
 
 const mapStateToProps = state => ({
   ingredients: getSortedIngredients(state),
-  fetching: getFethingRecipe(state)
+  fetching: getFethingRecipe(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

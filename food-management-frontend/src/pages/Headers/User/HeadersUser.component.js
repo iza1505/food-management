@@ -1,5 +1,5 @@
 import React from "react";
-import { array, number, func, string } from "prop-types";
+import { array, bool, number, func, string } from "prop-types";
 import { reduxForm, Field } from "redux-form";
 
 import {
@@ -25,7 +25,8 @@ export const HeadersUser = props => {
     handlePagination,
     paginationElem,
     userRole,
-    handleClick
+    handleClick,
+    fetching
   } = props;
 
   return (
@@ -86,6 +87,7 @@ export const HeadersUser = props => {
             name="submit_button"
             type="submit"
             onClick={handleClick}
+            disabled={fetching}
           >
             {" "}
             Szukaj{" "}
@@ -98,7 +100,9 @@ export const HeadersUser = props => {
                 <tr>
                   <th scope="col">Tytuł</th>
                   <th scope="col">Ilość brakujących składników</th>
-                  <th scope="col">Możliwy % do ugotowania (z posiadanych produktów)</th>
+                  <th scope="col">
+                    Możliwy % do ugotowania (z posiadanych produktów)
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -154,6 +158,7 @@ export const HeadersUser = props => {
 
 HeadersUser.propTypes = {
   currentPage: number,
+  fetching: bool,
   handlePagination: func,
   pageCount: number,
   paginationElem: array,
@@ -167,4 +172,3 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(HeadersUser);
-//export default HeadersUser;

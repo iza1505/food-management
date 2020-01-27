@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, bool, func, object, number } from "prop-types";
+import { array, bool, func, object, number, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -10,7 +10,8 @@ import {
   getUsers,
   getFetchingUsers,
   getPageCount,
-  getCurrentPage
+  getCurrentPage,
+  getError
 } from "../../selectors/users.selectors";
 
 import {
@@ -29,6 +30,7 @@ class UsersManagementContainer extends Component {
   static propTypes = {
     changeAccountStatus: func,
     currentPage: number,
+    error: string,
     fetching: bool,
     getDetails: func,
     getUsersAction: func,
@@ -190,7 +192,7 @@ class UsersManagementContainer extends Component {
             "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           );
         } else {
-          toast.error("Nie można zmienić statusu użytkownika.");
+          toast.error(this.props.error);
         }
       });
   }
@@ -225,7 +227,8 @@ const mapStateToProps = state => ({
   users: getUsers(state),
   currentPage: getCurrentPage(state),
   fetching: getFetchingUsers(state),
-  userId: getId(state)
+  userId: getId(state),
+  error: getError(state)
 });
 
 export default withRouter(

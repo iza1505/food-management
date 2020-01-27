@@ -54,7 +54,7 @@ public class IngredientController {
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
     @PostMapping
-    ResponseEntity add(@Valid @RequestBody IngredientDto dto) {
+    ResponseEntity add(@RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {
             throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
         }

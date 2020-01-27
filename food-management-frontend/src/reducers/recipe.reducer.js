@@ -3,7 +3,8 @@ import { PENDING, FULFILLED, REJECTED } from "../middleware";
 
 const initialState = {
   recipe: {},
-  fetchingRecipe: false
+  fetchingRecipe: false,
+  error: null
 };
 
 const recipeReducer = (state = initialState, action) => {
@@ -36,14 +37,18 @@ const recipeReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_RECIPE}_${REJECTED}`:
       return {
         fetchingRecipe: false,
-        initialState
-        //errors: action.payload.response.data
+        initialStaterecipe: {},
+        error: action.payload.response.data.message
       };
 
     case `${ACTIONS.UPDATE_RECIPE}_${REJECTED}`:
     case `${ACTIONS.UPDATE_RECIPE_STATUS}_${REJECTED}`:
     case `${ACTIONS.ADD_RECIPE}_${REJECTED}`: {
-      return { ...state, fetchingRecipe: false };
+      return {
+        ...state,
+        fetchingRecipe: false,
+        error: action.payload.response.data.message
+      };
     }
 
     default:

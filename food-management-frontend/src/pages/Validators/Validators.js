@@ -3,7 +3,7 @@ import _ from "lodash";
 const validator = require("email-validator");
 
 const validateRequired = value =>
-  value && !_.isEqual(value, '""') ? undefined : "To pole jest wymagane.";
+  value && !_.isEqual(value, "null") ? undefined : "To pole jest wymagane.";
 
 const validateConfirmedPassword = (passwordConfirm, allValues) =>
   allValues.password1 === passwordConfirm

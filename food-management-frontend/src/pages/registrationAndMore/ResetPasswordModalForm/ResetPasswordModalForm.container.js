@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bool, func } from "prop-types";
+import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
 import { reset } from "redux-form";
 
 import ResetPasswordModalForm from "./ResetPasswordModalForm.component";
 import { sendResetPasswordMail } from "../../../actions/user.actions";
-import { getFetchingUser } from "../../../selectors/user.selectors";
+import { getFetchingUser, getError } from "../../../selectors/user.selectors";
 
 export class ResetPasswordModalFormContainer extends Component {
   static propTypes = {
     dispatch: func,
+    error: string,
     fetching: bool,
     sendResetPasswordMail: func
   };
@@ -29,7 +30,7 @@ export class ResetPasswordModalFormContainer extends Component {
             "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           );
         } else {
-          toast.error("Niepoprawne dane.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -45,7 +46,8 @@ export class ResetPasswordModalFormContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  fetching: getFetchingUser(state)
+  fetching: getFetchingUser(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

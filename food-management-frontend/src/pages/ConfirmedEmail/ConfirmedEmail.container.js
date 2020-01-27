@@ -5,13 +5,13 @@ import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 
 import { confirmAccount } from "../../actions/user.actions";
+import { getError } from "../../selectors/user.selectors";
 import ConfirmedEmail from "./ConfirmedEmail.component";
 
 class ConfirmedEmailContainer extends Component {
   static propTypes = {
-    information: string,
-    token: string,
-    confirmAccount: func
+    confirmAccount: func,
+    error: string
   };
 
   state = {
@@ -25,16 +25,16 @@ class ConfirmedEmailContainer extends Component {
     this.props
       .confirmAccount(url)
       .then(() => {
-        this.setState({ information: "Your account is confirmed." });
+        this.setState({ information: "Twoje konto zostało potwierdzone." });
       })
       .catch(err => {
         if (!err.response) {
           this.setState({
             information:
-              "Server is unreachable. Check your internet connection."
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           });
         } else {
-          this.setState({ information: "Invalid data." });
+          this.setState({ information: this.props.error });
         }
       });
   }
@@ -44,10 +44,14 @@ class ConfirmedEmailContainer extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  error: getError(state)
+});
+
 const mapDispatchToProps = {
   confirmAccount
 };
 
 export default withRouter(
-  connect(null, mapDispatchToProps)(ConfirmedEmailContainer)
+  connect(mapStateToProps, mapDispatchToProps)(ConfirmedEmailContainer)
 );

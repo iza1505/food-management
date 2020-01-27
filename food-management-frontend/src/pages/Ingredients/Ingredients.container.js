@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, object, number } from "prop-types";
+import { array, bool, func, object, number, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -9,7 +9,9 @@ import _ from "lodash";
 import {
   getPageCount,
   getCurrentPage,
-  getIngredients
+  getIngredients,
+  getFethingIngredients,
+  getError
 } from "../../selectors/ingredients.selectors";
 
 import {
@@ -25,6 +27,8 @@ class IngredientsContainer extends Component {
   static propTypes = {
     currentPage: number,
     deleteIngredient: func,
+    error: string,
+    fetching: bool,
     getIngredientsAdmin: func,
     history: object,
     ingredients: array,
@@ -176,7 +180,7 @@ class IngredientsContainer extends Component {
             "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           );
         } else {
-          toast.error("Nie można zaktualizować produktu.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -206,7 +210,7 @@ class IngredientsContainer extends Component {
             "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
           );
         } else {
-          toast.error("Nie można usunąć produktu.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -222,6 +226,7 @@ class IngredientsContainer extends Component {
         handleClick={this.handleClick}
         handleActiveIngredient={this.handleActiveIngredient}
         handleDeleteIngredient={this.handleDeleteIngredient}
+        fetching={this.props.fetching}
       />
     );
   }
@@ -238,7 +243,9 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   pageCount: getPageCount(state),
   ingredients: getIngredients(state),
-  currentPage: getCurrentPage(state)
+  currentPage: getCurrentPage(state),
+  fetching: getFethingIngredients(state),
+  error: getError(state)
 });
 
 export default withRouter(

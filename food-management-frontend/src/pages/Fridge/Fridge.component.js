@@ -185,4 +185,3 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(Fridge);
-//export default HeadersUser;

@@ -64,6 +64,10 @@ public class IngredientServiceImpl implements IngredientService {
                     "nazwą już istnieje.");
         }
 
+        if (ingredient.getIngredientName() == null) {
+            throw new EmptyFieldException("Ingredient name cannot be null", "Nazwa produktu nie może być pusta.");
+        }
+
         if (ingredient.getMeasure() == null) {
             throw new EmptyFieldException("Measure cannot be null", "Miara nie może być pusta.");
         }
@@ -146,6 +150,8 @@ public class IngredientServiceImpl implements IngredientService {
         if (!repository.existsById(id)) {
             throw new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","Produkt nie istnieje.");
         }
+
+
         repository.deleteById(id);
     }
 }

@@ -6,7 +6,8 @@ const initialState = {
   recipesHeaders: [],
   pageCount: 1,
   fetchingHeaders: false,
-  currentPage: 1
+  currentPage: 1,
+  error: null
 };
 
 const recipeHeadersReducer = (state = initialState, action) => {
@@ -35,7 +36,8 @@ const recipeHeadersReducer = (state = initialState, action) => {
     case `${ACTIONS_Recipe.DELETE_RECIPE}_${REJECTED}`: {
       return {
         ...state,
-        fetchingHeaders: false
+        fetchingHeaders: false,
+        error: action.payload.response.data.message
       };
     }
 
@@ -53,8 +55,8 @@ const recipeHeadersReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_HEADERS_RECIPE}_${REJECTED}`:
       return {
         ...state,
-        fetching: false
-        //errors: action.payload.response.data
+        fetching: false,
+        error: action.payload.response.data.message
       };
 
     default:

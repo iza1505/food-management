@@ -109,6 +109,7 @@ const getMeasures = () => dispatch => {
 };
 
 const addIngredientToDatabase = (ingredientName, measure) => dispatch => {
+  console.log("wchodze tutaj");
   return dispatch(
     APIService.post(ACTIONS.ADD_INGREDIENT_TO_DATABASE, {
       url: `/ingredients`,
@@ -138,7 +139,7 @@ const deleteIngredient = id => dispatch => {
 
 const updateIngredient = (id, version) => dispatch => {
   return dispatch(
-    APIService.put(ACTIONS.UPDATE_INGREDIENTS, {
+    APIService.put(ACTIONS.UPDATE_INGREDIENT, {
       url: "/ingredients",
       needAuth: true,
       headers: {

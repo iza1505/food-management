@@ -1,6 +1,5 @@
 import { ACTIONS } from "../actions/user.actions";
 import { PENDING, FULFILLED, REJECTED } from "../middleware";
-//import { mapRoles } from "../helpers";
 
 const initialState = {
   logged: false,
@@ -16,7 +15,7 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    //case `${ACTIONS.REFRESH_TOKEN}_${PENDING}`:CHANGE_PASSWORD
+    //case `${ACTIONS.REFRESH_TOKEN}_${PENDING}`:
     case `${ACTIONS.REGISTER_USER}_${PENDING}`:
     case `${ACTIONS.LOGIN_USER}_${PENDING}`:
     case `${ACTIONS.GET_DETAILS}_${PENDING}`:
@@ -38,7 +37,8 @@ const userReducer = (state = initialState, action) => {
         login: token.sub,
         token: action.payload.data.accessToken,
         tokenExpDate: token.exp,
-        role: role
+        role: role,
+        error: null
       };
     }
 
@@ -61,13 +61,9 @@ const userReducer = (state = initialState, action) => {
     }
 
     case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${FULFILLED}`:
-    case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${REJECTED}`:
     case `${ACTIONS.RESET_PASSWORD}_${FULFILLED}`:
-    case `${ACTIONS.RESET_PASSWORD}_${REJECTED}`:
     case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${FULFILLED}`:
-    case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${REJECTED}`:
-    case `${ACTIONS.REGISTER_USER}_${FULFILLED}`:
-    case `${ACTIONS.REGISTER_USER}_${REJECTED}`: {
+    case `${ACTIONS.REGISTER_USER}_${FULFILLED}`: {
       return {
         ...state,
         fetchingUser: false
@@ -75,7 +71,19 @@ const userReducer = (state = initialState, action) => {
     }
 
     //case `${ACTIONS.REFRESH_TOKEN}_${REJECTED}`:
+
+    case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${REJECTED}`:
+    case `${ACTIONS.RESET_PASSWORD}_${REJECTED}`:
+    case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${REJECTED}`:
+    case `${ACTIONS.REGISTER_USER}_${REJECTED}`:
     case `${ACTIONS.LOGIN_USER}_${REJECTED}`:
+    case `${ACTIONS.CONFIRMATION_EMAIL}_${REJECTED}`: {
+      return {
+        ...state,
+        fetchingUser: false,
+        error: action.payload.response.data.message
+      };
+    }
     case ACTIONS.LOGOUT_USER: {
       return initialState;
     }

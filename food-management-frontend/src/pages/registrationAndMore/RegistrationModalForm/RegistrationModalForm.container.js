@@ -7,11 +7,16 @@ import { bindActionCreators } from "redux";
 
 import RegistrationModalForm from "./RegistrationModalForm.component";
 import { register } from "../../../actions/user.actions";
-import { getRole, getFetchingUser } from "../../../selectors/user.selectors";
+import {
+  getRole,
+  getFetchingUser,
+  getError
+} from "../../../selectors/user.selectors";
 
 export class RegistrationModalFormContainer extends Component {
   static propTypes = {
     dispatch: func,
+    error: string,
     fetching: bool,
     register: func,
     userRole: string
@@ -33,9 +38,11 @@ export class RegistrationModalFormContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
+          toast.warn(
+            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+          );
         } else {
-          toast.error("Niepoprawne dane.");
+          toast.error(this.props.error);
         }
       });
   };
@@ -53,7 +60,8 @@ export class RegistrationModalFormContainer extends Component {
 
 const mapStateToProps = state => ({
   userRole: getRole(state),
-  fetching: getFetchingUser(state)
+  fetching: getFetchingUser(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

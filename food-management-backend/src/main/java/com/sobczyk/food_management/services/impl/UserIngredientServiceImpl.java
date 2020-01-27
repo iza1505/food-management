@@ -5,7 +5,10 @@ import com.sobczyk.food_management.dtos.UserIngredientDto;
 import com.sobczyk.food_management.entities.UserIngredientEntity;
 import com.sobczyk.food_management.entities.UserIngredientKey;
 import com.sobczyk.food_management.entities.UserEntity;
+import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
+import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
+import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.UserIngredientRepository;
 import com.sobczyk.food_management.security.UserSessionService;
 import com.sobczyk.food_management.services.interfaces.IngredientService;
@@ -118,12 +121,25 @@ public class UserIngredientServiceImpl implements UserIngredientService {
     public IngredientInFridgeAndRecipeDto add(IngredientInFridgeAndRecipeDto dto) {
         UserEntity userEntity = userSessionService.getUser();
 
+
+        if (dto.getIngredient()==null) {
+            throw new EmptyFieldException(
+                    "Empty ingredient.", "Produkt nie moze być pusty.");
+        }
+
+        if (dto.getAmount()==null) {
+            throw new EmptyFieldException(
+                    "Empty amount for ingredient in fridge.", "Ilość produktu musi być większa od 0.");
+        }
+
         for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
             if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
                 throw new EntityAlreadyExistsException("Ingredient exists in fridge.", "Produkt jest już dodany do " +
                         "lodówki.");
             }
         }
+
+
 
         UserIngredientKey userIngredientKey =
                 new UserIngredientKey(userEntity, ingredientService.findById(dto.getIngredient().getId()));

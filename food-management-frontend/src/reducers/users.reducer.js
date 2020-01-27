@@ -5,7 +5,8 @@ const initialState = {
   users: [],
   fetchingUsers: false,
   pageCount: 1,
-  currentPage: 1
+  currentPage: 1,
+  error: null
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -33,8 +34,8 @@ const usersReducer = (state = initialState, action) => {
     case `${ACTIONS.CHANGE_ACCOUNT_STATUS}_${REJECTED}`:
       return {
         ...state,
-        fetchingUsers: false
-        //errors: action.payload.response.data
+        fetchingUsers: false,
+        error: action.payload.response.data.message
       };
 
     case ACTIONS.RESET_CURRENTPAGE_ON_SUBMIT: {

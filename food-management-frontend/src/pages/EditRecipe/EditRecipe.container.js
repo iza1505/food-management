@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, bool, func, object } from "prop-types";
+import { array, bool, func, object, string } from "prop-types";
 import { toast } from "react-toastify";
 import _ from "lodash";
-//import { reset } from "redux-form";
 
-import { getRecipeDetails } from "../../actions/recipe.actions";
+import { getRecipeDetails, updateRecipe } from "../../actions/recipe.actions";
 import { bindActionCreators } from "redux";
 import EditRecipe from "./EditRecipe.component";
-import { updateRecipe } from "../../actions/recipe.actions";
-import { getRecipe, getFethingRecipe } from "../../selectors/recipe.selectors";
+import {
+  getRecipe,
+  getFethingRecipe,
+  getError
+} from "../../selectors/recipe.selectors";
 import { getSortedIngredients } from "../../selectors/ingredients.selectors";
 import { getSortedIngredients as getSortedIngredientsAction } from "../../actions/ingredients.actions";
 import { isPositiveInteger } from "../../configuration/helpers";
 
 export class EditRecipeContainer extends Component {
   static propTypes = {
+    error: string,
     fetching: bool,
     getRecipeDetails: func,
     getSortedIngredientsAction: func,
@@ -38,7 +41,7 @@ export class EditRecipeContainer extends Component {
       let ingredientsOptionsCopy = [];
       ingredientsOptionsCopy.push({
         label: "Wybierz składnik...",
-        value: ""
+        value: null
       });
       this.props.ingredients.map(elem =>
         elem.measure.measureName
@@ -85,6 +88,8 @@ export class EditRecipeContainer extends Component {
       });
   }
 
+  redirectToMyRecipes = () => this.props.history.push("/recipes/my");
+
   handleSubmit = values => {
     let copySelectedIngredients = [...this.state.selectedIngredients];
 
@@ -100,7 +105,7 @@ export class EditRecipeContainer extends Component {
         )
         .then(() => {
           toast.info("Przepis zaktualizowany.");
-          window.location.reload();
+          this.redirectToMyRecipes();
         })
         .catch(err => {
           if (!err.response) {
@@ -108,7 +113,7 @@ export class EditRecipeContainer extends Component {
               "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
             );
           } else {
-            toast.error("Niepoprawne dane.");
+            toast.error(this.props.error);
           }
         });
     } else {
@@ -190,7 +195,8 @@ const mapStateToProps = state => ({
   },
   recipe: getRecipe(state),
   ingredients: getSortedIngredients(state),
-  fetching: getFethingRecipe(state)
+  fetching: getFethingRecipe(state),
+  error: getError(state)
 });
 
 function mapDispatchToProps(dispatch) {

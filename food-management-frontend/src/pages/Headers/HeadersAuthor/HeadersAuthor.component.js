@@ -145,4 +145,3 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(HeadersAuthor);
-//export default HeadersUser;

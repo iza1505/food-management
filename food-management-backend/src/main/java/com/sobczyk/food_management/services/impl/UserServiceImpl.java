@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity findByLogin(String login) {
         return repository.findByLogin(login)
                 .orElseThrow(() -> new FMEntityNotFoundException("User with login " + login + " not found.","U" +
-                        "żytkownik nie jestnieje."));
+                        "żytkownik nie istnieje."));
     }
 
     @Override
@@ -235,12 +235,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void forgotPassword(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByEmail(dto.getEmail());
-        if(userEntity.getConfrimationDate()==null){
-            throw new IncompatibilityDataException("Can't reset password of not confirmed account. Id account: " + userEntity.getId(),
-                                                   "Aby " +
-                    "zresetować hasło potwierdź utworzone konto.");
-        }
         if(userEntity.getLogin().equals(dto.getLogin())){
+            if(userEntity.getConfrimationDate()==null){
+                throw new IncompatibilityDataException("Can't reset password of not confirmed account. Id account: " + userEntity.getId(),
+                                                       "Aby " +
+                                                               "zresetować hasło potwierdź utworzone konto.");
+            }
             String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
             String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
             SimpleMailMessage emailToSend = emailProvider
@@ -251,9 +251,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IncompatibilityDataException("User with this login "+dto.getLogin()+" and email "+dto.getEmail()+" not " +
                     "exists.",
-                                                   "Brak konta " +
-                    "dla " +
-                    "podanego loginu i hasła");
+                                                   "Użytkownik nie istnieje.");
         }
 
     }
@@ -340,10 +338,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IncompatibilityDataException("User with this login "+ userEntity.getLogin() +" and email "+userEntity.getEmail()+
                                                            " not " +
-                                                           "exists.","Brak " +
-                    "użytkownika " +
-                    "o " +
-                    "podanym loginie i emailu.");
+                                                           "exists.","Użytkownik nie istnieje.");
         }
 
 

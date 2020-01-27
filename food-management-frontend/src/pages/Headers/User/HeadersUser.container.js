@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { array, func, object, number, string } from "prop-types";
+import { array, bool, func, object, number, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
@@ -9,7 +9,8 @@ import _ from "lodash";
 import {
   getPageCount,
   getRecipesHeaders,
-  getCurrentPage
+  getCurrentPage,
+  getFetchingHeaders
 } from "../../../selectors/recipeHeaders.selectors";
 
 import { getRole } from "../../../selectors/user.selectors";
@@ -25,12 +26,13 @@ import { userRoles } from "../../../configuration/roles";
 class HeadersUserContainer extends Component {
   static propTypes = {
     currentPage: number,
+    fetching: bool,
     getHeaders: func,
     history: object,
     pageCount: number,
     recipeHeaders: array,
-    resetHeaders: func,
     resetCurrentPageOnSubmit: func,
+    resetHeaders: func,
     userRole: string
   };
 
@@ -144,6 +146,7 @@ class HeadersUserContainer extends Component {
         paginationElem={this.state.paginationElem}
         userRole={this.props.userRole}
         handleClick={this.handleClick}
+        fetching={this.props.fetching}
       />
     );
   }
@@ -159,7 +162,8 @@ const mapStateToProps = state => ({
   pageCount: getPageCount(state),
   recipeHeaders: getRecipesHeaders(state),
   currentPage: getCurrentPage(state),
-  userRole: getRole(state)
+  userRole: getRole(state),
+  fetching: getFetchingHeaders(state)
 });
 
 export default withRouter(

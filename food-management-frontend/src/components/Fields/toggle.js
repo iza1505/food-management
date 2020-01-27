@@ -23,7 +23,6 @@ renderToggle.propTypes = {
   input: object,
   label: string,
   placeholder: string,
-  //type: string.isRequired,
   className: string
 };
 

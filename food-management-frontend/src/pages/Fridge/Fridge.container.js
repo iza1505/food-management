@@ -69,7 +69,7 @@ class FridgeContainer extends Component {
     const ingredientsOptionsCopy = [];
     ingredientsOptionsCopy.push({
       label: "Wybierz składnik...",
-      value: ""
+      value: null
     });
     this.props.allSortedIngredients.forEach(elem => {
       let iterator = 0;

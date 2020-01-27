@@ -9,10 +9,12 @@ const initialState = {
   fetchingSortedIngredients: false,
   fetchingMeasures: false,
   pageCount: 1,
-  currentPage: 1
+  currentPage: 1,
+  error: null
 };
 
 const ingredientsReducer = (state = initialState, action) => {
+  console.log(action);
   switch (action.type) {
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${PENDING}`:
       return { ...state, fetchingSortedIngredients: true };
@@ -23,6 +25,7 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.UPDATE_INGREDIENT}_${PENDING}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${PENDING}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${PENDING}`: {
+      console.log("pending");
       return { ...state, fetchingIngredients: true };
     }
 
@@ -60,10 +63,10 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${FULFILLED}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${FULFILLED}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${FULFILLED}`: {
+      console.log("fulllfil");
       return {
         ...state,
         fetchingIngredients: false
-        //ingredients: action.payload.data
       };
     }
 
@@ -85,14 +88,15 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${REJECTED}`:
       return {
         ...state,
-        fetchingIngredients: false
-        //errors: action.payload.response.data
+        fetchingIngredients: false,
+        error: action.payload.response.data.message
       };
 
     case `${ACTIONS.GET_MEASURES}_${REJECTED}`: {
       return {
         ...state,
-        fetchingMeasures: false
+        fetchingMeasures: false,
+        error: action.payload.response.data.message
       };
     }
 

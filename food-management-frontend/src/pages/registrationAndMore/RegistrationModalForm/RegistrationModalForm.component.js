@@ -134,6 +134,4 @@ RegistrationModalForm.propTypes = {
 export default reduxForm({
   form: "registrationModalForm",
   enableReinitialize: true
-  // onSubmitSuccess: (result, dispatch) =>
-  //   dispatch(reset("registrationModalForm"))
 })(RegistrationModalForm);

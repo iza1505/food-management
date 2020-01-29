@@ -1,6 +1,8 @@
 import React from "react";
 import { reduxForm } from "redux-form";
 import { string, number } from "prop-types";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import LabelWithData from "../../components/LabelWithData/LabelWithData";
@@ -8,7 +10,7 @@ import ChangePasswordModalForm from "./ChangePasswordModalForm";
 import EditDetailsModalForm from "./EditDetailsModalForm";
 
 export const Profile = props => {
-  const { id, login, email } = props;
+  const { id, login, email, t } = props;
 
   return (
     <LayoutMain title="Profil">
@@ -41,7 +43,7 @@ export const Profile = props => {
         <LabelWithData loading={false} label="ID:">
           {id}
         </LabelWithData>
-        <LabelWithData loading={false} label="Login:">
+        <LabelWithData loading={false} label={t("label.login")}>
           {login}
         </LabelWithData>
         <LabelWithData loading={false} label="Email:">
@@ -58,6 +60,9 @@ Profile.propTypes = {
   login: string
 };
 
-export default reduxForm({
-  form: "profileform"
-})(Profile);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "profileform"
+  })
+)(Profile);

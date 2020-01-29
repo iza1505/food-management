@@ -6,52 +6,52 @@ const elementsOnPageOptions = [
 ];
 
 const ascendingSortOptions = [
-  { label: "Rosnąco", value: true },
-  { label: "Malejąco", value: false }
+  { label: "select.ascending", value: true },
+  { label: "select.descending", value: false }
 ];
 
 const sortByOptionsUser = [
-  { label: "Tytuł", value: "title" },
-  { label: "Ilość brakujących składników", value: "missingIngredientsAmount" },
+  { label: "select.title", value: "title" },
+  { label: "select.missingIngrAmout", value: "missingIngredientsAmount" },
   {
-    label: "Możliwy % do ugotowania (z posiadanych produktów)",
+    label: "select.cookable",
     value: "percentageToCook"
   }
 ];
 
 const sortByOptionsAdmin = [
-  { label: "Tytuł", value: "title" },
-  { label: "Login autora", value: "userLogin" },
-  { label: "Aktywny", value: "active" },
-  { label: "Oczekuje na sprawdzenie", value: "waitingForAccept" }
+  { label: "select.title", value: "title" },
+  { label: "select.author", value: "userLogin" },
+  { label: "select.active", value: "active" },
+  { label: "select.waitingForAccept", value: "waitingForAccept" }
 ];
 
 const sortByOptionsAuthor = [
-  { label: "Tytuł", value: "title" },
-  { label: "Aktywny", value: "active" },
-  { label: "Oczekuje na sprawdzenie", value: "waitingForAccept" }
+  { label: "select.title", value: "title" },
+  { label: "select.active", value: "active" },
+  { label: "select.waitingForAccept", value: "waitingForAccept" }
 ];
 
 const userSortByOptionsAdmin = [
-  { label: "Login", value: "login" },
-  { label: "Rola", value: "role" },
-  { label: "Aktywny", value: "active" }
+  { label: "select.login", value: "login" },
+  { label: "select.role", value: "role" },
+  { label: "select.active", value: "active" }
 ];
 
 const sortByOptionsIngredient = [
-  { label: "Nazwa", value: "ingredientName" },
-  { label: "Miara", value: "measure.measureName" },
-  { label: "Aktywny", value: "active" }
+  { label: "select.name", value: "ingredientName" },
+  { label: "select.measureSort", value: "measure.measureName" },
+  { label: "select.active", value: "active" }
 ];
 
 const roleOptionsRegistration = [
-  { label: "Wybierz rolę...", value: null },
-  { label: "Administrator", value: "ADMINISTRATOR" },
-  { label: "Użytkownik", value: "USER" }
+  { label: "select.role", value: null },
+  { label: "select.admin", value: "ADMINISTRATOR" },
+  { label: "select.user", value: "USER" }
 ];
 
 const possibleMissingIngredientsAmountOptions = [
-  { label: "Dowolna ilość", value: -1 },
+  { label: "select.anyQuantity", value: -1 },
   { label: "0", value: 0 },
   { label: "1", value: 1 },
   { label: "2", value: 2 },

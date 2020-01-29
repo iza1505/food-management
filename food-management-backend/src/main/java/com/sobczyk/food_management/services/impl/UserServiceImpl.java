@@ -114,11 +114,18 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = convertToEntity(userDto);
 
-        if (registrationDto.getRole() == null) {
-            userEntity.setRole(roleService.findByName("USER"));
+        UserEntity loggedUser = userSessionService.getUser();
+
+        if(loggedUser != null && loggedUser.getRole().getName()== "ADMINISTRATOR"){
+            if (registrationDto.getRole() == null) {
+                throw new EmptyFieldException("Role cannot be null", "Rola nie może być pusta.");
+            } else {
+                userEntity.setRole(roleService.findByName(registrationDto.getRole()));
+            }
         } else {
-            userEntity.setRole(roleService.findByName(registrationDto.getRole()));
+            userEntity.setRole(roleService.findByName("USER"));
         }
+
 
         repository.save(userEntity);
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { array, bool, number, func, string } from "prop-types";
 import { reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import {
   elementsOnPageOptions,
@@ -26,7 +28,8 @@ export const HeadersUser = props => {
     paginationElem,
     userRole,
     handleClick,
-    fetching
+    fetching,
+    t
   } = props;
 
   return (
@@ -38,7 +41,8 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sortuj po:"
+              label={t("label.sortBy")}
+              allNeedTranslate={true}
               component={select}
               options={
                 userRole === userRoles.user
@@ -50,7 +54,8 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Opcje sortowania:"
+              label={t("label.sortOptions")}
+              allNeedTranslate={true}
               component={select}
               options={ascendingSortOptions}
             />
@@ -65,7 +70,7 @@ export const HeadersUser = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Ilość elementów na stronie:"
+              label={t("label.elementsOnPage")}
               component={select}
               options={elementsOnPageOptions}
             />
@@ -74,7 +79,8 @@ export const HeadersUser = props => {
                 className="form-control mb-2 mr-sm-4"
                 name="possibleMissingIngredientsAmount"
                 type="text"
-                label="Max. możliwa ilość brakujących składników:"
+                label={t("label.missingIngrAmout")}
+                firstNeedTranslate={true}
                 component={select}
                 options={possibleMissingIngredientsAmountOptions}
               />
@@ -98,11 +104,9 @@ export const HeadersUser = props => {
             <table className="table table-striped ">
               <thead className="bg-success">
                 <tr>
-                  <th scope="col">Tytuł</th>
-                  <th scope="col">Ilość brakujących składników</th>
-                  <th scope="col">
-                    Możliwy % do ugotowania (z posiadanych produktów)
-                  </th>
+                  <th scope="col">{t("tableLabel.title")}</th>
+                  <th scope="col">{t("tableLabel.missingIngrAmout")}</th>
+                  <th scope="col">{t("tableLabel.cookable")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,11 +125,11 @@ export const HeadersUser = props => {
             <table className="table table-striped">
               <thead className="bg-success">
                 <tr>
-                  <th scope="col">Tytuł</th>
-                  <th scope="col">Login autora</th>
-                  <th scope="col">Aktywny</th>
-                  <th scope="col">Oczekuje na sprawdzenie</th>
-                  <th scope="col">Zgłoszone uwagi</th>
+                  <th scope="col">{t("tableLabel.title")}</th>
+                  <th scope="col">{t("tableLabel.author")}</th>
+                  <th scope="col">{t("tableLabel.active")}</th>
+                  <th scope="col">{t("tableLabel.waitingForAccept")}</th>
+                  <th scope="col">{t("tableLabel.toImprove")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,8 +139,8 @@ export const HeadersUser = props => {
                       <a href={"/recipes/" + elem.id}>{elem.title}</a>
                     </th>
                     <td>{elem.userLogin}</td>
-                    <td>{renderBooelan(elem.active)}</td>
-                    <td>{renderBooelan(elem.waitingForAccept)}</td>
+                    <td>{t(renderBooelan(elem.active))}</td>
+                    <td>{t(renderBooelan(elem.waitingForAccept))}</td>
                     <td>{elem.toImprove}</td>
                   </tr>
                 ))}
@@ -167,8 +171,11 @@ HeadersUser.propTypes = {
   handleClick: func
 };
 
-export default reduxForm({
-  form: "headersform",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(HeadersUser);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "headersform",
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true
+  })
+)(HeadersUser);

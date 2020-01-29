@@ -1,12 +1,14 @@
 import React from "react";
 import { array, func, number } from "prop-types";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 const renderInput = ({
   currentPage,
   handlePagination,
   pageCount,
-  paginationElem
+  paginationElem,
+  t
 }) => {
   return (
     <div className="center-align-elem">
@@ -25,7 +27,7 @@ const renderInput = ({
               onClick={() => handlePagination(currentPage - 1)}
               tabIndex="-1"
             >
-              Poprzednia
+              {t("pagination.previous")}
             </a>
           </li>
           {paginationElem.map(page => (
@@ -58,7 +60,7 @@ const renderInput = ({
               className="page-link"
               onClick={() => handlePagination(Number(currentPage) + Number(1))}
             >
-              Następna
+              {t("pagination.next")}
             </a>
           </li>
         </ul>
@@ -74,4 +76,4 @@ renderInput.propTypes = {
   paginationElem: array
 };
 
-export default renderInput;
+export default withTranslation("common")(renderInput);

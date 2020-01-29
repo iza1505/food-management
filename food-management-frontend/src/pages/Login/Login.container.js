@@ -59,7 +59,6 @@ class LoginContainer extends Component {
   };
 
   render() {
-    console.log("fetching: " + this.props.fetching);
     return (
       <Login onSubmit={this.handleSubmit} fetching={this.props.fetching} />
     );

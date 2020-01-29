@@ -23,7 +23,7 @@ public class RecipeController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @GetMapping(value = "/{id}")
     ResponseEntity<?> getById(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
@@ -31,7 +31,7 @@ public class RecipeController {
         }
 
         String role = userSessionService.getUser().getRole().getName();
-        if (role.equals("ADMINISTRATOR")) {
+        if (role.equals("ADMINISTRATOR") || role.equals("MANAGER")) {
             return ResponseEntity.ok(service.getRecipeAdmin(id));
         } else if (role.equals("USER")) {
             return ResponseEntity.ok(service.getRecipeUser(id));
@@ -58,7 +58,7 @@ public class RecipeController {
                                           ));
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')") // zwraca wszystkie hedery przepisow jakie sa dla admina
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')") // zwraca wszystkie hedery przepisow jakie sa dla admina
     @GetMapping(value = "/all", params = {"elementsOnPage", "currentPage"})
     ResponseEntity<HeadersDto> findAllForAdmin(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                @RequestParam(value = "currentPage") Integer currentPage,
@@ -72,7 +72,7 @@ public class RecipeController {
         return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @GetMapping(value = "/my")// zwraca hedery przepisow uzytkownika zalogowanego
     ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                 @RequestParam(value = "currentPage") Integer currentPage,
@@ -86,7 +86,7 @@ public class RecipeController {
         return ResponseEntity.ok(service.findAllForAuthor(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @PutMapping(value = "/{id}/updateStatus")
     ResponseEntity<RecipeDto> updateStatus(@PathVariable Long id,
                                            @RequestBody RecipeChangeStatusDto dto){
@@ -97,7 +97,7 @@ public class RecipeController {
         return ResponseEntity.ok(service.updateStatus(id, dto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @PutMapping(value = "/{id}") // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) throws Exception {
         if (!userSessionService.isActive()) {
@@ -108,7 +108,7 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe has been updated.");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @PostMapping
     ResponseEntity add(@RequestBody RecipeDto dto) {
         if (!userSessionService.isActive()) {
@@ -118,7 +118,7 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe has been added.");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {

@@ -68,7 +68,7 @@ class FridgeContainer extends Component {
   updateAvaliableIngredientsToAdd() {
     const ingredientsOptionsCopy = [];
     ingredientsOptionsCopy.push({
-      label: "Wybierz składnik...",
+      label: "select.ingredient",
       value: null
     });
     this.props.allSortedIngredients.forEach(elem => {
@@ -86,7 +86,7 @@ class FridgeContainer extends Component {
               value: elem
             })
           : ingredientsOptionsCopy.push({
-              label: elem.ingredientName + " (sztuki)",
+              label: elem.ingredientName,
               value: elem
             });
       }

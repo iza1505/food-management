@@ -1,6 +1,8 @@
 import React from "react";
 import { array, bool, func } from "prop-types";
 import { reduxForm } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
@@ -14,7 +16,8 @@ export const Fridge = props => {
     handleDeleteIngredient,
     handleSaveChangesIngredient,
     avaliableIngredientsToAddToFridge,
-    getIngredientsUser
+    getIngredientsUser,
+    t
   } = props;
 
   const ingredientSizeHalf = (ingredients.length / 2).toFixed();
@@ -56,9 +59,9 @@ export const Fridge = props => {
               <table className="table table-striped ">
                 <thead className="bg-success">
                   <tr>
-                    <th scope="col">Produkt</th>
-                    <th scope="col">Ilość</th>
-                    <th scope="col">Opcje</th>
+                    <th scope="col">{t("tableLabel.product")}</th>
+                    <th scope="col">{t("tableLabel.amount")}</th>
+                    <th scope="col">{t("tableLabel.options")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,9 +115,9 @@ export const Fridge = props => {
               <table className="table table-striped ">
                 <thead className="bg-success">
                   <tr>
-                  <th scope="col">Produkt</th>
-                    <th scope="col">Ilość</th>
-                    <th scope="col">Opcje</th>
+                    <th scope="col">{t("tableLabel.product")}</th>
+                    <th scope="col">{t("tableLabel.amount")}</th>
+                    <th scope="col">{t("tableLabel.options")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -180,8 +183,11 @@ Fridge.propTypes = {
   ingredients: array
 };
 
-export default reduxForm({
-  form: "fridgeForm",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(Fridge);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "fridgeForm",
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true
+  })
+)(Fridge);

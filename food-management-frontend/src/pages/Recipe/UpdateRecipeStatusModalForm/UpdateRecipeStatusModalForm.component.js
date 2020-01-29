@@ -1,6 +1,8 @@
 import React from "react";
 import { bool, func } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import toggle from "../../../components/Fields/toggle";
 import MyLoader from "../../../components/Loader/loader.component";
@@ -13,7 +15,8 @@ const UpdateRecipeStatusModalForm = props => {
     change,
     isActive,
     isWaitingForAccept,
-    fetching
+    fetching,
+    t
   } = props;
   return (
     <Form onSubmit={handleSubmit}>
@@ -28,14 +31,14 @@ const UpdateRecipeStatusModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Update recipe</h5>
+              <h5>Aktualizuj przepis</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">Update recipe status.</h1>
+              <h1 className="email-information">Zmień status przepisu.</h1>
               <Field
                 name="active"
                 id="active"
-                label="Active:"
+                label={t("label.active")}
                 component={toggle}
                 onChange={e => {
                   change("waitingForAccept", !e);
@@ -48,7 +51,7 @@ const UpdateRecipeStatusModalForm = props => {
                 name="waitingForAccept"
                 id="waitingForAccept"
                 type="checkbox"
-                label="Waiting for accept:"
+                label={t("label.waitingForAccept")}
                 component={toggle}
                 onChange={e => {
                   if (e) {
@@ -62,8 +65,8 @@ const UpdateRecipeStatusModalForm = props => {
                 name="toImprove"
                 id="toImprove"
                 type="text"
-                placeholder="To improve:"
-                label="To improve"
+                placeholder={t("placeholder.toImprove")}
+                label={t("label.toImprove")}
                 component={textarea}
                 disabled={isActive || isWaitingForAccept}
                 validate={
@@ -80,7 +83,7 @@ const UpdateRecipeStatusModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Send
+                  Aktualizuj
                 </button>
                 <button
                   type="button"
@@ -88,7 +91,7 @@ const UpdateRecipeStatusModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Close
+                  Zamknij
                 </button>
               </div>
             </div>
@@ -107,7 +110,10 @@ UpdateRecipeStatusModalForm.propTypes = {
   isWaitingForAccept: bool
 };
 
-export default reduxForm({
-  form: "updateRecipeStatusModalForm",
-  enableReinitialize: true
-})(UpdateRecipeStatusModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "updateRecipeStatusModalForm",
+    enableReinitialize: true
+  })
+)(UpdateRecipeStatusModalForm);

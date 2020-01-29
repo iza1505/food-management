@@ -14,7 +14,6 @@ const initialState = {
 };
 
 const ingredientsReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case `${ACTIONS.GET_SORTED_INGREDIENTS}_${PENDING}`:
       return { ...state, fetchingSortedIngredients: true };
@@ -25,7 +24,6 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.UPDATE_INGREDIENT}_${PENDING}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${PENDING}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${PENDING}`: {
-      console.log("pending");
       return { ...state, fetchingIngredients: true };
     }
 
@@ -63,7 +61,6 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.UPDATE_INGREDIENT_USER}_${FULFILLED}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${FULFILLED}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${FULFILLED}`: {
-      console.log("fulllfil");
       return {
         ...state,
         fetchingIngredients: false

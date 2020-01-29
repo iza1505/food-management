@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { bool, func, string } from "prop-types";
+import { withTranslation } from "react-i18next";
 
 import styles from "./ProfileDropdown.module.scss";
 
-const ProfileDropdown = ({ loggedStatus, logout, login }) => {
+const ProfileDropdown = ({ loggedStatus, logout, login, t }) => {
   return (
     <div className={styles["navaccount"]}>
       {loggedStatus ? (
@@ -24,14 +25,14 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
             aria-labelledby="usernavmenu"
           >
             <Link to="/profile" className="dropdown-item">
-              Profil
+              {t("navBar.loggedUser.profile")}
             </Link>
             <hr />
             <li
               className={[styles["logout-item"], "dropdown-item"].join(" ")}
               onClick={logout}
             >
-              Wyloguj
+              {t("navBar.loggedUser.logout")}
             </li>
           </div>
         </div>
@@ -39,10 +40,10 @@ const ProfileDropdown = ({ loggedStatus, logout, login }) => {
         <div className="unauth-button-container">
           <nav>
             <a className="btn btn-success" href="/login">
-              Zaloguj
+              {t("button.login")}
             </a>
             <a className="btn btn-success" href="/registrationAndMore">
-              Dołącz/Więcej...
+              {t("button.signInMore")}
             </a>
           </nav>
         </div>
@@ -57,4 +58,4 @@ ProfileDropdown.propTypes = {
   logout: func
 };
 
-export default ProfileDropdown;
+export default withTranslation("common")(ProfileDropdown);

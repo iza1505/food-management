@@ -2,6 +2,8 @@ import React from "react";
 import { reduxForm, Form, Field } from "redux-form";
 import { bool, func, object, array } from "prop-types";
 import _ from "lodash";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import { validateRequired, validateInteger } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
@@ -20,7 +22,8 @@ export const CreateRecipe = props => {
     handleAmountIngredient,
     handleAddIngredientToList,
     handleDeteleIngredientFromListButton,
-    selectedIngredient
+    selectedIngredient,
+    t
   } = props;
   return (
     <LayoutMain title="Utwórz przepis">
@@ -30,8 +33,8 @@ export const CreateRecipe = props => {
             className="form-control p-2 bd-highlight"
             name="recipe.title"
             type="text"
-            placeholder="Tytuł"
-            label="Tytuł:"
+            placeholder={t("placeholder.title")}
+            label={t("label.title")}
             validate={validateRequired}
             component={input}
           />
@@ -39,8 +42,8 @@ export const CreateRecipe = props => {
             className="form-control mb-2 mr-sm-2"
             name="recipe.preparationMins"
             type="text"
-            placeholder="Czas przygotownia (min)"
-            label="Czas przygotownia (min):"
+            placeholder={t("placeholder.preparationTime")}
+            label={t("label.preparationTime")}
             validate={[validateRequired, validateInteger]}
             component={input}
           />
@@ -65,23 +68,20 @@ export const CreateRecipe = props => {
           )}
 
           <div className="d-flex justify-content-end">
-            <h5 className="mr-2">Dodaj nowy składnik do przepisu:</h5>
+            <h5 className="mr-2">{t("label.addNewIngredientToRecipe")}</h5>
             <Field
               className="form-control mr-auto p-2 bd-highlight"
               name="selectIngredient"
               type="text"
-              label={
-                _.isEmpty(selectedIngredient)
-                  ? "Wybierz składnik: (brak wybranego)"
-                  : "Wybierz składnik:"
-              }
+              firstNeedTranslate={true}
+              label={t("label.selectIngredient")}
               component={select}
               options={ingredientsOptions}
               onBlur={e => handleSelectIngredient(e)}
             />
             <Field
-              placeholder="Ilość"
-              label="Ilość: "
+              placeholder={t("placeholder.amount")}
+              label={t("label.amount")}
               component={input}
               className="form-control p-2 bd-highlight"
               name="selectedIngredientAmount"
@@ -102,8 +102,8 @@ export const CreateRecipe = props => {
             className="form-control mb-2 mr-sm-2 textarea-autosize"
             name="recipe.description"
             type="text"
-            placeholder="Opis"
-            label="Opis:"
+            placeholder={t("placeholder.description")}
+            label={t("label.description")}
             validate={validateRequired}
             component={textarea}
           />
@@ -138,7 +138,10 @@ CreateRecipe.propTypes = {
   selectedIngredients: array
 };
 
-export default reduxForm({
-  form: "createRecipeForm",
-  enableReinitialize: true
-})(CreateRecipe);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "createRecipeForm",
+    enableReinitialize: true
+  })
+)(CreateRecipe);

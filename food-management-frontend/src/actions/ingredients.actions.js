@@ -109,7 +109,6 @@ const getMeasures = () => dispatch => {
 };
 
 const addIngredientToDatabase = (ingredientName, measure) => dispatch => {
-  console.log("wchodze tutaj");
   return dispatch(
     APIService.post(ACTIONS.ADD_INGREDIENT_TO_DATABASE, {
       url: `/ingredients`,

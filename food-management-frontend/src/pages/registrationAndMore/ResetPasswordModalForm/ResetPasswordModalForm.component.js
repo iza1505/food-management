@@ -1,6 +1,8 @@
 import React from "react";
 import { bool, func } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import MyLoader from "../../../components/Loader/loader.component";
@@ -11,7 +13,7 @@ import {
 } from "../../Validators/Validators";
 
 const ResetPasswordModalForm = props => {
-  const { handleSubmit, fetching } = props;
+  const { handleSubmit, fetching, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -36,8 +38,8 @@ const ResetPasswordModalForm = props => {
                 name="login"
                 id="login"
                 type="text"
-                placeholder="Login"
-                label="Login:"
+                placeholder={t("placeholder.login")}
+                label={t("label.login")}
                 validate={[validateRequired, validateLogin]}
                 component={input}
               />
@@ -83,7 +85,10 @@ ResetPasswordModalForm.propTypes = {
   handleSubmit: func
 };
 
-export default reduxForm({
-  form: "resetPasswordModalForm",
-  enableReinitialize: true
-})(ResetPasswordModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "resetPasswordModalForm",
+    enableReinitialize: true
+  })
+)(ResetPasswordModalForm);

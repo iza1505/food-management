@@ -15,7 +15,7 @@ import Fridge from "../pages/Fridge";
 import Ingredients from "../pages/Ingredients";
 import UsersManagement from "../pages/UsersManagement";
 
-const { admin, user } = userRoles;
+const { admin, user, manager } = userRoles;
 
 const routes = [
   { path: "/login", component: Login, public: true },
@@ -27,18 +27,18 @@ const routes = [
   {
     path: "/recipes/create",
     component: CreateRecipe,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
   {
     path: "/recipes/my",
     component: HeadersAuthor,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
-  { path: "/", component: Home, canAccess: [user, admin] },
+  { path: "/", component: Home, canAccess: [user, admin, manager] },
   {
     path: "/profile",
     component: Profile,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
   {
     path: "/auth/registration",
@@ -53,17 +53,17 @@ const routes = [
   {
     path: "/recipes/all",
     component: HeadersUser,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
   {
     path: "/recipes/:recipeId",
     component: Recipe,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
   {
     path: "/recipes/:recipeId/edit",
     component: EditRecipe,
-    canAccess: [user, admin]
+    canAccess: [user, admin, manager]
   },
   {
     path: "/myFridge",
@@ -73,7 +73,7 @@ const routes = [
   {
     path: "/ingredients",
     component: Ingredients,
-    canAccess: [admin]
+    canAccess: [admin, manager]
   },
   {
     path: "/users",

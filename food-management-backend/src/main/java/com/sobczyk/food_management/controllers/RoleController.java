@@ -24,7 +24,7 @@ public class RoleController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')")
     @GetMapping
     ResponseEntity<List<RoleDto>> findAll() {
         if (!userSessionService.isActive()) {

@@ -64,6 +64,33 @@ class HeadersAuthorContainer extends Component {
     }
   };
 
+  createUrl() {
+    const defaultUrl = window.location.pathname;
+    const parsed = querySearch.parse(this.props.location.search);
+    if (!_.isEmpty(parsed)) {
+      let url =
+        window.location.pathname + "?elementsOnPage=" + parsed.elementsOnPage;
+
+      if (parsed.sortBy) {
+        const str = parsed.sortBy.replace(/"/g, "");
+        url = url + "&sortBy=" + str;
+      }
+
+      if (parsed.ascendingSort) {
+        url = url + "&ascendingSort=" + parsed.ascendingSort;
+      }
+
+      if (parsed.currentPage) {
+        url = url + "&currentPage=" + parsed.currentPage;
+      } else {
+        url = url + "&currentPage=1";
+      }
+      return url;
+    }
+
+    return defaultUrl;
+  }
+
   componentDidMount() {
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
@@ -131,9 +158,7 @@ class HeadersAuthorContainer extends Component {
       .deleteRecipe(recipeId)
       .then(() => {
         toast.info("Przepis został usunięty.");
-        this.props.getHeaders(
-          window.location.pathname + window.location.search
-        );
+        this.props.getHeaders(this.createUrl());
       })
       .catch(err => {
         if (!err.response) {

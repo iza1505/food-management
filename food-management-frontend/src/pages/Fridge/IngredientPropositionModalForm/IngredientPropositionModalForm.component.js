@@ -1,6 +1,8 @@
 import React from "react";
 import { array, bool, func, string } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import select from "../../../components/Fields/select";
@@ -9,7 +11,7 @@ import { userRoles } from "../../../configuration/roles";
 import { validateRequired } from "../../Validators/Validators";
 
 const IngredientPropositionModalForm = props => {
-  const { handleSubmit, userRole, measures, fetching } = props;
+  const { handleSubmit, userRole, measures, fetching, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -38,8 +40,8 @@ const IngredientPropositionModalForm = props => {
                 name="ingredientName"
                 id="ingredientName"
                 type="text"
-                placeholder="Nazwa produktu:"
-                label="Nazwa produktu:"
+                placeholder={t("placeholder.productName")}
+                label={t("label.productName")}
                 validate={validateRequired}
                 component={input}
               />
@@ -48,7 +50,8 @@ const IngredientPropositionModalForm = props => {
                 name="measure"
                 id="measure"
                 type="text"
-                label="Wybierz miarę:"
+                firstNeedTranslate={true}
+                label={t("label.selectMeasure")}
                 validate={validateRequired}
                 component={select}
                 options={measures}
@@ -87,7 +90,10 @@ IngredientPropositionModalForm.propTypes = {
   userRole: string
 };
 
-export default reduxForm({
-  form: "ingredientPropositionModalForm",
-  enableReinitialize: true
-})(IngredientPropositionModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "ingredientPropositionModalForm",
+    enableReinitialize: true
+  })
+)(IngredientPropositionModalForm);

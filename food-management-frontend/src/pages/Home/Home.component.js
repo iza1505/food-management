@@ -1,11 +1,12 @@
 import React from "react";
 import { string } from "prop-types";
+import { withTranslation } from "react-i18next";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import background from "../../assets/background-home.jpg";
 
 export const Home = props => {
-  const { login } = props;
+  const { login, t } = props;
   return (
     <LayoutMain title="Strona główna" hideTitle fullContent>
       <div>
@@ -15,7 +16,8 @@ export const Home = props => {
         />
         <div className="home-container">
           <h1 className="title-text-home">
-            Witaj <br /> {login}{" "}
+            {t("welcomeTitle")}
+            <br /> {login}{" "}
           </h1>
         </div>
       </div>
@@ -27,4 +29,4 @@ Home.propTypes = {
   login: string
 };
 
-export default Home;
+export default withTranslation("common")(Home);

@@ -55,7 +55,7 @@ const recipeHeadersReducer = (state = initialState, action) => {
     case `${ACTIONS.GET_HEADERS_RECIPE}_${REJECTED}`:
       return {
         ...state,
-        fetching: false,
+        fetchingHeaders: false,
         error: action.payload.response.data.message
       };
 

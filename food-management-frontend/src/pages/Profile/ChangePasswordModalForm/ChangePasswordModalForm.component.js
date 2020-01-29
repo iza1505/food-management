@@ -1,6 +1,8 @@
 import React from "react";
 import { func, bool } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import MyLoader from "../../../components/Loader/loader.component";
@@ -13,7 +15,7 @@ import {
 } from "../../Validators/Validators";
 
 const ChangePasswordModalForm = props => {
-  const { handleSubmit, fetching } = props;
+  const { handleSubmit, fetching, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -38,8 +40,8 @@ const ChangePasswordModalForm = props => {
                 name="oldPassword"
                 id="oldPassword"
                 type="password"
-                placeholder="Stare hasło"
-                label="Stare hasło:"
+                placeholder={t("placeholder.oldPassword")}
+                label={t("label.oldPassword")}
                 validate={[validateRequired]}
                 component={input}
               />
@@ -48,8 +50,8 @@ const ChangePasswordModalForm = props => {
                 name="password1"
                 id="password1"
                 type="password"
-                placeholder="Nowe hasło"
-                label="Nowe hasło:"
+                placeholder={t("placeholder.newPassword")}
+                label={t("label.newPassword")}
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -63,8 +65,8 @@ const ChangePasswordModalForm = props => {
                 name="passwordConfirm"
                 id="passwordConfirm"
                 type="password"
-                placeholder="Nowe hasło"
-                label="Potwierdź nowe hasło:"
+                placeholder={t("placeholder.confirmNewPassword")}
+                label={t("label.confirmNewPassword")}
                 validate={[validateRequired, validateConfirmedPassword]}
                 component={input}
               />
@@ -99,7 +101,10 @@ ChangePasswordModalForm.propTypes = {
   handleSubmit: func
 };
 
-export default reduxForm({
-  form: "changePasswordModalForm",
-  enableReinitialize: true
-})(ChangePasswordModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "changePasswordModalForm",
+    enableReinitialize: true
+  })
+)(ChangePasswordModalForm);

@@ -22,7 +22,7 @@ public class MeasureController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @GetMapping
     ResponseEntity<List<MeasureDto>> findAll() {
         if (!userSessionService.isActive()) {

@@ -103,7 +103,7 @@ public class IngredientServiceImpl implements IngredientService {
     public HeadersDto findAll(Integer elementsOnPage, Integer currentPage, String sortBy, Boolean ascendingSort) {
         UserEntity userEntity = userSessionService.getUser();
         List<IngredientEntity> modelList = repository.findAll();
-        if (userEntity.getRole().getName().equals("ADMINISTRATOR")) {
+        if (userEntity.getRole().getName().equals("ADMINISTRATOR") || userEntity.getRole().getName().equals("MANAGER")) {
             List<IngredientDto> dtos = modelList
                     .stream()
                     .map(entity ->

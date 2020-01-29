@@ -23,7 +23,7 @@ public class UserController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')")
     @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')")
     @PutMapping
     ResponseEntity<ChangeActiveStatusDto> updateActiveStatus(@RequestBody ChangeActiveStatusDto dto) {
         if (!userSessionService.isActive()) {
@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateActiveStatus(dto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @PutMapping(value = "/myAccount")
     ResponseEntity<UserDetailsToChangeDto> updateDetails(@RequestBody UserDetailsToChangeDto dto) {
         if (!userSessionService.isActive()) {
@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateDetails(dto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @GetMapping(value = "/myAccount")
     ResponseEntity<MyDetailsUserDto> getMyDetails() {
         if (!userSessionService.isActive()) {
@@ -66,7 +66,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyDetails());
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @PutMapping(value = "/myAccount/changePassword")
     public ResponseEntity changePassword(@RequestBody ChangePasswordDto dto) {
         userService.changePassword(dto);

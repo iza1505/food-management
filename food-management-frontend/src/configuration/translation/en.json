@@ -1,0 +1,114 @@
+{
+  "welcomeTitle": "Welcome",
+  "navBar": {
+    "fridge": {
+      "header": "Fridge",
+      "myFridge": "My fridge"
+    },
+    "recipes": {
+      "header": "Recipes",
+      "allRecipes": "All recipes",
+      "myRecipes": "My recipes",
+      "createRecipe": "Creacte recipe",
+      "ingredients": "Ingredients"
+    },
+    "users": {
+      "header": "Users",
+      "allUsers": "All users"
+    },
+    "loggedUser": {
+      "profile": "Profile",
+      "logout": "Logout"
+    }
+  },
+  "button": {
+    "login": "Log in",
+    "signInMore": "Sign in/More..."
+  },
+  "label": {
+    "login": "Login:",
+    "password": "Password:",
+    "confirmPassword": "Confirm password:",
+    "selectProduct": "Select product:",
+    "productName": "Product name:",
+    "selectIngredient": "Select ingredient:",
+    "amount": "Amount:",
+    "selectMeasure": "Select measure:",
+    "sortBy": "Sort by:",
+    "sortOptions": "Sort option:",
+    "elementsOnPage": "Elements on page:",
+    "missingIngrAmout": "Max. possible missing ingredients amount:",
+    "title": "Title:",
+    "preparationTime": "Preparation time (min):",
+    "ingredients": "Ingredients:",
+    "youHave": "You have:",
+    "description": "Description:",
+    "selectRole": "Select role:",
+    "active": "Active:",
+    "waitingForAccept": "Waiting for accept:",
+    "toImprove": "To improve:",
+    "author": "Author:",
+    "addNewIngredientToRecipe": "Add new ingredient to recipe:",
+    "oldPassword": "Old password:",
+    "newPassword": "New password:",
+    "confirmNewPassword": "Confirm new password:"
+  },
+  "placeholder": {
+    "login": "Login",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "productName": "Product name",
+    "amount": "Amount",
+    "title": "Title",
+    "preparationTime": "Preparation time (min)",
+    "description": "Description",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "toImprove": "To improve"
+  },
+  "tableLabel": {
+    "title": "Title",
+    "author": "Author",
+    "login": "Login",
+    "role": "Role",
+    "active": "Active",
+    "missingIngrAmout": "Missing ingredients amount",
+    "cookable": "Cookable % (of the ingredients you have)",
+    "waitingForAccept": "Waiting for accept",
+    "toImprove": "To improve",
+    "name": "Name",
+    "measure": "Measure",
+    "product": "Product",
+    "amount": "Amount",
+    "options": "Options"
+  },
+  "boolean": {
+    "yes": "yes",
+    "no": "no"
+  },
+  "ingredientsPieces": "(pieces)",
+  "select": {
+    "ingredient": "Select ingredient...",
+    "measure": "Select measure...",
+    "measureSort": "Measure",
+    "role": "Select role...",
+    "title": "Title",
+    "missingIngrAmout": "Missing ingredients amount",
+    "cookable": "Cookable % (of the ingredients you have)",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "anyQuantity": "Any quantity",
+    "user": "User",
+    "admin": "Administrator",
+    "name": "Name",
+    "active": "Active",
+    "login": "Login",
+    "waitingForAccept": "Waiting for accept",
+    "author": "Author"
+  },
+  "pagination": {
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

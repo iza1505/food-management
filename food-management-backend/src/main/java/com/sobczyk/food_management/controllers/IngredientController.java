@@ -28,7 +28,7 @@ public class IngredientController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @GetMapping(value = "/all")
     ResponseEntity<List<IngredientDto>> getAllActive() {
         if (!userSessionService.isActive()) {
@@ -38,7 +38,7 @@ public class IngredientController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')")
     @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
@@ -52,7 +52,7 @@ public class IngredientController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
     @PostMapping
     ResponseEntity add(@RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {
@@ -62,7 +62,7 @@ public class IngredientController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
@@ -73,7 +73,7 @@ public class IngredientController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {

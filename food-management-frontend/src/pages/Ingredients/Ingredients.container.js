@@ -14,6 +14,7 @@ import {
   getError
 } from "../../selectors/ingredients.selectors";
 
+import { getRole } from "../../selectors/user.selectors";
 import {
   resetCurrentPageOnSubmit,
   resetIngredients,
@@ -35,7 +36,8 @@ class IngredientsContainer extends Component {
     pageCount: number,
     resetCurrentPageOnSubmit: func,
     resetIngredients: func,
-    updateIngredient: func
+    updateIngredient: func,
+    userRole: string
   };
 
   state = {
@@ -159,19 +161,15 @@ class IngredientsContainer extends Component {
     this.props
       .updateIngredient(id, version)
       .then(() => {
-        this.props
-          .getIngredientsAdmin(
-            window.location.pathname + window.location.search
-          )
-          .catch(err => {
-            if (!err.response) {
-              toast.warn(
-                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-              );
-            } else {
-              toast.error("Nie można pobrać produktów.");
-            }
-          });
+        this.props.getIngredientsAdmin(this.createUrl()).catch(err => {
+          if (!err.response) {
+            toast.warn(
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+            );
+          } else {
+            toast.error("Nie można pobrać produktów.");
+          }
+        });
         toast.info("Produkt aktywowany.");
       })
       .catch(err => {
@@ -190,19 +188,15 @@ class IngredientsContainer extends Component {
       .deleteIngredient(id)
       .then(() => {
         toast.info("Produkt został usunięty.");
-        this.props
-          .getIngredientsAdmin(
-            window.location.pathname + window.location.search
-          )
-          .catch(err => {
-            if (!err.response) {
-              toast.warn(
-                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-              );
-            } else {
-              toast.error("Nie można pobrać produktów.");
-            }
-          });
+        this.props.getIngredientsAdmin(this.createUrl()).catch(err => {
+          if (!err.response) {
+            toast.warn(
+              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+            );
+          } else {
+            toast.error("Nie można pobrać produktów.");
+          }
+        });
       })
       .catch(err => {
         if (!err.response) {
@@ -227,6 +221,8 @@ class IngredientsContainer extends Component {
         handleActiveIngredient={this.handleActiveIngredient}
         handleDeleteIngredient={this.handleDeleteIngredient}
         fetching={this.props.fetching}
+        url={this.createUrl()}
+        userRole={this.props.userRole}
       />
     );
   }
@@ -245,7 +241,8 @@ const mapStateToProps = state => ({
   ingredients: getIngredients(state),
   currentPage: getCurrentPage(state),
   fetching: getFethingIngredients(state),
-  error: getError(state)
+  error: getError(state),
+  userRole: getRole(state)
 });
 
 export default withRouter(

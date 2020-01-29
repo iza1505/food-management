@@ -29,6 +29,7 @@ export class EditRecipeContainer extends Component {
   };
 
   constructor(props) {
+    console.log(JSON.stringify(props.updateRecipe));
     super(props);
     this.handleSelectIngredient = this.handleSelectIngredient.bind(this);
     this.handleAmountIngredient = this.handleAmountIngredient.bind(this);
@@ -40,7 +41,7 @@ export class EditRecipeContainer extends Component {
     this.props.getSortedIngredientsAction().then(() => {
       let ingredientsOptionsCopy = [];
       ingredientsOptionsCopy.push({
-        label: "Wybierz składnik...",
+        label: "select.ingredient",
         value: null
       });
       this.props.ingredients.map(elem =>
@@ -51,7 +52,7 @@ export class EditRecipeContainer extends Component {
               value: elem
             })
           : ingredientsOptionsCopy.push({
-              label: elem.ingredientName + " (sztuki)",
+              label: elem.ingredientName,
               value: elem
             })
       );

@@ -28,7 +28,9 @@ export class MainLayoutContainer extends Component {
 
   _setDocumentTitle = title => {
     this.docTitle = title;
-    document.title = this.docTitle ? this.docTitle + " | Delegation Assistant" : "Delegation Assistant";
+    document.title = this.docTitle
+      ? this.docTitle + " | Food management"
+      : "Food management";
   };
 
   render() {
@@ -46,7 +48,4 @@ export class MainLayoutContainer extends Component {
   }
 }
 
-export default connect(
-  null,
-  null
-)(MainLayoutContainer);
+export default connect(null, null)(MainLayoutContainer);

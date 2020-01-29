@@ -1,0 +1,111 @@
+{
+  "welcomeTitle": "Witaj",
+  "navBar": {
+    "fridge": {
+      "header": "Lodówka",
+      "myFridge": "Moja lodówka"
+    },
+    "recipes": {
+      "header": "Przepisy",
+      "allRecipes": "Wszystkie przepisy",
+      "myRecipes": "Moje przepisy",
+      "createRecipe": "Utwórz przepis",
+      "ingredients": "Produkty"
+    },
+    "users": {
+      "header": "Użytkownicy",
+      "allUsers": "Wszyscy użytkownicy"
+    },
+    "loggedUser": {
+      "profile": "Profil",
+      "logout": "Wyloguj"
+    }
+  },
+  "button": { "login": "Zaloguj", "signInMore": "Dołącz/Więcej..." },
+  "label": {
+    "login": "Nazwa użytkownika:",
+    "password": "Hasło:",
+    "confirmPassword": "Potwierdzenie hasła:",
+    "selectProduct": "Wybierz produkt:",
+    "productName": "Nazwa produktu:",
+    "selectIngredient": "Wybierz składnik:",
+    "amount": "Ilość:",
+    "selectMeasure": "Wybierz miarę",
+    "sortBy": "Sortuj po:",
+    "sortOptions": "Opcja sortowania:",
+    "elementsOnPage": "Ilość elementów na stronie:",
+    "missingIngrAmout": "Max. możliwa ilość brakujących składników:",
+    "title": "Tytuł:",
+    "preparationTime": "Czas przygotowania (min):",
+    "ingredients": "Składniki:",
+    "youHave": "Posiadasz:",
+    "description": "Opis:",
+    "selectRole": "Wybierz rolę:",
+    "active": "Aktywny:",
+    "waitingForAccept": "Oczekuje na sprawdzenie",
+    "toImprove": "Zgłoszone uwagi",
+    "author": "Autor:",
+    "addNewIngredientToRecipe": "Dodaj nowy składnik do przepisu: ",
+    "oldPassword": "Stare hasło:",
+    "newPassword": "Nowe hasło:",
+    "confirmNewPassword": "Potwierdź nowe hasło:"
+  },
+  "placeholder": {
+    "login": "Nazwa użytkownika",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdzenie hasła",
+    "productName": "Nazwa produktu",
+    "amount": "Ilość",
+    "title": "Tytuł",
+    "preparationTime": "Czas przygotowania (min)",
+    "description": "Opis",
+    "oldPassword": "Stare hasło",
+    "newPassword": "Nowe hasło",
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "toImprove": "Zgłoszone uwagi"
+  },
+  "tableLabel": {
+    "title": "Tytuł",
+    "author": "Autor",
+    "login": "Nazwa użytkownika",
+    "role": "Rola",
+    "active": "Aktywny",
+    "missingIngrAmout": "Ilość brakujących składników",
+    "cookable": "Możliwy % do ugotowania (z posiadanych produktów)",
+    "waitingForAccept": "Oczekuje na sprawdzenie",
+    "toImprove": "Zgłoszone uwagi",
+    "name": "Nazwa",
+    "measure": "Miara",
+    "product": "Produkt",
+    "amount": "Ilość",
+    "options": "Opcje"
+  },
+  "boolean": {
+    "yes": "tak",
+    "no": "nie"
+  },
+  "ingredientsPieces": "(sztuk)",
+  "select": {
+    "ingredient": "Wybierz produkt...",
+    "measure": "Wybierz miarę...",
+    "measureSort": "Miara",
+    "role": "Wybierz rolę...",
+    "title": "Tytuł",
+    "missingIngrAmout": "Ilość brakujących składników",
+    "cookable": "Możliwy % do ugotowania (z posiadanych produktów)",
+    "ascending": "Rosnąco",
+    "descending": "Malejąco",
+    "anyQuantity": "Dowolna ilość",
+    "name": "Nazwa",
+    "active": "Aktywny",
+    "user": "Użytkownik",
+    "admin": "Administrator",
+    "login": "Nazwa użytkownika",
+    "waitingForAccept": "Oczekuje na sprawdzenie",
+    "author": "Autor"
+  },
+  "pagination": {
+    "next": "Następna",
+    "previous": "Poprzednia"
+  }
+}

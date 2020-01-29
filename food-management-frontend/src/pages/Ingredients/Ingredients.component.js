@@ -1,6 +1,8 @@
 import React from "react";
-import { array, bool, number, func } from "prop-types";
+import { array, bool, number, func, string } from "prop-types";
 import { reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import {
   elementsOnPageOptions,
@@ -14,6 +16,7 @@ import select from "../../components/Fields/select";
 import Pagination from "../../components/Pagination/Pagination";
 import { renderBooelan } from "../../configuration/helpers";
 import IngredientProposition from "../Fridge/IngredientPropositionModalForm";
+import { userRoles } from "../../configuration/roles";
 
 export const Ingredients = props => {
   const {
@@ -25,7 +28,10 @@ export const Ingredients = props => {
     handleDeleteIngredient,
     handlePagination,
     paginationElem,
-    handleClick
+    handleClick,
+    url,
+    userRole,
+    t
   } = props;
 
   return (
@@ -43,7 +49,7 @@ export const Ingredients = props => {
           >
             Dodaj nowy produkt
           </button>
-          <IngredientProposition />
+          <IngredientProposition url={url} />
         </div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
@@ -51,7 +57,8 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sortuj po:"
+              label={t("label.sortBy")}
+              allNeedTranslate={true}
               component={select}
               options={sortByOptionsIngredient}
             />
@@ -59,7 +66,8 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Opcje sortowania:"
+              label={t("label.sortOptions")}
+              allNeedTranslate={true}
               component={select}
               options={ascendingSortOptions}
             />
@@ -74,7 +82,8 @@ export const Ingredients = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Ilość elementów na stronie:"
+              allNeedTranslate={true}
+              label={t("label.elementsOnPage")}
               component={select}
               options={elementsOnPageOptions}
             />
@@ -93,10 +102,14 @@ export const Ingredients = props => {
           <table className="table table-striped ">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Nazwa</th>
-                <th scope="col">Miara</th>
-                <th scope="col">Aktywny</th>
-                <th scope="col">Opcje</th>
+                <th scope="col">{t("tableLabel.name")}</th>
+                <th scope="col">{t("tableLabel.measure")}</th>
+                <th scope="col">{t("tableLabel.active")}</th>
+                {userRole === userRoles.manager ? (
+                  <th scope="col">Opcje</th>
+                ) : (
+                  <></>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -104,32 +117,38 @@ export const Ingredients = props => {
                 <tr key={elem.id}>
                   <th scope="row">{elem.ingredientName}</th>
                   <td>{elem.measure.measureName}</td>
-                  <td>{renderBooelan(elem.active)}</td>
-                  {elem.active ? (
-                    <td></td>
+                  <td>{t(renderBooelan(elem.active))}</td>
+                  {userRole === userRoles.manager ? (
+                    <>
+                      {elem.active ? (
+                        <td></td>
+                      ) : (
+                        <td>
+                          <button
+                            disabled={fetching}
+                            className="btn btn-info btn-rounded btn-sm my-0 "
+                            text="Activate"
+                            onClick={() =>
+                              handleActiveIngredient(elem.id, elem.version)
+                            }
+                          >
+                            Aktywuj
+                          </button>
+                          <span className="table-remove">
+                            <button
+                              disabled={fetching}
+                              type="button"
+                              className="btn btn-danger btn-rounded btn-sm my-0"
+                              onClick={() => handleDeleteIngredient(elem.id)}
+                            >
+                              Usuń
+                            </button>
+                          </span>
+                        </td>
+                      )}
+                    </>
                   ) : (
-                    <td>
-                      <button
-                        disabled={fetching}
-                        className="btn btn-info btn-rounded btn-sm my-0 "
-                        text="Activate"
-                        onClick={() =>
-                          handleActiveIngredient(elem.id, elem.version)
-                        }
-                      >
-                        Aktywuj
-                      </button>
-                      <span className="table-remove">
-                        <button
-                          disabled={fetching}
-                          type="button"
-                          className="btn btn-danger btn-rounded btn-sm my-0"
-                          onClick={() => handleDeleteIngredient(elem.id)}
-                        >
-                          Usuń
-                        </button>
-                      </span>
-                    </td>
+                    <></>
                   )}
                 </tr>
               ))}
@@ -152,16 +171,21 @@ Ingredients.propTypes = {
   currentPage: number,
   fetching: bool,
   handleActiveIngredient: func,
-  handleDeleteIngredient: func,
   handleClick: func,
+  handleDeleteIngredient: func,
   handlePagination: func,
   ingredients: array,
   pageCount: number,
-  paginationElem: array
+  paginationElem: array,
+  url: string,
+  userRole: string
 };
 
-export default reduxForm({
-  form: "ingredientsform",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(Ingredients);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "ingredientsform",
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true
+  })
+)(Ingredients);

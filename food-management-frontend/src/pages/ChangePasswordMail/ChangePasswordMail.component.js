@@ -1,6 +1,8 @@
 import React from "react";
 import { bool, func } from "prop-types";
 import { reduxForm, Form, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import {
   validateRequired,
@@ -12,7 +14,7 @@ import MyLoader from "../../components/Loader/loader.component";
 import background from "../../assets/backgroundUnauth.jpg";
 
 export const ChangePasswordMail = props => {
-  const { handleSubmit, fetching } = props;
+  const { handleSubmit, fetching, t } = props;
 
   return (
     <LayoutMain title="Resetowanie hasła" hideTitle fullContent>
@@ -27,8 +29,8 @@ export const ChangePasswordMail = props => {
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="password1"
             type="password"
-            placeholder="Hasło"
-            label="Hasło:"
+            placeholder={t("placeholder.password")}
+            label={t("label.password")}
             validate={validateRequired}
             component={input}
           />
@@ -36,8 +38,8 @@ export const ChangePasswordMail = props => {
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="password2"
             type="password"
-            placeholder="Potwierdzenie hasła"
-            label="Potwierdzenie hasła:"
+            placeholder={t("placeholder.confirmPassword")}
+            label={t("label.confirmPassword")}
             validate={validateConfirmedPassword}
             component={input}
           />
@@ -60,6 +62,10 @@ ChangePasswordMail.propTypes = {
   fetching: bool,
   handleSubmit: func
 };
-export default reduxForm({
-  form: "changePasswordForm"
-})(ChangePasswordMail);
+
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "changePasswordForm"
+  })
+)(ChangePasswordMail);

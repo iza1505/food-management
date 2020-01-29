@@ -1,6 +1,8 @@
 import React from "react";
 import { array, bool, func } from "prop-types";
 import { Form, reduxForm, reset, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import MyLoader from "../../../components/Loader/loader.component";
@@ -9,7 +11,12 @@ import { validateRequired, validateInteger } from "../../Validators/Validators";
 import select from "../../../components/Fields/select";
 
 const AddIngredientToFridgeModalForm = props => {
-  const { handleSubmit, avaliableIngredientsToAddToFridge, fetching } = props;
+  const {
+    handleSubmit,
+    avaliableIngredientsToAddToFridge,
+    fetching,
+    t
+  } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -32,7 +39,8 @@ const AddIngredientToFridgeModalForm = props => {
                 name="ingredient"
                 id="ingredient"
                 type="text"
-                label="Wybierz produkt:"
+                label={t("label.selectProduct")}
+                firstNeedTranslate={true}
                 validate={[validateRequired]}
                 component={select}
                 options={avaliableIngredientsToAddToFridge}
@@ -42,8 +50,8 @@ const AddIngredientToFridgeModalForm = props => {
                 name="amount"
                 id="amount"
                 type="number"
-                placeholder="Ilość"
-                label="Ilość:"
+                placeholder={t("placeholder.amount")}
+                label={t("label.amount")}
                 validate={[validateInteger]}
                 component={input}
               />
@@ -80,9 +88,12 @@ AddIngredientToFridgeModalForm.propTypes = {
   handleSubmit: func
 };
 
-export default reduxForm({
-  form: "addIngredientToFridgeModalForm",
-  enableReinitialize: true,
-  onSubmitSuccess: (result, dispatch) =>
-    dispatch(reset("addIngredientToFridgeModalForm"))
-})(AddIngredientToFridgeModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "addIngredientToFridgeModalForm",
+    enableReinitialize: true,
+    onSubmitSuccess: (result, dispatch) =>
+      dispatch(reset("addIngredientToFridgeModalForm"))
+  })
+)(AddIngredientToFridgeModalForm);

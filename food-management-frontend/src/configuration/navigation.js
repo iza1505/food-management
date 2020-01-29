@@ -1,36 +1,50 @@
 import { userRoles } from "./roles";
 
-const { admin, user } = userRoles;
+const { admin, user, manager } = userRoles;
 
 const navigationItems = [
   {
-    text: "Przepisy",
-    canAccess: [admin, user],
+    text: "navBar.recipes.header", //"Przepisy",
+    canAccess: [admin, user, manager],
     subItems: [
       {
         to: "/recipes/all",
-        text: "Wszystkie przepisy",
-        canAccess: [admin, user]
+        text: "navBar.recipes.allRecipes",
+        canAccess: [admin, user, manager]
       },
-      { to: "/recipes/my", text: "Moje przepisy", canAccess: [admin, user] },
+      {
+        to: "/recipes/my",
+        text: "navBar.recipes.myRecipes",
+        canAccess: [admin, user, manager]
+      },
       {
         to: "/recipes/create",
-        text: "Utwórz przepis",
-        canAccess: [admin, user]
+        text: "navBar.recipes.createRecipe",
+        canAccess: [admin, user, manager]
       },
-      { to: "/ingredients", text: "Produkty", canAccess: [admin] }
+      {
+        to: "/ingredients",
+        text: "navBar.recipes.ingredients",
+        canAccess: [admin, manager]
+      }
     ]
   },
   {
-    text: "Lodówka",
+    text: "navBar.fridge.header",
     canAccess: [user],
-    subItems: [{ to: "/myFridge", text: "Moja lodówka", canAccess: [user] }]
+    subItems: [
+      { to: "/myFridge", text: "navBar.fridge.myFridge", canAccess: [user] }
+    ]
   },
   {
-    text: "Użytkownicy",
+    text: "navBar.users.header",
     canAccess: [admin],
     subItems: [
-      { to: "/users", text: "Wszyscy użytkownicy", canAccess: [admin] }
+      {
+        to: "/users",
+        text: "navBar.users.allUsers",
+        canAccess: [admin, manager]
+      }
     ]
   }
 ];

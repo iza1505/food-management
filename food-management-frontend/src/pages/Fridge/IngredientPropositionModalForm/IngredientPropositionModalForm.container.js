@@ -28,6 +28,7 @@ export class IngredientPropositionModalFormContainer extends Component {
     getIngredientsAdmin: func,
     getMeasuresAction: func,
     measures: array,
+    url: string,
     userRole: string
   };
 
@@ -57,9 +58,10 @@ export class IngredientPropositionModalFormContainer extends Component {
   createMeasuresOptions() {
     const measureOptionsCopy = [];
     measureOptionsCopy.push({
-      label: "Wybierz miarę...",
+      label: "select.measure",
       value: null
     });
+
     this.props.measures.forEach(elem => {
       elem.measureName
         ? measureOptionsCopy.push({
@@ -67,7 +69,7 @@ export class IngredientPropositionModalFormContainer extends Component {
             value: elem
           })
         : measureOptionsCopy.push({
-            label: "sztuki",
+            label: "—",
             value: elem
           });
     });
@@ -83,16 +85,15 @@ export class IngredientPropositionModalFormContainer extends Component {
         JSON.parse(values.measure)
       )
       .then(() => {
-        this.props.getIngredientsAdmin(
-          window.location.pathname + window.location.search
-        );
-        console.log(
-          "patj " + window.location.pathname + window.location.search
-        );
-        this.props.dispatch(reset("ingredientPropositionModalForm"));
-        this.props.userRole === userRoles.user
-          ? toast.info("Produkt został dodany do listy oczekujących.")
-          : toast.info("Produkt został dodany.");
+        if (this.props.userRole === userRoles.admin) {
+          this.props.getIngredientsAdmin(this.props.url).then(() => {
+            this.props.dispatch(reset("ingredientPropositionModalForm"));
+            toast.info("Produkt został dodany.");
+          });
+        } else {
+          this.props.dispatch(reset("ingredientPropositionModalForm"));
+          toast.info("Produkt został dodany do listy oczekujących.");
+        }
       })
       .catch(err => {
         if (!err.response) {

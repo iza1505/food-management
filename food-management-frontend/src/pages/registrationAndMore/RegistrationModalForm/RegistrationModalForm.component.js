@@ -1,6 +1,8 @@
 import React from "react";
 import { bool, func, string } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import select from "../../../components/Fields/select";
@@ -18,7 +20,7 @@ import {
 import { roleOptionsRegistration } from "../../../configuration/recipeConst";
 
 const RegistrationModalForm = props => {
-  const { handleSubmit, userRole, fetching } = props;
+  const { handleSubmit, userRole, fetching, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -44,7 +46,8 @@ const RegistrationModalForm = props => {
                   name="role"
                   id="role"
                   type="text"
-                  label="Wybierz rolę:"
+                  label={t("label.selectRole")}
+                  allNeedTranslate={true}
                   validate={[validateRequired]}
                   component={select}
                   options={roleOptionsRegistration}
@@ -58,8 +61,8 @@ const RegistrationModalForm = props => {
                 name="login"
                 id="login"
                 type="text"
-                placeholder="Login"
-                label="Login:"
+                placeholder={t("placeholder.login")}
+                label={t("label.login")}
                 validate={[validateRequired, validateLogin]}
                 component={input}
               />
@@ -77,8 +80,8 @@ const RegistrationModalForm = props => {
                 className="form-control mb-2 mr-sm-2"
                 name="password1"
                 id="password1"
-                placeholder="Hasło"
-                label="Hasło:"
+                placeholder={t("placeholder.password")}
+                label={t("label.password")}
                 validate={[
                   validateRequired,
                   validatePasswordLength,
@@ -92,8 +95,8 @@ const RegistrationModalForm = props => {
                 className="form-control mb-2 mr-sm-2"
                 name="passwordConfirm"
                 id="passwordConfirm"
-                placeholder="Potwierdzenie hasła"
-                label="Potwierdzenie hasła:"
+                placeholder={t("placeholder.confirmPassword")}
+                label={t("label.confirmPassword")}
                 validate={[validateRequired, validateConfirmedPassword]}
                 type="password"
                 component={input}
@@ -131,7 +134,10 @@ RegistrationModalForm.propTypes = {
   userRole: string
 };
 
-export default reduxForm({
-  form: "registrationModalForm",
-  enableReinitialize: true
-})(RegistrationModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "registrationModalForm",
+    enableReinitialize: true
+  })
+)(RegistrationModalForm);

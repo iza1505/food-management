@@ -1,6 +1,8 @@
 import React from "react";
 import { array, bool, number, func } from "prop-types";
 import { reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import {
   elementsOnPageOptions,
@@ -24,7 +26,8 @@ export const UsersManagement = props => {
     paginationElem,
     handleClick,
     fetching,
-    userId
+    userId,
+    t
   } = props;
   return (
     <LayoutMain title="Użytkownicy">
@@ -49,7 +52,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sortuj po:"
+              label={t("label.sortBy")}
               component={select}
               options={userSortByOptionsAdmin}
             />
@@ -57,7 +60,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Opcje sortowania:"
+              label={t("label.sortOptions")}
               component={select}
               options={ascendingSortOptions}
             />
@@ -72,7 +75,7 @@ export const UsersManagement = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Ilość elementów na stronie:"
+              label={t("label.elementsOnPage")}
               component={select}
               options={elementsOnPageOptions}
             />
@@ -91,10 +94,10 @@ export const UsersManagement = props => {
           <table className="table table-striped ">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Login</th>
-                <th scope="col">Rola</th>
+                <th scope="col">{t("tableLabel.login")}</th>
+                <th scope="col">{t("tableLabel.role")}</th>
                 <th scope="col">Email</th>
-                <th scope="col">Aktywny</th>
+                <th scope="col">{t("tableLabel.active")}</th>
               </tr>
             </thead>
             <tbody>
@@ -155,8 +158,11 @@ UsersManagement.propTypes = {
   users: array
 };
 
-export default reduxForm({
-  form: "usersManagementForm",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(UsersManagement);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "usersManagementForm",
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true
+  })
+)(UsersManagement);

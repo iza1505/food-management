@@ -1,6 +1,8 @@
 import React from "react";
 import { array, number, func } from "prop-types";
 import { reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import {
   elementsOnPageOptions,
@@ -23,7 +25,8 @@ export const HeadersAuthor = props => {
     handlePagination,
     paginationElem,
     handleClick,
-    handleEditRecipe
+    handleEditRecipe,
+    t
   } = props;
 
   return (
@@ -35,15 +38,17 @@ export const HeadersAuthor = props => {
               className="form-control mb-2 mr-sm-4"
               name="sortBy"
               type="text"
-              label="Sortuj po:"
+              label={t("label.sortBy")}
               component={select}
+              allNeedTranslate={true}
               options={sortByOptionsAuthor}
             />
             <Field
               className="form-control mb-2 mr-sm-4"
               name="ascendingSort"
               type="text"
-              label="Opcje sortowania:"
+              label={t("label.sortOptions")}
+              allNeedTranslate={true}
               component={select}
               options={ascendingSortOptions}
             />
@@ -58,7 +63,7 @@ export const HeadersAuthor = props => {
               className="form-control mb-2 mr-sm-4"
               name="elementsOnPage"
               type="text"
-              label="Ilość elementów na stronie:"
+              label={t("label.elementsOnPage")}
               component={select}
               options={elementsOnPageOptions}
             />
@@ -77,10 +82,10 @@ export const HeadersAuthor = props => {
           <table className="table table-striped">
             <thead className="bg-success">
               <tr>
-                <th scope="col">Tytuł</th>
-                <th scope="col">Aktywny</th>
-                <th scope="col">Oczekuje na sprawdzenie</th>
-                <th scope="col">Zgłoszone uwagi</th>
+                <th scope="col">{t("tableLabel.title")}</th>
+                <th scope="col">{t("tableLabel.active")}</th>
+                <th scope="col">{t("tableLabel.waitingForAccept")}</th>
+                <th scope="col">{t("tableLabel.toImprove")}</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -90,8 +95,8 @@ export const HeadersAuthor = props => {
                   <th scope="row">
                     <a href={"/recipes/" + elem.id}>{elem.title}</a>
                   </th>
-                  <td>{renderBooelan(elem.active)}</td>
-                  <td>{renderBooelan(elem.waitingForAccept)}</td>
+                  <td>{t(renderBooelan(elem.active))}</td>
+                  <td>{t(renderBooelan(elem.waitingForAccept))}</td>
                   <td>{elem.toImprove}</td>
                   <td>
                     <button
@@ -140,8 +145,11 @@ HeadersAuthor.propTypes = {
   recipeHeaders: array
 };
 
-export default reduxForm({
-  form: "headersform",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(HeadersAuthor);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "headersform",
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true
+  })
+)(HeadersAuthor);

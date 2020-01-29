@@ -1,7 +1,14 @@
 import React from "react";
-import { withTranslation } from "react-i18next";
-
+import { withTranslation, initReactI18next } from "react-i18next";
+import i18n from "i18next";
 import styles from "./Footer.module.scss";
+
+function switchLang(lang) {
+  // i18n
+  //   .use(initReactI18next) // passes i18n down to react-i18next
+  //   .init({ lng: lang });
+    i18n.locale='pl';
+}
 
 const Footer = props => {
   const { i18n } = props;
@@ -12,15 +19,14 @@ const Footer = props => {
         <div>
           <button
             className="btn btn-link"
-            onClick={() => i18n.changeLanguage("pl")}
+            onClick={() =>
+              switchLang("pl")
+            }
           >
             Polski
           </button>
           2020 &copy; Food management
-          <button
-            className="btn btn-link"
-            onClick={() => i18n.changeLanguage("en")}
-          >
+          <button className="btn btn-link" onClick={() => switchLang("en")}>
             English
           </button>
         </div>

@@ -241,13 +241,16 @@
     "productAlreadyInFridge": "The product has already been added to the fridge.",
     "incorrectRecipeUpdateData": "Invalid recipe data to update.",
     "emptyRecipesData": "Complete all fields. The list of ingredients must not be empty.",
-    "updatedNotOwnRecipe": "Nie można zaktualizować przepisu innego autora.",
+    "updatedNotOwnRecipe": "Cannot update recipe from another author.",
     "recipeWithNameExists": "A recipe with the given name exists.",
     "cannotUpdateOwnRecipeStatus": "Cannot update the status of your recipe.",
     "invalidRecipeStatusData": "Cannot set recipe status to be active and awaiting review.",
     "cannotDeleteRecipe": "Cannot delete recipe.",
     "incorrectPasswordValidation": "Password does not meet validation requirements.",
     "incorrectLoginValidation": "Login does not meet the validation requirements.",
-    
+    "inactiveAccount": "Inactive account.",
+    "userWithLoginNotExists": "User with given login does not exist.",
+    "unknownMeasure": "Unknown measure.",
+    "recipeNotExists": "Recipe not found."
   }
 }

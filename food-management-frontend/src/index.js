@@ -8,7 +8,8 @@ import common_pl from "./configuration/translation/pl.json";
 
 i18next.init({
   interpolation: { escapeValue: false }, // React already does escaping
-  lng: "pl", // language to use
+  lng: "en",
+  fallbackLng: "en", // language to use
   resources: {
     en: {
       common: common_en // 'common' is our custom namespace

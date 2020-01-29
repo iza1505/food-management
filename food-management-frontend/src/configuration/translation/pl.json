@@ -241,13 +241,16 @@
     "productAlreadyInFridge": "Produkt jest już dodany do lodówki.",
     "incorrectRecipeUpdateData": "Niepoprawne dane przepisu do zaktualizowania.",
     "emptyRecipesData": "Wypełnij wszystkie pola. Lista składników nie może być pusta.",
-    "updatedNotOwnRecipe": "Cannot update recipe from another author.",
+    "updatedNotOwnRecipe": "Nie można zaktualizować przepisu innego autora.",
     "recipeWithNameExists": "Przepis o podanej nazwie istnieje.",
     "cannotUpdateOwnRecipeStatus": "Nie można zaktualizować statusu swojego przepisu.",
     "invalidRecipeStatusData": "Nie można ustawić statusu przepisu jako aktywny i oczekujący na sprawdzenie.",
     "cannotDeleteRecipe": "Nie można usunąć przepisu.",
     "incorrectPasswordValidation": "Hasło nie spełnia wymagań walidacji.",
     "incorrectLoginValidation": "Nazwa użytkownika nie spełnia wymagań walidacji.",
-    
+    "inactiveAccount": "Konto niekaktywne.",
+    "userWithLoginNotExists": "Użytkownik z podanym loginem nie istnieje.",
+    "unknownMeasure": "Nieznana miara.",
+    "recipeNotExists": "Nie znaleziono przepisu."
   }
 }

@@ -7,7 +7,6 @@ import com.sobczyk.food_management.entities.UserIngredientKey;
 import com.sobczyk.food_management.entities.UserEntity;
 import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
-import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
 import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.UserIngredientRepository;
 import com.sobczyk.food_management.security.UserSessionService;
@@ -17,8 +16,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,9 +151,9 @@ public class UserIngredientServiceImpl implements UserIngredientService {
 
     @Override
     public UserIngredientEntity findById(UserIngredientKey id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        return repository.findById(id).orElseThrow(() -> new FMEntityNotFoundException(
                 "Entity with id user " + id.getUser().getId() + ", id ingredient " + id.getIngredient().getId() +
-                        "  not found."));
+                        "  not found.","exception.productNotFoundInFridge"));
     }
 
 }

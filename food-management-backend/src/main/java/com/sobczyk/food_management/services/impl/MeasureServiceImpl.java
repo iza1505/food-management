@@ -52,7 +52,7 @@ public class MeasureServiceImpl implements MeasureService {
     @Override
     public MeasureEntity findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new FMEntityNotFoundException("Measure with id " + id + " not found.",
-                                                                            "Miara nie istnieje."));
+                                                                            "exception.unknownMeasure"));
 
     }
 

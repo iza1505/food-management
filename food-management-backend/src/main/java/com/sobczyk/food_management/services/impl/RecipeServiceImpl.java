@@ -55,8 +55,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeEntity findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(()-> new FMEntityNotFoundException("Recipe with id " + id + " not found.","Przepis nie " +
-                        "istnieje."));
+                .orElseThrow(()-> new FMEntityNotFoundException("Recipe with id " + id + " not found.","exception.recipeNotExists"));
     }
 
     @Override

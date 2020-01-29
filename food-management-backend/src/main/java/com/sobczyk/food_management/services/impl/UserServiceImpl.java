@@ -112,18 +112,11 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = convertToEntity(userDto);
 
-        UserEntity loggedUser = userSessionService.getUser();
-
-        if(loggedUser != null && loggedUser.getRole().getName()== "ADMINISTRATOR"){
-            if (registrationDto.getRole() == null) {
-                throw new EmptyFieldException("Role cannot be null", "exception.emptyRole");
-            } else {
-                userEntity.setRole(roleService.findByName(registrationDto.getRole()));
-            }
-        } else {
+        if (registrationDto.getRole() == null) {
             userEntity.setRole(roleService.findByName("USER"));
+        } else {
+        userEntity.setRole(roleService.findByName(registrationDto.getRole()));
         }
-
 
         repository.save(userEntity);
 
@@ -204,20 +197,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByLogin(String login) {
         return repository.findByLogin(login)
-                .orElseThrow(() -> new FMEntityNotFoundException("User with login " + login + " not found.","U" +
-                        "żytkownik nie istnieje."));
+                .orElseThrow(() -> new FMEntityNotFoundException("User with login " + login + " not found.",
+                                                                 "exception.userNotExists"));
     }
 
     @Override
     public UserEntity findByEmail(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new FMEntityNotFoundException("User with email " + email + " not found.","U" +
-                        "żytkownik nie istnieje."));
+                .orElseThrow(() -> new FMEntityNotFoundException("User with email " + email + " not found.","exception.userNotExists"));
     }
 
     @Override
     public UserEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new FMEntityNotFoundException("User with id " + id + " not found.","Użytkownik nie istnieje."));
+        return repository.findById(id).orElseThrow(() -> new FMEntityNotFoundException("User with id " + id + " not " +
+                                                                                               "found.","exception.userNotExists"));
     }
 
     @Override

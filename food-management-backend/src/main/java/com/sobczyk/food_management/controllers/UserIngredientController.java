@@ -30,7 +30,7 @@ public class UserIngredientController {
     @GetMapping
     ResponseEntity<List<IngredientInFridgeAndRecipeDto>> findAll() {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccoutn");
         }
 
         List<IngredientInFridgeAndRecipeDto> dtoList = service.findAll();
@@ -41,7 +41,7 @@ public class UserIngredientController {
     @PostMapping
     ResponseEntity add(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
 
         IngredientInFridgeAndRecipeDto created = service.add(dto);
@@ -52,7 +52,7 @@ public class UserIngredientController {
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
 
         service.delete(id);
@@ -63,7 +63,7 @@ public class UserIngredientController {
     @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientInFridgeAndRecipeDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
 
         return ResponseEntity.ok(service.update(dto));

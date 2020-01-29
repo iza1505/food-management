@@ -32,7 +32,7 @@ public class IngredientController {
     @GetMapping(value = "/all")
     ResponseEntity<List<IngredientDto>> getAllActive() {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
 
         return ResponseEntity.ok(service.getAll());
@@ -45,7 +45,7 @@ public class IngredientController {
                                        @RequestParam(value = "sortBy", required = false) String sortBy,
                                        @RequestParam(value = "ascendingSort", required = false) Boolean ascendingSort) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
 
         return ResponseEntity.ok(service.findAll(elementsOnPage, currentPage, sortBy, ascendingSort));
@@ -56,7 +56,7 @@ public class IngredientController {
     @PostMapping
     ResponseEntity add(@RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
         IngredientDto created = service.add(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -66,7 +66,7 @@ public class IngredientController {
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
         service.deleteById(id);
         return ResponseEntity.ok("Ingredient has been deleted.");
@@ -77,7 +77,7 @@ public class IngredientController {
     @PutMapping
     ResponseEntity update(@Valid @RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {
-            throw new InactiveAccountException("Inactive account.","Konto niekatywne.");
+            throw new InactiveAccountException("Inactive account.","exception.inactiveAccount");
         }
         return ResponseEntity.ok(service.update(dto));
     }

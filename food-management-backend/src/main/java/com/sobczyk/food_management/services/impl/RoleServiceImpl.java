@@ -51,7 +51,6 @@ public class RoleServiceImpl implements RoleService {
         return repository.findByName(name).orElseThrow(() -> new FMEntityNotFoundException("Role with name " + name +
                                                                                                    " " +
                                                                                                    "not found.",
-                                                                                           "Rola" +
-                " nie istnieje."));
+                                                                                           "exception.unknownRole"));
     }
 }

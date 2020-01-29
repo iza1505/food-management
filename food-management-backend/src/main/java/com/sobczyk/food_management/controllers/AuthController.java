@@ -55,11 +55,10 @@ public class AuthController {
                 loginResponse.setAccessToken(loginJWT);
                 return ResponseEntity.ok(loginResponse);
             } else {
-                throw new InactiveAccountException("Inactive account","Konto niekatywne.");
+                throw new InactiveAccountException("Inactive account","exception.inactiveAccount");
             }
         } else {
-            throw new FMEntityNotFoundException("User with login: " + loginReq.getLogin() + " not found","U" +
-                    "żytkownik z podanym loginem nie istnieje.");
+            throw new FMEntityNotFoundException("User with login: " + loginReq.getLogin() + " not found","exception.userWithLoginNotExists");
         }
 
     }

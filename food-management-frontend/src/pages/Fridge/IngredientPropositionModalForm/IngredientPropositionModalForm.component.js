@@ -25,14 +25,14 @@ const IngredientPropositionModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Nowy produkt</h5>
+              <h5>{t("modal.title.newProduct")}</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                {userRole && userRole === userRoles.user ? (
-                  <>Zasugeruj nowy produkt.</>
+                {userRole && userRole === userRoles.manager ? (
+                  <>{t("modal.description.addNewProduct")}</>
                 ) : (
-                  <>Dodaj nowy produkt.</>
+                  <>{t("modal.description.suggestNewProduct")}</>
                 )}
               </h1>
               <Field

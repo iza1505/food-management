@@ -27,11 +27,11 @@ const ConfirmationEmailModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Email aktywacyjny</h5>
+              <h5>{t("modal.title.emailActivation")}</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Podaj wymagane informacje aby wysłać email aktywujący konto.
+                {t("modal.description.emailActivation")}
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"

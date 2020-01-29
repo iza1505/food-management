@@ -6,6 +6,7 @@ import querySearch from "query-string";
 import { toast } from "react-toastify";
 import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import { resetPassword } from "../../actions/user.actions";
 import { getFetchingUser, getError } from "../../selectors/user.selectors";
@@ -16,7 +17,8 @@ class ChangePasswordMailContainer extends Component {
     dispatch: func,
     error: string,
     fetching: bool,
-    resetPassword: func
+    resetPassword: func,
+    t: func
   };
 
   state = {
@@ -35,15 +37,13 @@ class ChangePasswordMailContainer extends Component {
     this.props
       .resetPassword(url, values.password1)
       .then(() => {
-        toast.info("Hasło zostało zmienione.");
+        toast.info(this.props.t("toastInfo.passwordHasBeenChanged"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -70,6 +70,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ChangePasswordMailContainer)
+export default withTranslation("common")(
+  withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(ChangePasswordMailContainer)
+  )
 );

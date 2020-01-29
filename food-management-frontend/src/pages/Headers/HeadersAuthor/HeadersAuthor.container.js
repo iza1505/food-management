@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import {
   getPageCount,
@@ -30,7 +31,8 @@ class HeadersAuthorContainer extends Component {
     pageCount: number,
     recipeHeaders: array,
     resetCurrentPageOnSubmit: func,
-    resetHeaders: func
+    resetHeaders: func,
+    t: func
   };
 
   state = {
@@ -119,11 +121,9 @@ class HeadersAuthorContainer extends Component {
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać przepisów.");
+            toast.error(this.props.t("toastInfo.cantDownloadRecipes"));
           }
         });
     }
@@ -157,16 +157,14 @@ class HeadersAuthorContainer extends Component {
     this.props
       .deleteRecipe(recipeId)
       .then(() => {
-        toast.info("Przepis został usunięty.");
+        toast.info(this.props.t("toastInfo.recipeHasBeedDeleted"));
         this.props.getHeaders(this.createUrl());
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można pobrać przepisów.");
+          toast.error(this.props.t("toastInfo.cantDownloadRecipes"));
         }
       });
   };
@@ -207,6 +205,8 @@ const mapStateToProps = state => ({
   currentPage: getCurrentPage(state)
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(HeadersAuthorContainer)
+export default withTranslation("common")(
+  withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(HeadersAuthorContainer)
+  )
 );

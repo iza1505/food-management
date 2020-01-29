@@ -9,7 +9,7 @@ public class Validator {
         if (entity.getVersion() != dtoVersion) {
             throw new BadVersionException(
                     "Incompatible versions. Entity " + entity.getClass().getSimpleName() + " version: " + entity.getVersion() +
-                            ", version from request: " + dtoVersion, "Nieaktualne dane. Odśwież stronę.");
+                            ", version from request: " + dtoVersion, "exception.outdatedData");
         }
     }
 
@@ -17,7 +17,7 @@ public class Validator {
         if (entity.getVersion() != dtoVersion) {
             throw new BadVersionException(
                     "Incompatible versions. UserIngredientEntity version: " + entity.getVersion() +
-                            ", version from request: " + dtoVersion, "Nieaktualne dane. Odśwież stronę.");
+                            ", version from request: " + dtoVersion, "exception.outdatedData");
         }
     }
 }

@@ -27,11 +27,11 @@ const ResetPasswordModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Resetuj hasło</h5>
+              <h5>{t("modal.title.resetPassword")}</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Podaj wymagane informacje aby wysłać email resetujący hasło.
+                {t("modal.description.resetPasswordEmail")}
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"

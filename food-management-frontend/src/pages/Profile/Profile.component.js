@@ -13,7 +13,7 @@ export const Profile = props => {
   const { id, login, email, t } = props;
 
   return (
-    <LayoutMain title="Profil">
+    <LayoutMain title={t("pageTitle.profile")}>
       <div>
         <div className="center-align-elem">
           <button

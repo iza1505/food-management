@@ -23,7 +23,7 @@ export const Fridge = props => {
   const ingredientSizeHalf = (ingredients.length / 2).toFixed();
 
   return (
-    <LayoutMain title="Moja lodówka">
+    <LayoutMain title={t("pageTitle.myFridge")}>
       <div className="">
         <div className="center-align-elem">
           <button

@@ -26,7 +26,7 @@ export const EditRecipe = props => {
     t
   } = props;
   return (
-    <LayoutMain title="Edytuj przepis">
+    <LayoutMain title={t("pageTitle.editRecipe")}>
       <div className="d-flex flex-column bd-highlight mb-3">
         <Form onSubmit={handleSubmit} autoComplete="on">
           <Field

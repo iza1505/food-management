@@ -4,6 +4,7 @@ import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
 import { reset } from "redux-form";
+import { withTranslation } from "react-i18next";
 
 import ResetPasswordModalForm from "./ResetPasswordModalForm.component";
 import { sendResetPasswordMail } from "../../../actions/user.actions";
@@ -14,7 +15,8 @@ export class ResetPasswordModalFormContainer extends Component {
     dispatch: func,
     error: string,
     fetching: bool,
-    sendResetPasswordMail: func
+    sendResetPasswordMail: func,
+    t: func
   };
 
   handleSubmit = values => {
@@ -22,15 +24,13 @@ export class ResetPasswordModalFormContainer extends Component {
       .sendResetPasswordMail(values.login, values.email)
       .then(() => {
         this.props.dispatch(reset("resetPasswordModalForm"));
-        toast.info("Email zmieniający hasło został wysłany.");
+        toast.info(this.props.t("toastInfo.resetPasswordEmailSend"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -57,7 +57,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ResetPasswordModalFormContainer);
+export default withTranslation("common")(
+  connect(mapStateToProps, mapDispatchToProps)(ResetPasswordModalFormContainer)
+);

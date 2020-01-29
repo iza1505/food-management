@@ -82,19 +82,36 @@ const ingredientsReducer = (state = initialState, action) => {
     case `${ACTIONS.DELETE_INGREDIENT}_${REJECTED}`:
     case `${ACTIONS.UPDATE_INGREDIENT}_${REJECTED}`:
     case `${ACTIONS.ADD_INGREDIENT_TO_FRIDGE}_${REJECTED}`:
-    case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${REJECTED}`:
-      return {
-        ...state,
-        fetchingIngredients: false,
-        error: action.payload.response.data.message
-      };
+    case `${ACTIONS.ADD_INGREDIENT_TO_DATABASE}_${REJECTED}`: {
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingIngredients: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingIngredients: false,
+          error: null
+        };
+      }
+    }
 
     case `${ACTIONS.GET_MEASURES}_${REJECTED}`: {
-      return {
-        ...state,
-        fetchingMeasures: false,
-        error: action.payload.response.data.message
-      };
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingMeasures: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingMeasures: false,
+          error: null
+        };
+      }
     }
 
     case ACTIONS.RESET_CURRENTPAGE_ON_SUBMIT: {

@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import { loginUser } from "../../actions/user.actions";
 import {
@@ -23,6 +24,7 @@ class LoginContainer extends Component {
     history: object,
     loggedStatus: bool,
     loginUser: func,
+    t: func,
     token: string
   };
 
@@ -49,11 +51,9 @@ class LoginContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -78,6 +78,6 @@ function mapDispatchToProps(dispatch) {
   return { dispatch, loginUser: bindActionCreators(loginUser, dispatch) };
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginContainer))
 );

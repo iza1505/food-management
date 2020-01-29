@@ -14,7 +14,7 @@ export const Login = props => {
   const { handleSubmit, fetching, t } = props;
 
   return (
-    <LayoutMain title="Logowanie" hideTitle fullContent>
+    <LayoutMain title={t("pageTitle.login")} hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <Form
           onSubmit={handleSubmit}

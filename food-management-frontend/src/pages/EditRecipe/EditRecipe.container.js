@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { array, bool, func, object, string } from "prop-types";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import { getRecipeDetails, updateRecipe } from "../../actions/recipe.actions";
 import { bindActionCreators } from "redux";
@@ -25,6 +26,7 @@ export class EditRecipeContainer extends Component {
     ingredients: array,
     initialValues: object,
     recipe: object,
+    t: func,
     updateRecipe: func
   };
 
@@ -80,11 +82,9 @@ export class EditRecipeContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można pobrać szczegółów przepisu.");
+          toast.error(this.props.t("toastInfo.cantDownloadRecipeDetails"));
         }
       });
   }
@@ -105,20 +105,18 @@ export class EditRecipeContainer extends Component {
           copySelectedIngredients
         )
         .then(() => {
-          toast.info("Przepis zaktualizowany.");
+          toast.info(this.props.t("toastInfo.recipeUpdated"));
           this.redirectToMyRecipes();
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error(this.props.error);
+            toast.error(this.props.t(this.props.error));
           }
         });
     } else {
-      toast.error("Lista składników nie może być pusta.");
+      toast.error(this.props.t("toastInfo.ingredientListCannotBeEmpty"));
     }
   };
 
@@ -137,7 +135,7 @@ export class EditRecipeContainer extends Component {
       this.setState({ selectedAmount: e.target.value });
     } else {
       this.setState({ selectedAmount: null });
-      toast.error("Ilość musi być liczbą całkowitą większą od 0.");
+      toast.error(this.props.t("toastInfo.amountMustBeInteger"));
     }
   }
 
@@ -146,16 +144,12 @@ export class EditRecipeContainer extends Component {
       _.isEmpty(this.state.selectedIngredient) ||
       !this.state.selectedAmount
     ) {
-      toast.warn("Wybierz składnik i podaj poprawną ilość aby dodać do listy.");
+      toast.warn(this.props.t("toastInfo.selectIngredientAmount"));
     } else {
       let iterator = 0;
       this.state.selectedIngredients.forEach((elem, index) => {
         if (_.isEqual(elem.ingredient.id, this.state.selectedIngredient.id)) {
-          toast.warn(
-            "Składnik znajduje się już na liście. (pozycja " +
-              Number(index + 1) +
-              ")"
-          );
+          toast.warn(this.props.t("toastInfo.ingredientAlreadyOnList"));
           iterator++;
         }
       });
@@ -212,7 +206,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditRecipeContainer);
+export default withTranslation("common")(
+  connect(mapStateToProps, mapDispatchToProps)(EditRecipeContainer)
+);

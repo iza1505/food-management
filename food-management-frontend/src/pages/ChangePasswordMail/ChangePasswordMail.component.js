@@ -17,14 +17,16 @@ export const ChangePasswordMail = props => {
   const { handleSubmit, fetching, t } = props;
 
   return (
-    <LayoutMain title="Resetowanie hasła" hideTitle fullContent>
+    <LayoutMain title={t("pageTitle.resetPassword")} hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <Form
           onSubmit={handleSubmit}
           className="form-container"
           autoComplete="on"
         >
-          <h1 className="email-information">Podaj nowe hasło. </h1>
+          <h1 className="email-information">
+            {t("modal.description.resetPasswordInformation")}
+          </h1>
           <Field
             className="form-control mb-2 mr-sm-2 autoComplete"
             name="password1"
@@ -49,7 +51,7 @@ export const ChangePasswordMail = props => {
             name="changePassword"
             disabled={fetching}
           >
-            Resetuj hasło
+            {t("button.resetPassword")}
           </button>
           <MyLoader visible={fetching} />
         </Form>

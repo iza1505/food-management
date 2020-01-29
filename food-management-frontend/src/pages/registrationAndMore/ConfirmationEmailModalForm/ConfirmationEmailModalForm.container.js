@@ -4,6 +4,7 @@ import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
 import { reset } from "redux-form";
+import { withTranslation } from "react-i18next";
 
 import ConfirmationEmailModalForm from "./ConfirmationEmailModalForm.component";
 import { sendConfirmationMail } from "../../../actions/user.actions";
@@ -14,7 +15,8 @@ export class ConfirmationEmailModalFormContainer extends Component {
     dispatch: func,
     error: string,
     fetching: bool,
-    sendConfirmationMail: func
+    sendConfirmationMail: func,
+    t: func
   };
 
   handleSubmit = values => {
@@ -22,15 +24,13 @@ export class ConfirmationEmailModalFormContainer extends Component {
       .sendConfirmationMail(values.login, values.email)
       .then(() => {
         this.props.dispatch(reset("confirmationEmailModalForm"));
-        toast.info("Email aktywujący konto został wysłany.");
+        toast.info(this.props.t("toastInfo.confirmationEmailSend"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -57,7 +57,9 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConfirmationEmailModalFormContainer);
+export default withTranslation("common")(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ConfirmationEmailModalFormContainer)
+);

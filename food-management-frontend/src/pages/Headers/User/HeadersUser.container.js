@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import {
   getPageCount,
@@ -23,6 +24,8 @@ import {
 import HeadersUser from "./HeadersUser.component";
 import { userRoles } from "../../../configuration/roles";
 
+//import { Toast } from "../../../components/Toast/Toast";
+
 class HeadersUserContainer extends Component {
   static propTypes = {
     currentPage: number,
@@ -33,7 +36,8 @@ class HeadersUserContainer extends Component {
     recipeHeaders: array,
     resetCurrentPageOnSubmit: func,
     resetHeaders: func,
-    userRole: string
+    userRole: string,
+    t: func
   };
 
   state = {
@@ -69,6 +73,7 @@ class HeadersUserContainer extends Component {
   };
 
   componentDidMount() {
+    //console.log("did mount " + JSON.stringify(this.props));
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
       let url =
@@ -102,11 +107,9 @@ class HeadersUserContainer extends Component {
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać przepisów.");
+            toast.error(this.props.t("toastInfo.cantDownloadRecipes"));
           }
         });
     }
@@ -166,6 +169,6 @@ const mapStateToProps = state => ({
   fetching: getFetchingHeaders(state)
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(HeadersUserContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(HeadersUserContainer))
 );

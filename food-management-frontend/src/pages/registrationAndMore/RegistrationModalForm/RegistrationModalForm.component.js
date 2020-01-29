@@ -34,11 +34,11 @@ const RegistrationModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Rejestracja</h5>
+              <h5>{t("modal.title.registration")}</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Podaj wymagane informacje i utwórz konto.
+                {t("modal.description.registration")}
               </h1>
               {userRole === "ADMINISTRATOR" ? (
                 <Field

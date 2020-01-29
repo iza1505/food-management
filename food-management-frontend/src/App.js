@@ -13,6 +13,7 @@ import "bootstrap/dist/js/bootstrap.bundle";
 
 toast.configure({ position: toast.POSITION.BOTTOM_RIGHT });
 
+
 class App extends Component {
   render() {
     return (

@@ -3,45 +3,45 @@ import _ from "lodash";
 const validator = require("email-validator");
 
 const validateRequired = value =>
-  value && !_.isEqual(value, "null") ? undefined : "To pole jest wymagane.";
+  value && !_.isEqual(value, "null") ? undefined : "validator.validateRequired";
 
 const validateConfirmedPassword = (passwordConfirm, allValues) =>
   allValues.password1 === passwordConfirm
     ? undefined
-    : "Hasła muszą być takie same.";
+    : "validator.validateConfirmedPassword";
 
 const validateEmail = email =>
-  validator.validate(email) ? undefined : "Niepoprawny format adresu email.";
+  validator.validate(email) ? undefined : "validator.validateEmail";
 
 const validateLogin = login =>
   login && login.length > 7 && login.length < 33
     ? undefined
-    : "Login musi zawierać od 8 do 32 znaków.";
+    : "validator.validateLogin";
 
 const validatePasswordLength = password =>
   password && password.length > 7 && password.length < 65
     ? undefined
-    : "Password musi zawierać od 8 do 64 znaków.";
+    : "validator.validatePasswordLength";
 
 const validatePasswordUpperLowerCase = password =>
   hasLowerCase(password) && hasUpperCase(password)
     ? undefined
-    : "Password musi zawierać wielkie i małe litery.";
+    : "validator.validatePasswordUpperLowerCase";
 
 const validatePasswordDidits = password =>
-  hasDigit(password) ? undefined : "Password musi zawierać min. 1 cyfrę.";
+  hasDigit(password) ? undefined : "validator.validatePasswordDidits";
 
 const validateInteger = value => {
   const regex = /^[0-9\b]+$/;
   if (regex.test(value) && value > 0) {
     return undefined;
   } else {
-    return "Wartość musi być liczbą całkowitą większą od 0.";
+    return "validator.validateInteger";
   }
 };
 
 const validateSelectedOption = value =>
-  value ? undefined : "Wybierz opcję z listy.";
+  value ? undefined : "validator.validateSelectedOption";
 
 function hasDigit(string) {
   return string.match(/\d/);

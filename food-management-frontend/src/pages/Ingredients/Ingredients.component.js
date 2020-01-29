@@ -35,22 +35,27 @@ export const Ingredients = props => {
   } = props;
 
   return (
-    <LayoutMain title="Produkty">
+    <LayoutMain title={t("pageTitle.ingredients")}>
       <div>
         <div className="center-align-elem">
           <button
             className="btn btn-success "
             data-toggle="modal"
             data-target="#ingredientPropositionModal"
-            text="Edit details"
+            text="New product"
             style={{
               marginLeft: "5px"
             }}
           >
-            Dodaj nowy produkt
+            {userRole === userRoles.manager ? (
+              <>{t("button.addNewProductToDatabase")}</>
+            ) : (
+              <>{t("button.newIngredientProposition")}</>
+            )}
           </button>
           <IngredientProposition url={url} />
         </div>
+
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">
             <Field

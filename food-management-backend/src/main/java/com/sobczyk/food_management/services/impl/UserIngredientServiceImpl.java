@@ -93,8 +93,7 @@ public class UserIngredientServiceImpl implements UserIngredientService {
 
         if (i == 0) {
             throw new EntityAlreadyExistsException(
-                    "Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge.", "Brak produktu w " +
-                    "lodówce.");
+                    "Ingredient with id " + dto.getIngredient().getId() + " not exists in fridge.", "exception.productNotFoundInFridge");
         } else
             return updatedDto;
     }
@@ -112,8 +111,7 @@ public class UserIngredientServiceImpl implements UserIngredientService {
             }
         }
         if (i == 0) {
-            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists.", "Produkt nie istnieje" +
-                    ".");
+            throw new EntityAlreadyExistsException("Ingredient with id " + id + " not exists.", "exception.productNotExists");
         }
     }
 
@@ -124,18 +122,17 @@ public class UserIngredientServiceImpl implements UserIngredientService {
 
         if (dto.getIngredient()==null) {
             throw new EmptyFieldException(
-                    "Empty ingredient.", "Produkt nie moze być pusty.");
+                    "Empty ingredient.", "exception.emptyProduct");
         }
 
         if (dto.getAmount()==null) {
             throw new EmptyFieldException(
-                    "Empty amount for ingredient in fridge.", "Ilość produktu musi być większa od 0.");
+                    "Empty amount for ingredient in fridge.", "exception.amountGreater0");
         }
 
         for (UserIngredientEntity userIngredient : userEntity.getUserIngredients()) {
             if (userIngredient.getUserIngredientKey().getIngredient().getId() == dto.getIngredient().getId()) {
-                throw new EntityAlreadyExistsException("Ingredient exists in fridge.", "Produkt jest już dodany do " +
-                        "lodówki.");
+                throw new EntityAlreadyExistsException("Ingredient exists in fridge.", "exception.productAlreadyInFridge");
             }
         }
 

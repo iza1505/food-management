@@ -24,7 +24,7 @@ export const Recipe = props => {
               text="Edit recipe"
               onClick={() => handleEditRecipe()}
             >
-              Edytuj przepis
+              {t("button.editRecipe")}
             </button>
           ) : (
             <></>
@@ -46,7 +46,7 @@ export const Recipe = props => {
                   data-target="#updateRecipeStatusModalForm"
                   text="Edit recipe"
                 >
-                  Zmień status przepisu
+                  {t("button.changeRecipeStatus")}
                 </button>
                 <UpdateRecipeStatusModalForm />
               </>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
+import { withTranslation } from "react-i18next";
 
 import ChangePasswordModalForm from "./ChangePasswordModalForm.component";
 import { changePassword } from "../../../actions/user.actions";
@@ -11,22 +12,21 @@ export class ChangePasswordModalFormContainer extends Component {
   static propTypes = {
     changePassword: func,
     error: string,
-    fetching: bool
+    fetching: bool,
+    t: func
   };
 
   handleSubmit = values => {
     return this.props
       .changePassword(values.oldPassword, values.password1)
       .then(() => {
-        toast.info("Hasło zostało zmienione.");
+        toast.info(this.props.t("toastInfo.passwordHasBeenChanged"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -50,7 +50,6 @@ const mapDispatchToProps = {
   changePassword
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangePasswordModalFormContainer);
+export default withTranslation("common")(
+  connect(mapStateToProps, mapDispatchToProps)(ChangePasswordModalFormContainer)
+);

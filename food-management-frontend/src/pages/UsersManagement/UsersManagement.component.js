@@ -30,7 +30,7 @@ export const UsersManagement = props => {
     t
   } = props;
   return (
-    <LayoutMain title="Użytkownicy">
+    <LayoutMain title={t("pageTitle.users")}>
       <div>
         <div className="center-align-elem">
           <button

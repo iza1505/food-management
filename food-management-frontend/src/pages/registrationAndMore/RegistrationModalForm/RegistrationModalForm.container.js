@@ -4,6 +4,7 @@ import { func, string, bool } from "prop-types";
 import { toast } from "react-toastify";
 import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import RegistrationModalForm from "./RegistrationModalForm.component";
 import { register } from "../../../actions/user.actions";
@@ -19,6 +20,7 @@ export class RegistrationModalFormContainer extends Component {
     error: string,
     fetching: bool,
     register: func,
+    t: func,
     userRole: string
   };
 
@@ -34,15 +36,13 @@ export class RegistrationModalFormContainer extends Component {
       .register(values.login, values.email, values.password1, role)
       .then(() => {
         this.props.dispatch(reset("registrationModalForm"));
-        toast.info("Email aktywujący konto został wysłany.");
+        toast.info(this.props.t("toastInfo.confirmationEmailSend"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -71,7 +71,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegistrationModalFormContainer);
+export default withTranslation("common")(
+  connect(mapStateToProps, mapDispatchToProps)(RegistrationModalFormContainer)
+);

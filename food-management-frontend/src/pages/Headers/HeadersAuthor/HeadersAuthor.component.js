@@ -30,7 +30,7 @@ export const HeadersAuthor = props => {
   } = props;
 
   return (
-    <LayoutMain title="Moje przepisy">
+    <LayoutMain title={t("pageTitle.myRecipes")}>
       <div>
         <form autoComplete="on" className="form-container">
           <div className="center-align-elem">

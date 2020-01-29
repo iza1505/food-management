@@ -4,6 +4,7 @@ import { array, bool, func, string } from "prop-types";
 import { toast } from "react-toastify";
 import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import IngredientPropositionModalForm from "./IngredientPropositionModalForm.component";
 import {
@@ -28,6 +29,7 @@ export class IngredientPropositionModalFormContainer extends Component {
     getIngredientsAdmin: func,
     getMeasuresAction: func,
     measures: array,
+    t: func,
     url: string,
     userRole: string
   };
@@ -42,11 +44,9 @@ export class IngredientPropositionModalFormContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można pobrać listy miar.");
+          toast.error(this.props.t("toastInfo.cantDownloadMeasures"));
         }
       });
   }
@@ -85,23 +85,21 @@ export class IngredientPropositionModalFormContainer extends Component {
         JSON.parse(values.measure)
       )
       .then(() => {
-        if (this.props.userRole === userRoles.admin) {
+        if (this.props.userRole === userRoles.manager) {
           this.props.getIngredientsAdmin(this.props.url).then(() => {
             this.props.dispatch(reset("ingredientPropositionModalForm"));
-            toast.info("Produkt został dodany.");
+            toast.info(this.props.t("toastInfo.productHasBeenAdded"));
           });
         } else {
           this.props.dispatch(reset("ingredientPropositionModalForm"));
-          toast.info("Produkt został dodany do listy oczekujących.");
+          toast.info(this.props.t("toastInfo.productHasBeenSuggest"));
         }
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -137,7 +135,9 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IngredientPropositionModalFormContainer);
+export default withTranslation("common")(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(IngredientPropositionModalFormContainer)
+);

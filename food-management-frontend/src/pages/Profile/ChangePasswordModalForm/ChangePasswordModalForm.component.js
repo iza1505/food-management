@@ -29,11 +29,11 @@ const ChangePasswordModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Zmień hasło</h5>
+              <h5>{t("modal.title.changePassword")}</h5>
             </div>
             <div className="modal-body">
               <h1 className="email-information">
-                Zmień hasło podając stare i nowe spełniające wymagane kryteria.
+                {t("modal.description.changePassword")}
               </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"

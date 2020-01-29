@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { string, func } from "prop-types";
 import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
+import { withTranslation } from "react-i18next";
 
 import { confirmAccount } from "../../actions/user.actions";
 import { getError } from "../../selectors/user.selectors";
@@ -11,7 +12,8 @@ import ConfirmedEmail from "./ConfirmedEmail.component";
 class ConfirmedEmailContainer extends Component {
   static propTypes = {
     confirmAccount: func,
-    error: string
+    error: string,
+    t: func
   };
 
   state = {
@@ -25,16 +27,17 @@ class ConfirmedEmailContainer extends Component {
     this.props
       .confirmAccount(url)
       .then(() => {
-        this.setState({ information: "Twoje konto zostało potwierdzone." });
+        this.setState({
+          information: this.props.t("toastInfo.accountHasBeenConfirmed")
+        });
       })
       .catch(err => {
         if (!err.response) {
           this.setState({
-            information:
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
+            information: this.props.t("toastInfo.unreachableServer")
           });
         } else {
-          this.setState({ information: this.props.error });
+          this.setState({ information: this.props.t(this.props.error) });
         }
       });
   }
@@ -52,6 +55,8 @@ const mapDispatchToProps = {
   confirmAccount
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ConfirmedEmailContainer)
+export default withTranslation("common")(
+  withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(ConfirmedEmailContainer)
+  )
 );

@@ -4,6 +4,7 @@ import { func, number, object, string } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import { getRecipe } from "../../selectors/recipe.selectors";
 import { getRecipeDetails } from "../../actions/recipe.actions";
@@ -15,6 +16,7 @@ class RecipeContainer extends Component {
     getRecipeDetails: func,
     recipe: object,
     recipeId: number,
+    t: func,
     userLogin: string,
     userRole: string
   };
@@ -23,9 +25,9 @@ class RecipeContainer extends Component {
     super(props);
     this.props.getRecipeDetails(this.state.recipeId).catch(err => {
       if (!err.response) {
-        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
+        toast.warn(this.props.t("toastInfo.unreachableServer"));
       } else {
-        toast.error("Nie można pobrać przepisu.");
+        toast.error(this.props.t("toastInfo.cantDownloadRecipe"));
       }
     });
   }
@@ -66,6 +68,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(RecipeContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(RecipeContainer))
 );

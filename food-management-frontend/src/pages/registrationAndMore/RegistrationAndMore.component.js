@@ -11,7 +11,7 @@ import ConfirmationEmailModalForm from "./ConfirmationEmailModalForm";
 
 export const RegistrationAndMore = ({ t }) => {
   return (
-    <LayoutMain title="Dołącz | Więcej" hideTitle fullContent>
+    <LayoutMain title={t("pageTitle.signInMore")} hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
         <button
           className="btn btn-success"

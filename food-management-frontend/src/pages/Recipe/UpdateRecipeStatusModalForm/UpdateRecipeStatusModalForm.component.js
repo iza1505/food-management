@@ -83,7 +83,7 @@ const UpdateRecipeStatusModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Aktualizuj
+                  {t("button.change")}
                 </button>
                 <button
                   type="button"
@@ -91,7 +91,7 @@ const UpdateRecipeStatusModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bool, func, object } from "prop-types";
 import { toast } from "react-toastify";
 import { formValueSelector } from "redux-form";
+import { withTranslation } from "react-i18next";
 
 import UpdateRecipeStatusModalForm from "./UpdateRecipeStatusModalForm.component";
 import {
@@ -19,6 +20,7 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
     isActive: bool,
     isWaitingForAccept: bool,
     recipe: object,
+    t: func,
     updateRecipeStatus: func
   };
 
@@ -68,15 +70,13 @@ export class UpdateRecipeStatusModalFormContainer extends Component {
         values.toImprove
       )
       .then(() => {
-        toast.info("Status przepisu został zmieniony.");
+        toast.info(this.props.t("toastInfo.recipeStatusHasBeenChanged"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można zmienic statusu przepisu.");
+          toast.error(this.props.t("toastInfo.cantChangeRecipeStatus"));
         }
       });
   };
@@ -109,7 +109,9 @@ const mapDispatchToProps = {
   updateRecipeStatus
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UpdateRecipeStatusModalFormContainer);
+export default withTranslation("common")(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(UpdateRecipeStatusModalFormContainer)
+);

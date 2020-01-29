@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { reset } from "redux-form";
 import { bindActionCreators } from "redux";
+import { withTranslation } from "react-i18next";
 
 import { getLogin, getEmail, getId } from "../../selectors/user.selectors";
 import { getDetails } from "../../actions/user.actions";
@@ -16,16 +17,17 @@ class ProfileContainer extends Component {
     email: string,
     getDetails: func,
     id: number,
-    login: string
+    login: string,
+    t: func
   };
 
   constructor(props) {
     super(props);
     this.props.getDetails().catch(err => {
       if (!err.response) {
-        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
+        toast.warn(this.props.t("toastInfo.unreachableServer"));
       } else {
-        toast.error("Nie można pobrać danych.");
+        toast.error(this.props.t("toastInfo.cantDownloadData"));
       }
     });
 
@@ -36,9 +38,9 @@ class ProfileContainer extends Component {
   componentDidMount = () => {
     this.props.getDetails().catch(err => {
       if (!err.response) {
-        toast.warn("Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem.");
+        toast.warn(this.props.t("toastInfo.unreachableServer"));
       } else {
-        toast.error("Nie można pobrać danych.");
+        toast.error(this.props.t("toastInfo.cantDownloadData"));
       }
     });
   };
@@ -67,6 +69,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ProfileContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProfileContainer))
 );

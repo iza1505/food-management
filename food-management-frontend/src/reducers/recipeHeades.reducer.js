@@ -33,12 +33,21 @@ const recipeHeadersReducer = (state = initialState, action) => {
       };
     }
 
+    case `${ACTIONS.GET_HEADERS_RECIPE}_${REJECTED}`:
     case `${ACTIONS_Recipe.DELETE_RECIPE}_${REJECTED}`: {
-      return {
-        ...state,
-        fetchingHeaders: false,
-        error: action.payload.response.data.message
-      };
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingHeaders: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingHeaders: false,
+          error: null
+        };
+      }
     }
 
     case ACTIONS.RESET_HEADERS: {
@@ -51,13 +60,6 @@ const recipeHeadersReducer = (state = initialState, action) => {
         currentPage: 1
       };
     }
-
-    case `${ACTIONS.GET_HEADERS_RECIPE}_${REJECTED}`:
-      return {
-        ...state,
-        fetchingHeaders: false,
-        error: action.payload.response.data.message
-      };
 
     default:
       return state;

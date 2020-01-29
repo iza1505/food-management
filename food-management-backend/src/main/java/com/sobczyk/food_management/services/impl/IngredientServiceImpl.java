@@ -60,16 +60,15 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientDto add(IngredientDto ingredient) {
         if (repository.existsByIngredientName(ingredient.getIngredientName())) {
             throw new EntityAlreadyExistsException(
-                    "Ingredient with name " + ingredient.getIngredientName() + " already exists.", "Produkt z podaną " +
-                    "nazwą już istnieje.");
+                    "Ingredient with name " + ingredient.getIngredientName() + " already exists.", "exception.productWithNameExists");
         }
 
         if (ingredient.getIngredientName() == null) {
-            throw new EmptyFieldException("Ingredient name cannot be null", "Nazwa produktu nie może być pusta.");
+            throw new EmptyFieldException("Ingredient name cannot be null", "exception.emptyProductName");
         }
 
         if (ingredient.getMeasure() == null) {
-            throw new EmptyFieldException("Measure cannot be null", "Miara nie może być pusta.");
+            throw new EmptyFieldException("Measure cannot be null", "exception.emptyMeasure");
         }
 
         IngredientEntity ingredientEntity = convertToEntity(ingredient);
@@ -83,7 +82,7 @@ public class IngredientServiceImpl implements IngredientService {
         } else if (userEntity.getRole().getName().equals("USER")) {
             ingredientEntity.setActive(false);
         } else {
-            throw new UnknowRoleException("Unknow role.","Nieznana rola.");
+            throw new UnknowRoleException("Unknow role.","exception.unknownRole");
         }
 
         return convertToDto(repository.saveAndFlush(ingredientEntity));
@@ -121,7 +120,7 @@ public class IngredientServiceImpl implements IngredientService {
                 return headersPagination.createHeaderDto(elementsOnPage, currentPage, dtos, sortBy, ascendingSort);
 
             } else {
-                throw new UnknowRoleException("Unknow role.","Nieznana rola.");
+                throw new UnknowRoleException("Unknow role.","exception.unknownRole");
             }
         }
     }
@@ -141,14 +140,13 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientEntity findById(Long id) {
         return repository
                 .findById(id)
-                .orElseThrow(() -> new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","Produkt" +
-                        " nie istnieje."));
+                .orElseThrow(() -> new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","exception.productNotExists"));
     }
 
     @Override
     public void deleteById(Long id) {
         if (!repository.existsById(id)) {
-            throw new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","Produkt nie istnieje.");
+            throw new FMEntityNotFoundException("Ingredient with id " + id + " not exists.","exception.productNotExists");
         }
 
 

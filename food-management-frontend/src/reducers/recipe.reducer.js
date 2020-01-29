@@ -34,21 +34,38 @@ const recipeReducer = (state = initialState, action) => {
       };
     }
 
-    case `${ACTIONS.GET_RECIPE}_${REJECTED}`:
-      return {
-        fetchingRecipe: false,
-        initialStaterecipe: {},
-        error: action.payload.response.data.message
-      };
+    case `${ACTIONS.GET_RECIPE}_${REJECTED}`: {
+      if (action.payload.response) {
+        return {
+          fetchingRecipe: false,
+          initialStaterecipe: {},
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          fetchingRecipe: false,
+          initialStaterecipe: {},
+          error: null
+        };
+      }
+    }
 
     case `${ACTIONS.UPDATE_RECIPE}_${REJECTED}`:
     case `${ACTIONS.UPDATE_RECIPE_STATUS}_${REJECTED}`:
     case `${ACTIONS.ADD_RECIPE}_${REJECTED}`: {
-      return {
-        ...state,
-        fetchingRecipe: false,
-        error: action.payload.response.data.message
-      };
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingRecipe: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingRecipe: false,
+          error: null
+        };
+      }
     }
 
     default:

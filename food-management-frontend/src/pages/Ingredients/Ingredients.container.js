@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import {
   getPageCount,
@@ -36,6 +37,7 @@ class IngredientsContainer extends Component {
     pageCount: number,
     resetCurrentPageOnSubmit: func,
     resetIngredients: func,
+    t: func,
     updateIngredient: func,
     userRole: string
   };
@@ -123,11 +125,9 @@ class IngredientsContainer extends Component {
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać przepisów.");
+            toast.error(this.props.t("toastInfo.cantDownloadProducts"));
           }
         });
     }
@@ -163,22 +163,18 @@ class IngredientsContainer extends Component {
       .then(() => {
         this.props.getIngredientsAdmin(this.createUrl()).catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać produktów.");
+            toast.error(this.props.t("toastInfo.cantDownloadProducts"));
           }
         });
-        toast.info("Produkt aktywowany.");
+        toast.info(this.props.t("toastInfo.productActivated"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -187,24 +183,20 @@ class IngredientsContainer extends Component {
     this.props
       .deleteIngredient(id)
       .then(() => {
-        toast.info("Produkt został usunięty.");
+        toast.info(this.props.t("toastInfo.productHasBeenDeleted"));
         this.props.getIngredientsAdmin(this.createUrl()).catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać produktów.");
+            toast.error(this.props.t("toastInfo.cantDownloadProducts"));
           }
         });
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   };
@@ -245,6 +237,6 @@ const mapStateToProps = state => ({
   userRole: getRole(state)
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(IngredientsContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(IngredientsContainer))
 );

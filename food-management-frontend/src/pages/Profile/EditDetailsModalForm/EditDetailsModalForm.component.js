@@ -22,10 +22,12 @@ const EditDetailsModalForm = props => {
         <div role="document" className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Edytuj dane</h5>
+              <h5>{t("modal.title.editUser")}</h5>
             </div>
             <div className="modal-body">
-              <h1 className="email-information">Edytuj swoje dane.</h1>
+              <h1 className="email-information">
+                {t("modal.description.editUser")}
+              </h1>
               <Field
                 className="form-control mb-2 mr-sm-2"
                 name="email"

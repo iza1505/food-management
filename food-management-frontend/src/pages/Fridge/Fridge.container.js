@@ -4,6 +4,7 @@ import { array, bool, func } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import Fridge from "./Fridge.component";
 import {
@@ -27,6 +28,7 @@ class FridgeContainer extends Component {
     getIngredientsUser: func,
     getSortedIngredientsAction: func,
     ingredients: array,
+    t: func,
     updateIngredientUser: func
   };
 
@@ -52,11 +54,9 @@ class FridgeContainer extends Component {
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można pobrać produktów.");
+          toast.error(this.props.t("toastInfo.cantDownloadProducts"));
         }
       });
   }
@@ -109,22 +109,18 @@ class FridgeContainer extends Component {
       .then(() => {
         this.props.getIngredientsUser().catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać produktów.");
+            toast.error(this.props.t("toastInfo.cantDownloadProducts"));
           }
         });
         this.updateAvaliableIngredientsToAdd();
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error("Nie można usunąć produktu.");
+          toast.error(this.props.t("toastInfo.cantDeleteProduct"));
         }
       });
   }
@@ -141,26 +137,22 @@ class FridgeContainer extends Component {
         .then(() => {
           this.props.getIngredientsUser().catch(err => {
             if (!err.response) {
-              toast.warn(
-                "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-              );
+              toast.warn(this.props.t("toastInfo.unreachableServer"));
             } else {
-              toast.error("Nie można pobrać produktów.");
+              toast.error(this.props.t("toastInfo.cantDownloadProducts"));
             }
           });
-          toast.info("Ilość została zmieniona.");
+          toast.info(this.props.t("toastInfo.quantityHasBeenChanged"));
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można zaktualizować produktu.");
+            toast.error(this.props.t("toastInfo.cantUpdateProduct"));
           }
         });
     } else {
-      toast.error("Ilość musi być liczbą całkowitą większą od 0.");
+      toast.error(this.props.t("toastInfo.amountMustBeInteger"));
     }
   }
 
@@ -193,6 +185,6 @@ const mapStateToProps = state => ({
   allSortedIngredients: getSortedIngredients(state)
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(FridgeContainer)
+export default withTranslation("common")(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(FridgeContainer))
 );

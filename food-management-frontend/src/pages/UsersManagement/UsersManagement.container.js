@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import querySearch from "query-string";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { withTranslation } from "react-i18next";
 
 import {
   getUsers,
@@ -38,6 +39,7 @@ class UsersManagementContainer extends Component {
     pageCount: number,
     resetCurrentPageOnSubmit: func,
     resetUsers: func,
+    t: func,
     userId: number,
     users: array
   };
@@ -129,11 +131,9 @@ class UsersManagementContainer extends Component {
         })
         .catch(err => {
           if (!err.response) {
-            toast.warn(
-              "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-            );
+            toast.warn(this.props.t("toastInfo.unreachableServer"));
           } else {
-            toast.error("Nie można pobrać użytkowników.");
+            toast.error(this.props.t("toastInfo.cantDownloadUsers"));
           }
         });
     }
@@ -184,15 +184,13 @@ class UsersManagementContainer extends Component {
       .changeAccountStatus(id, e.target.checked, version)
       .then(() => {
         this.props.getUsersAction(this.createUrl());
-        toast.info("Status użytkownika został zmieniony.");
+        toast.info(this.props.t("toastInfo.userStatusHasBeenChanged"));
       })
       .catch(err => {
         if (!err.response) {
-          toast.warn(
-            "Serwer jest nieosiągalny. Sprawdź swoje połączenie z internetem."
-          );
+          toast.warn(this.props.t("toastInfo.unreachableServer"));
         } else {
-          toast.error(this.props.error);
+          toast.error(this.props.t(this.props.error));
         }
       });
   }
@@ -231,6 +229,8 @@ const mapStateToProps = state => ({
   error: getError(state)
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(UsersManagementContainer)
+export default withTranslation("common")(
+  withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(UsersManagementContainer)
+  )
 );

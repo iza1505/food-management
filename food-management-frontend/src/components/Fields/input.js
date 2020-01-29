@@ -1,5 +1,6 @@
 import React from "react";
 import { bool, string, object } from "prop-types";
+import { withTranslation } from "react-i18next";
 
 const renderInput = ({
   input,
@@ -8,7 +9,8 @@ const renderInput = ({
   type,
   className,
   disabled,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
+  t
 }) => {
   return (
     <div>
@@ -23,8 +25,8 @@ const renderInput = ({
           disabled={disabled}
         />
         {touched &&
-          ((error && <span style={{ color: "red" }}>{error}</span>) ||
-            (warning && <span style={{ color: "yellow" }}>{warning}</span>))}
+          ((error && <span style={{ color: "red" }}>{t(error)}</span>) ||
+            (warning && <span style={{ color: "yellow" }}>{t(warning)}</span>))}
       </div>
     </div>
   );
@@ -40,4 +42,4 @@ renderInput.propTypes = {
   className: string
 };
 
-export default renderInput;
+export default withTranslation("common")(renderInput);

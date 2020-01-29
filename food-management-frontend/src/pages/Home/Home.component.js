@@ -8,7 +8,7 @@ import background from "../../assets/background-home.jpg";
 export const Home = props => {
   const { login, t } = props;
   return (
-    <LayoutMain title="Strona główna" hideTitle fullContent>
+    <LayoutMain title={t("pageTitle.home")} hideTitle fullContent>
       <div>
         <div
           id="login-screen"

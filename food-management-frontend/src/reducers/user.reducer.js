@@ -80,11 +80,19 @@ const userReducer = (state = initialState, action) => {
     case `${ACTIONS.LOGIN_USER}_${REJECTED}`:
     case `${ACTIONS.CONFIRMATION_EMAIL}_${REJECTED}`:
     case `${ACTIONS.CHANGE_PASSWORD}_${REJECTED}`: {
-      return {
-        ...state,
-        fetchingUser: false,
-        error: action.payload.response.data.message
-      };
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingUser: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingUser: false,
+          error: null
+        };
+      }
     }
     case ACTIONS.LOGOUT_USER: {
       return initialState;

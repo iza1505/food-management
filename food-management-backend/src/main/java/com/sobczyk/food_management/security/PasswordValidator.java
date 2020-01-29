@@ -25,8 +25,7 @@ public class PasswordValidator {
                 (lowercase && !checkLowercase(password) ||
                         (number && !checkNumber(password))
                 )) {
-            throw new PasswordValidatorException("Password does not meet the basic conditions.","Hasło nie spełnia " +
-                    "wymagań walidacji.");
+            throw new PasswordValidatorException("Password does not meet the basic conditions.","exception.incorrectPasswordValidation");
         }
     }
 

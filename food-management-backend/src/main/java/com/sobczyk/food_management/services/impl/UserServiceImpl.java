@@ -80,28 +80,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public void add(RegistrationDto registrationDto) {
         if (registrationDto.getLogin() == null) {
-            throw new EmptyFieldException("Login cannot be null", "Login nie może być pusty.");
+            throw new EmptyFieldException("Login cannot be null", "exception.emptyLogin");
         }
 
         if (repository.existsByLogin(registrationDto.getLogin())) {
             throw new EntityAlreadyExistsException(
-                    "User with login " + registrationDto.getLogin() + " already exists.", "Użytkownik z podanym " +
-                    "loginem już istnieje");
+                    "User with login " + registrationDto.getLogin() + " already exists.", "exception.userWithLoginExists");
         } else {
             loginValidator.checkBasicConditions(registrationDto.getLogin());
         }
 
         if (registrationDto.getEmail() == null) {
-            throw new EmptyFieldException("Email cannot be null", "Email nie może być pusty.");
+            throw new EmptyFieldException("Email cannot be null", "exception.emptyEmail");
         }
         if (repository.existsByEmail(registrationDto.getEmail())) {
             throw new EntityAlreadyExistsException(
-                    "User with email " + registrationDto.getEmail() + " already exists.", "Użytkownik z podanym " +
-                    "mailem już istnieje.");
+                    "User with email " + registrationDto.getEmail() + " already exists.", "exception.userWithEmailExists");
         }
 
         if (registrationDto.getPassword() == null) {
-            throw new EmptyFieldException("Password cannot be null", "Hasło nie może być puste.");
+            throw new EmptyFieldException("Password cannot be null", "exception.emptyPassword");
         } else {
             passwordValidator.checkBasicConditions(registrationDto.getPassword());
         }
@@ -118,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
         if(loggedUser != null && loggedUser.getRole().getName()== "ADMINISTRATOR"){
             if (registrationDto.getRole() == null) {
-                throw new EmptyFieldException("Role cannot be null", "Rola nie może być pusta.");
+                throw new EmptyFieldException("Role cannot be null", "exception.emptyRole");
             } else {
                 userEntity.setRole(roleService.findByName(registrationDto.getRole()));
             }
@@ -159,7 +157,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity != null) {
             if (userEntity.getConfrimationDate() != null) {
                 throw new ConfirmedAccountException("Account with id " + userEntity.getId() + " is confirmed",
-                                                    "Konto jest już zatwierdzone.");
+                                                    "exception.accountAlreadyConfirmed");
             }
             if (passwordEncoder
                     .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
@@ -169,15 +167,14 @@ public class UserServiceImpl implements UserService {
                     repository.save(userEntity);
                 } else {
                     throw new ConfirmedAccountException("Account with id " + userEntity.getId() + " is activated.",
-                                                        "Konto jest już aktywne.");
+                                                        "exception.accountAlreadyActive");
                 }
             } else {
                 throw new ConfirmedAccountException("Registration password is different with current password for " +
-                                                            "account with id " + userEntity.getId(), "Hasło podane " +
-                        "podczas rejestracji i obecne różnią się.");
+                                                            "account with id " + userEntity.getId(), "exception.differentPasswords");
             }
         } else {
-            throw new FMEntityNotFoundException("User with email " + email + " not exists.","Użytkownik nie istnieje.");
+            throw new FMEntityNotFoundException("User with email " + email + " not exists.","exception.userNotExists");
         }
     }
 
@@ -245,8 +242,7 @@ public class UserServiceImpl implements UserService {
         if(userEntity.getLogin().equals(dto.getLogin())){
             if(userEntity.getConfrimationDate()==null){
                 throw new IncompatibilityDataException("Can't reset password of not confirmed account. Id account: " + userEntity.getId(),
-                                                       "Aby " +
-                                                               "zresetować hasło potwierdź utworzone konto.");
+                                                       "exception.firstConfirmAccount");
             }
             String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
             String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
@@ -258,7 +254,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IncompatibilityDataException("User with this login "+dto.getLogin()+" and email "+dto.getEmail()+" not " +
                     "exists.",
-                                                   "Użytkownik nie istnieje.");
+                                                   "exception.userNotExists");
         }
 
     }
@@ -271,9 +267,8 @@ public class UserServiceImpl implements UserService {
                 .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
             userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
         } else {
-            throw new IncompatibilityDataException("The password cannot be reset again using the same token.","Hasło " +
-                    "nie może być ponownie resetowane " +
-                    "przy użyciu tego samego linku. Aby zresetować hasło wyślij ponownie maila resetującego hasło.");
+            throw new IncompatibilityDataException("The password cannot be reset again using the same token.",
+                                                   "exception.passwordResetAgain");
         }
 
     }
@@ -287,10 +282,8 @@ public class UserServiceImpl implements UserService {
             userEntity.setPasswordHash(newPasswordHash);
             repository.save(userEntity);
         } else {
-            throw new IncompatibilityDataException("Old password is incorrect. User id: " + userEntity.getId(),"Podaj " +
-                    "poprawne " +
-                    "stare hasło aby " +
-                    "zmienić je na nowe.");
+            throw new IncompatibilityDataException("Old password is incorrect. User id: " + userEntity.getId(),
+                                                   "exception.incorrectOldPassword");
         }
     }
 
@@ -306,9 +299,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntitySession = userSessionService.getUser();
         if (userEntitySession.getId().equals(dto.getId())) {
             throw new IncompatibilityDataException("Can't change status own account. User id " + userEntitySession.getId(),
-                                                   "Nie można " +
-                    "zmienić " +
-                    "statusu własnego konta.");
+                                                   "exception.changeStatusOwnAccoutn");
         }
         UserEntity userEntity = findById(dto.getId());
         Validator.validateVersion(userEntity, dto.getVersion());
@@ -345,7 +336,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IncompatibilityDataException("User with this login "+ userEntity.getLogin() +" and email "+userEntity.getEmail()+
                                                            " not " +
-                                                           "exists.","Użytkownik nie istnieje.");
+                                                           "exists.","exception.userNotExists");
         }
 
 

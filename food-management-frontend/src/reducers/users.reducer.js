@@ -31,12 +31,21 @@ const usersReducer = (state = initialState, action) => {
     }
 
     case `${ACTIONS.GET_USERS}_${REJECTED}`:
-    case `${ACTIONS.CHANGE_ACCOUNT_STATUS}_${REJECTED}`:
-      return {
-        ...state,
-        fetchingUsers: false,
-        error: action.payload.response.data.message
-      };
+    case `${ACTIONS.CHANGE_ACCOUNT_STATUS}_${REJECTED}`: {
+      if (action.payload.response) {
+        return {
+          ...state,
+          fetchingUsers: false,
+          error: action.payload.response.data.message
+        };
+      } else {
+        return {
+          ...state,
+          fetchingUsers: false,
+          error: null
+        };
+      }
+    }
 
     case ACTIONS.RESET_CURRENTPAGE_ON_SUBMIT: {
       return {

@@ -61,7 +61,7 @@ const ResetPasswordModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Resetuj
+                  {t("button.reset")}
                 </button>
                 <button
                   type="button"
@@ -69,7 +69,7 @@ const ResetPasswordModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>

@@ -21,7 +21,32 @@
       "logout": "Wyloguj"
     }
   },
-  "button": { "login": "Zaloguj", "signInMore": "Dołącz/Więcej..." },
+  "button": {
+    "login": "Zaloguj",
+    "signInMore": "Dołącz/Więcej...",
+    "registration": "Rejestracja",
+    "resetPassword": "Resetuj hasło",
+    "sendConfirmMail": "Wyślij email aktywujący konto",
+    "createAccount": "Utwórz konto",
+    "close": "Zamknij",
+    "reset": "Resetuj",
+    "send": "Wyślij",
+    "editUser": "Edytuj dane",
+    "changePassword": "Zmień hasło",
+    "change": "Zmień",
+    "addProductToFridge": "Dodaj produkt do lodówki",
+    "newIngredientProposition": "Zaproponuj nowy składnik",
+    "add": "Dodaj",
+    "delete": "Usuń",
+    "search": "Szukaj",
+    "editRecipe": "Edytuj przepis",
+    "create": "Utwórz",
+    "deleteIngredientFromList": "Usuń składnik",
+    "addIngredientToList": "Dodaj składnik do listy",
+    "update": "Aktualizuj",
+    "addNewUser": "Dodaj nowego użytkownika",
+    "activate": "Aktywuj"
+  },
   "label": {
     "login": "Nazwa użytkownika:",
     "password": "Hasło:",

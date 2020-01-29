@@ -59,7 +59,7 @@ export const EditRecipe = props => {
                   title="Add ingr to list"
                   onClick={() => handleDeteleIngredientFromListButton(index)}
                 >
-                  Usuń składnik
+                  {t("button.deleteIngredientFromList")}
                 </button>
               </div>
             ))
@@ -94,7 +94,7 @@ export const EditRecipe = props => {
               title="Add ingr to list"
               onClick={() => handleAddIngredientToList()}
             >
-              Dodaj składnik do listy
+              {t("button.addIngredientToList")}
             </button>
           </div>
 
@@ -116,8 +116,7 @@ export const EditRecipe = props => {
               type="submit"
               disabled={fetching}
             >
-              {" "}
-              Aktualizuj{" "}
+              {t("button.update")}
             </button>
           </div>
         </Form>

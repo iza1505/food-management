@@ -95,8 +95,7 @@ export const HeadersUser = props => {
             onClick={handleClick}
             disabled={fetching}
           >
-            {" "}
-            Szukaj{" "}
+            {t("button.search")}
           </button>
         </form>
         <div>

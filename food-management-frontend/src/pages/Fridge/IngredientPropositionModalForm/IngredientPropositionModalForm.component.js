@@ -64,7 +64,7 @@ const IngredientPropositionModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Dodaj
+                  {t("button.add")}
                 </button>
                 <button
                   type="button"
@@ -72,7 +72,7 @@ const IngredientPropositionModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>

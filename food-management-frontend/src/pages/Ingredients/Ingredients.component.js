@@ -94,8 +94,7 @@ export const Ingredients = props => {
             type="submit"
             onClick={handleClick}
           >
-            {" "}
-            Szukaj{" "}
+            {t("button.search")}
           </button>
         </form>
         <div>
@@ -106,7 +105,7 @@ export const Ingredients = props => {
                 <th scope="col">{t("tableLabel.measure")}</th>
                 <th scope="col">{t("tableLabel.active")}</th>
                 {userRole === userRoles.manager ? (
-                  <th scope="col">Opcje</th>
+                  <th scope="col">{t("tableLabel.options")}</th>
                 ) : (
                   <></>
                 )}
@@ -132,7 +131,7 @@ export const Ingredients = props => {
                               handleActiveIngredient(elem.id, elem.version)
                             }
                           >
-                            Aktywuj
+                            {t("button.activate")}
                           </button>
                           <span className="table-remove">
                             <button
@@ -141,7 +140,7 @@ export const Ingredients = props => {
                               className="btn btn-danger btn-rounded btn-sm my-0"
                               onClick={() => handleDeleteIngredient(elem.id)}
                             >
-                              Usuń
+                              {t("button.delete")}
                             </button>
                           </span>
                         </td>

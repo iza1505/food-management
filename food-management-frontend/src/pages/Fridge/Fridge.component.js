@@ -32,7 +32,7 @@ export const Fridge = props => {
             data-target="#addIngredientToFridgeModal"
             text="Edit details"
           >
-            Dodaj produkt do lodówki
+            {t("button.addProductToFridge")}
           </button>
           <AddIngredientToFridge
             avaliableIngredientsToAddToFridge={
@@ -49,7 +49,7 @@ export const Fridge = props => {
               marginLeft: "5px"
             }}
           >
-            Zasugeruj nowy produkt
+            {t("button.newIngredientProposition")}
           </button>
         </div>
         <div className="row">
@@ -100,7 +100,7 @@ export const Fridge = props => {
                                 handleDeleteIngredient(elem.ingredient.id)
                               }
                             >
-                              Usuń
+                              {t("button.delete")}
                             </button>
                           </span>
                         </td>
@@ -158,7 +158,7 @@ export const Fridge = props => {
                                   handleDeleteIngredient(elem.ingredient.id)
                                 }
                               >
-                                Usuń
+                                {t("button.delete")}
                               </button>
                             </span>
                           </td>

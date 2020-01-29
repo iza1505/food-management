@@ -23,7 +23,29 @@
   },
   "button": {
     "login": "Log in",
-    "signInMore": "Sign in/More..."
+    "signInMore": "Sign in/More...",
+    "registration": "Registration",
+    "resetPassword": "Reset password",
+    "sendConfirmMail": "Send activation account email",
+    "createAccount": "Create account",
+    "close": "Close",
+    "reset": "Reset",
+    "send": "Send",
+    "editUser": "Edit details",
+    "changePassword": "Change password",
+    "change": "Change",
+    "addProductToFridge": "Add product to fridge",
+    "newIngredientProposition": "Propose new ingredient",
+    "add": "Add",
+    "delete": "Delete",
+    "search": "Search",
+    "editRecipe": "Edit recipe",
+    "create": "Create",
+    "deleteIngredientFromList": "Delete ingredient",
+    "addIngredientToList": "Add ingredient to list",
+    "update": "Update",
+    "addNewUser": "Add new user",
+    "activate": "Activate"
   },
   "label": {
     "login": "Login:",
@@ -65,7 +87,8 @@
     "oldPassword": "Old password",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password",
-    "toImprove": "To improve"
+    "toImprove": "To improve",
+    "options": "Options"
   },
   "tableLabel": {
     "title": "Title",

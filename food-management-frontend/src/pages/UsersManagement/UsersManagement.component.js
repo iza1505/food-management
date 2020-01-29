@@ -42,7 +42,7 @@ export const UsersManagement = props => {
               marginLeft: "5px"
             }}
           >
-            Dodaj nowego użytkownika
+            {t("button.addNewUser")}
           </button>
           <RegistrationModalForm />
         </div>
@@ -86,8 +86,7 @@ export const UsersManagement = props => {
             type="submit"
             onClick={handleClick}
           >
-            {" "}
-            Szukaj{" "}
+            {t("button.search")}
           </button>
         </form>
         <div>

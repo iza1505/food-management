@@ -74,8 +74,7 @@ export const HeadersAuthor = props => {
             type="submit"
             onClick={handleClick}
           >
-            {" "}
-            Szukaj{" "}
+            {t("button.search")}
           </button>
         </form>
         <div>
@@ -104,16 +103,15 @@ export const HeadersAuthor = props => {
                       text="Edit recipe"
                       onClick={() => handleEditRecipe(elem.id)}
                     >
-                      Edytuj przepis
+                      {t("button.editRecipe")}
                     </button>
                     <span className="table-remove">
                       <button
-                        //disabled={fetchingIngredients}
                         type="button"
                         className="btn btn-danger btn-rounded btn-sm my-0"
                         onClick={() => handleDeleteRecipe(elem.id)}
                       >
-                        Usuń
+                        {t("button.delete")}
                       </button>
                     </span>
                   </td>

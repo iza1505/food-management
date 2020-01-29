@@ -77,7 +77,7 @@ const ChangePasswordModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Zmień
+                  {t("button.change")}
                 </button>
                 <button
                   type="button"
@@ -85,7 +85,7 @@ const ChangePasswordModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>

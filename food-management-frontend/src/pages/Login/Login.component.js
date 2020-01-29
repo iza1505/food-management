@@ -41,8 +41,7 @@ export const Login = props => {
           />
 
           <button className="btn btn-success" type="submit" disabled={fetching}>
-            {" "}
-            Zaloguj{" "}
+            {t("button.login")}
           </button>
           <MyLoader visible={fetching} />
         </Form>

@@ -47,7 +47,7 @@ export const CreateRecipe = props => {
             validate={[validateRequired, validateInteger]}
             component={input}
           />
-          <label>Składniki:</label>
+          <label>{t("label.ingredients")}</label>
           {selectedIngredients ? (
             selectedIngredients.map((elem, index) => (
               <div key={index}>
@@ -59,7 +59,7 @@ export const CreateRecipe = props => {
                   title="Add ingr to list"
                   onClick={() => handleDeteleIngredientFromListButton(index)}
                 >
-                  Usuń składnik
+                  {t("button.deleteIngredientFromList")}
                 </button>
               </div>
             ))
@@ -94,7 +94,7 @@ export const CreateRecipe = props => {
               title="Add ingr to list"
               onClick={() => handleAddIngredientToList()}
             >
-              Dodaj składnik do listy
+              {t("button.addIngredientToList")}
             </button>
           </div>
 
@@ -116,8 +116,7 @@ export const CreateRecipe = props => {
               type="submit"
               disabled={fetching}
             >
-              {" "}
-              Utwórz{" "}
+              {t("button.create")}
             </button>
           </div>
         </Form>

@@ -63,7 +63,7 @@ const AddIngredientToFridgeModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Dodaj
+                  {t("button.add")}
                 </button>
                 <button
                   type="button"
@@ -71,7 +71,7 @@ const AddIngredientToFridgeModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>

@@ -1,12 +1,14 @@
 import React from "react";
 import { func, string } from "prop-types";
 import { Form, reduxForm, reset, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import { validateRequired, validateEmail } from "../../Validators/Validators";
 
 const EditDetailsModalForm = props => {
-  const { handleSubmit, email } = props;
+  const { handleSubmit, email, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -36,14 +38,14 @@ const EditDetailsModalForm = props => {
               />
               <div className="modal-footer">
                 <button className="btn btn-success" type="submit">
-                  Wyślij
+                  {t("button.send")}
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>
@@ -59,8 +61,12 @@ EditDetailsModalForm.propTypes = {
   handleSubmit: func
 };
 
-export default reduxForm({
-  form: "editDetailsModalForm",
-  enableReinitialize: true,
-  onSubmitSuccess: (result, dispatch) => dispatch(reset("editDetailsModalForm"))
-})(EditDetailsModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "editDetailsModalForm",
+    enableReinitialize: true,
+    onSubmitSuccess: (result, dispatch) =>
+      dispatch(reset("editDetailsModalForm"))
+  })
+)(EditDetailsModalForm);

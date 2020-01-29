@@ -1,6 +1,8 @@
 import React from "react";
 import { bool, func } from "prop-types";
 import { Form, reduxForm, Field } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import input from "../../../components/Fields/input";
 import MyLoader from "../../../components/Loader/loader.component";
@@ -11,7 +13,7 @@ import {
 } from "../../Validators/Validators";
 
 const ConfirmationEmailModalForm = props => {
-  const { handleSubmit, fetching } = props;
+  const { handleSubmit, fetching, t } = props;
   return (
     <Form onSubmit={handleSubmit}>
       <div
@@ -36,8 +38,8 @@ const ConfirmationEmailModalForm = props => {
                 name="login"
                 id="login"
                 type="text"
-                placeholder="Login"
-                label="Login:"
+                placeholder={t("placeholder.login")}
+                label={t("label.login")}
                 validate={[validateRequired, validateLogin]}
                 component={input}
               />
@@ -59,7 +61,7 @@ const ConfirmationEmailModalForm = props => {
                   type="submit"
                   disabled={fetching}
                 >
-                  Wyślij
+                  {t("button.send")}
                 </button>
                 <button
                   type="button"
@@ -67,7 +69,7 @@ const ConfirmationEmailModalForm = props => {
                   data-dismiss="modal"
                   disabled={fetching}
                 >
-                  Zamknij
+                  {t("button.close")}
                 </button>
               </div>
             </div>
@@ -83,7 +85,10 @@ ConfirmationEmailModalForm.propTypes = {
   handleSubmit: func
 };
 
-export default reduxForm({
-  form: "confirmationEmailModalForm",
-  enableReinitialize: true
-})(ConfirmationEmailModalForm);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "confirmationEmailModalForm",
+    enableReinitialize: true
+  })
+)(ConfirmationEmailModalForm);

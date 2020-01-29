@@ -1,5 +1,7 @@
 import React from "react";
 import { reduxForm } from "redux-form";
+import { compose } from "lodash/fp";
+import { withTranslation } from "react-i18next";
 
 import LayoutMain from "../../components/layouts/MainLayout";
 import background from "../../assets/backgroundUnauth.jpg";
@@ -7,7 +9,7 @@ import RegistrationModalForm from "./RegistrationModalForm";
 import ResetPasswordModalForm from "./ResetPasswordModalForm";
 import ConfirmationEmailModalForm from "./ConfirmationEmailModalForm";
 
-export const RegistrationAndMore = props => {
+export const RegistrationAndMore = ({ t }) => {
   return (
     <LayoutMain title="Dołącz | Więcej" hideTitle fullContent>
       <div id="login-screen" style={{ backgroundImage: `url(${background})` }}>
@@ -17,7 +19,7 @@ export const RegistrationAndMore = props => {
           data-target="#registrationModal"
           text="Registration"
         >
-          Rejestracja
+          {t("button.registration")}
         </button>
         <RegistrationModalForm />
         <button
@@ -29,7 +31,7 @@ export const RegistrationAndMore = props => {
             marginLeft: "5px"
           }}
         >
-          Resetuj hasło
+          {t("button.resetPassword")}
         </button>
         <ResetPasswordModalForm />
         <button
@@ -41,7 +43,7 @@ export const RegistrationAndMore = props => {
             marginLeft: "5px"
           }}
         >
-          Wyślij email aktywujący konto
+          {t("button.sendConfirmMail")}
         </button>
         <ConfirmationEmailModalForm />
       </div>
@@ -49,6 +51,9 @@ export const RegistrationAndMore = props => {
   );
 };
 
-export default reduxForm({
-  form: "registrationform"
-})(RegistrationAndMore);
+export default compose(
+  withTranslation("common"),
+  reduxForm({
+    form: "registrationform"
+  })
+)(RegistrationAndMore);

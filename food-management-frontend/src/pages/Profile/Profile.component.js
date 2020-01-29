@@ -22,7 +22,7 @@ export const Profile = props => {
             data-target="#editDetailsModal"
             text="Edit details"
           >
-            Edytuj dane
+            {t("button.editUser")}
           </button>
           <EditDetailsModalForm />
 
@@ -35,7 +35,7 @@ export const Profile = props => {
               marginLeft: "5px"
             }}
           >
-            Zmień hasło
+            {t("button.changePassword")}
           </button>
           <ChangePasswordModalForm />
         </div>

@@ -139,6 +139,7 @@
   "pageTitle": {
     "home": "Strona główna",
     "recipes": "Przepisy",
+    "recipe": "Przepis",
     "myRecipes": "Moje przepisy",
     "createRecipe": "Utwórz przepis",
     "editRecipe": "Edytuj przepis",
@@ -251,6 +252,9 @@
     "inactiveAccount": "Konto niekaktywne.",
     "userWithLoginNotExists": "Użytkownik z podanym loginem nie istnieje.",
     "unknownMeasure": "Nieznana miara.",
-    "recipeNotExists": "Nie znaleziono przepisu."
+    "recipeNotExists": "Nie znaleziono przepisu.",
+    "unknown": "Nieznany błąd.",
+    "token": "Aby móc korzystać ze strony, zaloguj się.",
+    "passwordToken": "Token resetujący hasło stracił ważność."
   }
 }

@@ -4,7 +4,7 @@ const { admin, user, manager } = userRoles;
 
 const navigationItems = [
   {
-    text: "navBar.recipes.header", //"Przepisy",
+    text: "navBar.recipes.header", 
     canAccess: [admin, user, manager],
     subItems: [
       {

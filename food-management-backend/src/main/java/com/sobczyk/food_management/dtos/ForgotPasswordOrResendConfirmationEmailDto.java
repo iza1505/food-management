@@ -14,4 +14,6 @@ public class ForgotPasswordOrResendConfirmationEmailDto {
 
     @NotNull
     public String email;
+
+    public String language;
 }

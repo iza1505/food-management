@@ -33,10 +33,6 @@ const checkIfUserCanPerformRequest = ({ dispatch }, state, action) => {
   const loggedStatus = getLoggedStatus(state);
   const expDate = getTokenExpDate(state);
   const currentTimeWOMs = Math.floor(Date.now() / 1000);
-  // TODO: If you have 5 minutes left to expire token and you are still doing something in the system, refresh token.
-  // if ((currentTimeWOMs - 300) > expDate) {
-  //  refreshToken(getToken(state))(dispatch);
-  // }
   if (currentTimeWOMs > expDate && expDate !==null) {
     logoutUser()(dispatch);
   }

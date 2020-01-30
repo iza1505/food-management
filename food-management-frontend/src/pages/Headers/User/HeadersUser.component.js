@@ -31,7 +31,6 @@ export const HeadersUser = props => {
     fetching,
     t
   } = props;
-  //console.log("component " + JSON.stringify(props));
   return (
     <LayoutMain title={t("pageTitle.recipes")}>
       <div>
@@ -93,7 +92,7 @@ export const HeadersUser = props => {
             name="submit_button"
             type="submit"
             onClick={handleClick}
-            //disabled={fetching}
+            disabled={fetching}
           >
             {t("button.search")}
           </button>

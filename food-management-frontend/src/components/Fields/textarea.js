@@ -1,6 +1,7 @@
 import React from "react";
 import { bool, string, object } from "prop-types";
 import TextareaAutosize from "react-textarea-autosize";
+import { withTranslation } from "react-i18next";
 
 const renderTextArea = ({
   input,
@@ -9,7 +10,8 @@ const renderTextArea = ({
   type,
   className,
   disabled,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
+  t
 }) => {
   return (
     <div>
@@ -24,8 +26,8 @@ const renderTextArea = ({
           disabled={disabled}
         />
         {touched &&
-          ((error && <span style={{ color: "red" }}>{error}</span>) ||
-            (warning && <span style={{ color: "yellow" }}>{warning}</span>))}
+          ((error && <span style={{ color: "red" }}>{t(error)}</span>) ||
+            (warning && <span style={{ color: "yellow" }}>{t(warning)}</span>))}
       </div>
     </div>
   );
@@ -41,4 +43,4 @@ renderTextArea.propTypes = {
   className: string
 };
 
-export default renderTextArea;
+export default withTranslation("common")(renderTextArea);

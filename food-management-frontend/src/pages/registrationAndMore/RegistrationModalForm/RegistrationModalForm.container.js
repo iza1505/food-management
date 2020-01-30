@@ -11,7 +11,8 @@ import { register } from "../../../actions/user.actions";
 import {
   getRole,
   getFetchingUser,
-  getError
+  getError,
+  getLogin
 } from "../../../selectors/user.selectors";
 
 export class RegistrationModalFormContainer extends Component {
@@ -21,6 +22,7 @@ export class RegistrationModalFormContainer extends Component {
     fetching: bool,
     register: func,
     t: func,
+    userLogin: string,
     userRole: string
   };
 
@@ -33,7 +35,13 @@ export class RegistrationModalFormContainer extends Component {
       role = null;
     }
     return this.props
-      .register(values.login, values.email, values.password1, role)
+      .register(
+        values.login,
+        values.email,
+        values.password1,
+        role,
+        this.props.userLogin
+      )
       .then(() => {
         this.props.dispatch(reset("registrationModalForm"));
         toast.info(this.props.t("toastInfo.confirmationEmailSend"));
@@ -61,7 +69,8 @@ export class RegistrationModalFormContainer extends Component {
 const mapStateToProps = state => ({
   userRole: getRole(state),
   fetching: getFetchingUser(state),
-  error: getError(state)
+  error: getError(state),
+  userLogin: getLogin(state)
 });
 
 function mapDispatchToProps(dispatch) {

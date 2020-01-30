@@ -15,7 +15,7 @@ public interface UserService {
 
     void add(RegistrationDto registrationDto);
 
-    void sendActivationEmail(String hashedPassword, String email);
+    void sendActivationEmail(String hashedPassword, String email, String language);
 
     void confirmAccount(String token);
 

@@ -24,8 +24,6 @@ import {
 import HeadersUser from "./HeadersUser.component";
 import { userRoles } from "../../../configuration/roles";
 
-//import { Toast } from "../../../components/Toast/Toast";
-
 class HeadersUserContainer extends Component {
   static propTypes = {
     currentPage: number,
@@ -73,7 +71,6 @@ class HeadersUserContainer extends Component {
   };
 
   componentDidMount() {
-    //console.log("did mount " + JSON.stringify(this.props));
     const parsed = querySearch.parse(this.props.location.search);
     if (!_.isEmpty(parsed)) {
       let url =

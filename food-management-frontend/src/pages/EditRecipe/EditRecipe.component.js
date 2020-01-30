@@ -1,9 +1,8 @@
 import React from "react";
 import { reduxForm, Form, Field } from "redux-form";
-import { bool, func, object, array } from "prop-types";
+import { bool, func, array } from "prop-types";
 import { compose } from "lodash/fp";
 import { withTranslation } from "react-i18next";
-import _ from "lodash";
 
 import { validateRequired, validateInteger } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
@@ -22,7 +21,6 @@ export const EditRecipe = props => {
     handleAmountIngredient,
     handleAddIngredientToList,
     handleDeteleIngredientFromListButton,
-    selectedIngredient,
     t
   } = props;
   return (
@@ -48,29 +46,12 @@ export const EditRecipe = props => {
             component={input}
           />
           <label>{t("label.ingredients")}</label>
-          {selectedIngredients ? (
-            selectedIngredients.map((elem, index) => (
-              <div key={index}>
-                {elem.ingredient.ingredientName}: {elem.amount}{" "}
-                {elem.ingredient.measure.measureName}
-                <button
-                  type="button"
-                  className="btn btn-warning p-1 m-2 bd-highlight align-self-center"
-                  title="Add ingr to list"
-                  onClick={() => handleDeteleIngredientFromListButton(index)}
-                >
-                  {t("button.deleteIngredientFromList")}
-                </button>
-              </div>
-            ))
-          ) : (
-            <></>
-          )}
-
-          <div className="d-flex justify-content-end">
-            <h5>{t("label.addNewIngredientToRecipe")}</h5>
+          <h5 className="d-flex justify-content-center">
+            {t("label.addNewIngredientToRecipe")}
+          </h5>
+          <div className="d-flex justify-content-center">
             <Field
-              className="form-control mr-auto p-2 bd-highlight"
+              className="form-control"
               name="selectIngredient"
               type="text"
               label={t("label.selectIngredient")}
@@ -97,6 +78,32 @@ export const EditRecipe = props => {
               {t("button.addIngredientToList")}
             </button>
           </div>
+          <table>
+            {selectedIngredients ? (
+              selectedIngredients.map((elem, index) => (
+                <tr key={index}>
+                  <td>
+                    {elem.ingredient.ingredientName}: {elem.amount}{" "}
+                    {elem.ingredient.measure.measureName}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-warning p-1 m-2 bd-highlight align-self-center"
+                      title="Add ingr to list"
+                      onClick={() =>
+                        handleDeteleIngredientFromListButton(index)
+                      }
+                    >
+                      {t("button.deleteIngredientFromList")}
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <></>
+            )}
+          </table>
 
           <Field
             className="form-control mb-2 mr-sm-2 textarea-autosize"
@@ -133,7 +140,6 @@ EditRecipe.propTypes = {
   handleSelectIngredient: func,
   handleSubmit: func,
   ingredientsOptions: array,
-  selectedIngredient: object,
   selectedIngredients: array
 };
 

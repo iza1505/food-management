@@ -1,9 +1,8 @@
 import React from "react";
 import { array, bool, string, object } from "prop-types";
-import _ from "lodash";
 import { withTranslation } from "react-i18next";
 
-const renderInput = ({
+const renderSelect = ({
   input,
   label,
   options,
@@ -40,13 +39,13 @@ const renderInput = ({
         )}
       </select>
       {touched &&
-        ((error && <span style={{ color: "red" }}>{error}</span>) ||
-          (warning && <span style={{ color: "yellow" }}>{warning}</span>))}
+        ((error && <span style={{ color: "red" }}>{t(error)}</span>) ||
+          (warning && <span style={{ color: "yellow" }}>{t(warning)}</span>))}
     </div>
   );
 };
 
-renderInput.propTypes = {
+renderSelect.propTypes = {
   allNeedTranslate: bool,
   className: string,
   firstNeedTranslate: bool,
@@ -57,5 +56,4 @@ renderInput.propTypes = {
   type: string.isRequired
 };
 
-export default withTranslation("common")(renderInput);
-//export default renderInput;
+export default withTranslation("common")(renderSelect);

@@ -6,7 +6,10 @@ import { withTranslation } from "react-i18next";
 
 import {
   validateRequired,
-  validateConfirmedPassword
+  validateConfirmedPassword,
+  validatePasswordLength,
+  validatePasswordUpperLowerCase,
+  validatePasswordDidits
 } from "./../Validators/Validators";
 import LayoutMain from "../../components/layouts/MainLayout";
 import input from "../../components/Fields/input";
@@ -33,7 +36,12 @@ export const ChangePasswordMail = props => {
             type="password"
             placeholder={t("placeholder.password")}
             label={t("label.password")}
-            validate={validateRequired}
+            validate={[
+              validateRequired,
+              validatePasswordLength,
+              validatePasswordUpperLowerCase,
+              validatePasswordDidits
+            ]}
             component={input}
           />
           <Field

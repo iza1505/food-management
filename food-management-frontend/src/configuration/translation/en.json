@@ -139,6 +139,7 @@
   "pageTitle": {
     "home": "Home",
     "recipes": "Recipes",
+    "recipe": "Recipe",
     "myRecipes": "My recipes",
     "createRecipe": "Creacte recipe",
     "editRecipe": "Edit recipe",
@@ -251,6 +252,9 @@
     "inactiveAccount": "Inactive account.",
     "userWithLoginNotExists": "User with given login does not exist.",
     "unknownMeasure": "Unknown measure.",
-    "recipeNotExists": "Recipe not found."
+    "recipeNotExists": "Recipe not found.",
+    "unknown": "Unknown error.",
+    "token": "To use the site, please log in.",
+    "passwordToken":"Reset password token is expired."
   }
 }

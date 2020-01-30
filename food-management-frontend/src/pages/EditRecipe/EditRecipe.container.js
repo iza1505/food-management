@@ -31,7 +31,6 @@ export class EditRecipeContainer extends Component {
   };
 
   constructor(props) {
-    console.log(JSON.stringify(props.updateRecipe));
     super(props);
     this.handleSelectIngredient = this.handleSelectIngredient.bind(this);
     this.handleAmountIngredient = this.handleAmountIngredient.bind(this);

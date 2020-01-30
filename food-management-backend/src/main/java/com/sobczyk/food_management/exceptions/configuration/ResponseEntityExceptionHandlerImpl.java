@@ -1,5 +1,6 @@
 package com.sobczyk.food_management.exceptions.configuration;
 
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,17 @@ public class ResponseEntityExceptionHandlerImpl extends ResponseEntityExceptionH
         return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(JwtException.class)
+    public  final ResponseEntity<ExceptionResponse> handleJwtException(JwtException e){
+        log.error(e.getMessage(), e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleUnknownExceptions(Exception e) {
         log.error(e.getMessage(), e);
-        ExceptionResponse exceptionResponse = new ExceptionResponse("Nieznany błąd.");
+        ExceptionResponse exceptionResponse = new ExceptionResponse("exception.unknown");
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

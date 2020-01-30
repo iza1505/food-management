@@ -43,7 +43,8 @@ const sendConfirmationMail = (login, email) => dispatch => {
       },
       data: {
         login: login,
-        email: email
+        email: email,
+        language: window.localStorage.i18nextLng
       }
     })
   );
@@ -59,7 +60,8 @@ const sendResetPasswordMail = (login, email) => dispatch => {
       },
       data: {
         login: login,
-        email: email
+        email: email,
+        language: window.localStorage.i18nextLng
       }
     })
   );
@@ -92,7 +94,7 @@ const confirmAccount = url => dispatch => {
   );
 };
 
-const register = (login, email, password, role) => dispatch => {
+const register = (login, email, password, role, creatorLogin) => dispatch => {
   return dispatch(
     APIService.post(ACTIONS.REGISTER_USER, {
       url: "/auth/registration",
@@ -104,7 +106,9 @@ const register = (login, email, password, role) => dispatch => {
         login: login,
         email: email,
         password: password,
-        role: role
+        role: role,
+        language: window.localStorage.i18nextLng,
+        creatorLogin: creatorLogin
       }
     })
   );

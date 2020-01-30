@@ -295,14 +295,13 @@ public class RecipeServiceImpl implements RecipeService {
 
         UserEntity userEntity = userSessionService.getUser();
 
-        if (userEntity.getRole().getName().equals("USER")) {
-            recipeEntity.setWaitingForAccept(true);
-            recipeEntity.setActive(false);
-            recipeEntity.setToImprove("");
-        } else {
-
+        if (userEntity.getRole().getName().equals("MANAGER")) {
             recipeEntity.setWaitingForAccept(false);
             recipeEntity.setActive(true);
+            recipeEntity.setToImprove("");
+        } else {
+            recipeEntity.setWaitingForAccept(true);
+            recipeEntity.setActive(false);
             recipeEntity.setToImprove("");
         }
 

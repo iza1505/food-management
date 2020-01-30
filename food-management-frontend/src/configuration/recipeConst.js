@@ -47,6 +47,7 @@ const sortByOptionsIngredient = [
 const roleOptionsRegistration = [
   { label: "select.role", value: null },
   { label: "select.admin", value: "ADMINISTRATOR" },
+  { label: "Manager", value: "MANAGER" },
   { label: "select.user", value: "USER" }
 ];
 

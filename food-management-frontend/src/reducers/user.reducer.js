@@ -15,7 +15,6 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    //case `${ACTIONS.REFRESH_TOKEN}_${PENDING}`:
     case `${ACTIONS.REGISTER_USER}_${PENDING}`:
     case `${ACTIONS.LOGIN_USER}_${PENDING}`:
     case `${ACTIONS.GET_DETAILS}_${PENDING}`:
@@ -26,7 +25,6 @@ const userReducer = (state = initialState, action) => {
     case `${ACTIONS.SEND_CONFIRMATION_EMAIL}_${PENDING}`:
       return { ...state, fetchingUser: true };
 
-    //case `${ACTIONS.REFRESH_TOKEN}_${FULFILLED}`:
     case `${ACTIONS.LOGIN_USER}_${FULFILLED}`: {
       const token = prepareToken(action.payload.data.accessToken);
       const role = token.roles[0]["authority"];
@@ -70,8 +68,6 @@ const userReducer = (state = initialState, action) => {
         fetchingUser: false
       };
     }
-
-    //case `${ACTIONS.REFRESH_TOKEN}_${REJECTED}`:
 
     case `${ACTIONS.SEND_RESET_PASSWORD_EMAIL}_${REJECTED}`:
     case `${ACTIONS.RESET_PASSWORD}_${REJECTED}`:

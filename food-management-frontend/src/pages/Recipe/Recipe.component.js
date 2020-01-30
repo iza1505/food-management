@@ -13,7 +13,7 @@ import UpdateRecipeStatusModalForm from "./UpdateRecipeStatusModalForm";
 export const Recipe = props => {
   const { recipe, userRole, userLogin, handleEditRecipe, t } = props;
   return (
-    <LayoutMain title="Przepis">
+    <LayoutMain title={t("pageTitle.recipe")}>
       <div>
         <div className="center-align-elem">
           {recipe &&

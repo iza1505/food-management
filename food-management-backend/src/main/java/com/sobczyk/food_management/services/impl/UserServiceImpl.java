@@ -118,26 +118,48 @@ public class UserServiceImpl implements UserService {
         userEntity.setRole(roleService.findByName(registrationDto.getRole()));
         }
 
+        if(registrationDto.getCreatorLogin() != null){
+            userEntity.setCreatorLogin(registrationDto.getCreatorLogin());
+        }
+
         repository.save(userEntity);
 
-        sendActivationEmail(hashedPassword, registrationDto.getEmail());
+        sendActivationEmail(hashedPassword, registrationDto.getEmail(),registrationDto.getLanguage());
     }
 
     @Override
-    public void sendActivationEmail(String hashedPassword, String email) {
+    public void sendActivationEmail(String hashedPassword, String email, String language) {
         SimpleMailMessage emailToSend;
-        if(hashedPassword == null){
-            emailToSend = emailProvider
-                    .constructResetPasswordEmail("", email, "", "Account activation information",
-                                                 "You can't active account because it is deactivated by administrator. "
-                                                );
-        } else {
-            String hashPasswordHash = passwordEncoder.encode(hashedPassword);
-            String jwt = tokenProvider.generatePasswordToken(email, hashPasswordHash);
-            emailToSend = emailProvider
-                    .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
-                                                 "Active your account using link"
-                                                );
+        if(language.equals("pl")){
+            if(hashedPassword == null){
+                emailToSend = emailProvider
+                        .constructResetPasswordEmail("", email, "", "Aktywacja konta - informacja",
+                                                     "Nie możesz aktywować konta ponieważ jest ono dezaktywowane " +
+                                                             "przez administratora."
+                                                    );
+            } else {
+                String hashPasswordHash = passwordEncoder.encode(hashedPassword);
+                String jwt = tokenProvider.generateActivationToken(email, hashPasswordHash);
+                emailToSend = emailProvider
+                        .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Aktywacja konta",
+                                                     "Aktywuj swoje konto używając linku:"
+                                                    );
+            }
+        }
+        else {
+            if(hashedPassword == null){
+                emailToSend = emailProvider
+                        .constructResetPasswordEmail("", email, "", "Account activation information",
+                                                     "You can't active account because it is deactivated by administrator. "
+                                                    );
+            } else {
+                String hashPasswordHash = passwordEncoder.encode(hashedPassword);
+                String jwt = tokenProvider.generateActivationToken(email, hashPasswordHash);
+                emailToSend = emailProvider
+                        .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
+                                                     "Active your account using link:"
+                                                    );
+            }
         }
 
         emailProvider.sendEmail(emailToSend);
@@ -239,10 +261,21 @@ public class UserServiceImpl implements UserService {
             }
             String passwordHash = passwordEncoder.encode(findByEmail(userEntity.getEmail()).getPasswordHash());
             String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
-            SimpleMailMessage emailToSend = emailProvider
-                    .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=", "Reset Password",
-                                                 "Reset your password using link:"
-                                                );
+            SimpleMailMessage emailToSend;
+            if(dto.getLanguage().equals("pl")){
+                 emailToSend = emailProvider
+                        .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
+                                                     "Resetuj hasło",
+                                                     "Resetuj swoje hasło używając linku:"
+                                                    );
+            } else {
+                 emailToSend = emailProvider
+                        .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
+                                                     "Reset password",
+                                                     "Reset your password using link:"
+                                                    );
+            }
+
             emailProvider.sendEmail(emailToSend);
         } else {
             throw new IncompatibilityDataException("User with this login "+dto.getLogin()+" and email "+dto.getEmail()+" not " +
@@ -254,10 +287,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetForgottenPassword(String newPassword, String token) {
+        tokenProvider.validatePasswordToken(token);
         String userEmail = tokenProvider.getEmailFromJWT(token);
         UserEntity userEntity = findByEmail(userEmail);
         if (passwordEncoder
                 .matches(userEntity.getPasswordHash(), tokenProvider.getHashPasswordHashFromJWT(token))) {
+            passwordValidator.checkBasicConditions(newPassword);
             userEntity.setPasswordHash(passwordEncoder.encode(newPassword));
         } else {
             throw new IncompatibilityDataException("The password cannot be reset again using the same token.",
@@ -271,6 +306,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userSessionService.getUser();
         
         if (passwordEncoder.matches(dto.getOldPassword(), userEntity.getPasswordHash())) {
+            passwordValidator.checkBasicConditions(dto.getNewPassword());
             String newPasswordHash = passwordEncoder.encode(dto.getNewPassword());
             userEntity.setPasswordHash(newPasswordHash);
             repository.save(userEntity);
@@ -303,24 +339,15 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-//    @Override
-//    public void changeActiveStatus() {
-//        UserEntity userEntity = userSessionService.getUser();
-//        userEntity.setActive(false);
-//        //userEntity.setConfrimationDate(null);
-//        userIngredientRepository.deleteAllByUserIngredientKey_UserId(userEntity.getId());
-//        repository.save(userEntity);
-//    }
-
     @Override
     public void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto) {
         UserEntity userEntity = findByEmail(dto.getEmail());
         if(userEntity.getLogin().equals(dto.getLogin())){
             if(!userEntity.getActive() && userEntity.getConfrimationDate() == null){
-                sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail());
+                sendActivationEmail(userEntity.getPasswordHash(), userEntity.getEmail(), dto.getLanguage());
             } else {
                 if(!userEntity.getActive() && userEntity.getConfrimationDate() != null)
-                sendActivationEmail(null, userEntity.getEmail());
+                sendActivationEmail(null, userEntity.getEmail(), dto.getLanguage());
             }
             if(userEntity.getActive()){
                 throw  new IncompatibilityDataException("Account with id " + userEntity.getId()+" is active.","Twoje " +

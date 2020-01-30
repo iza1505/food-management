@@ -20,7 +20,7 @@ public class UserEntity extends BaseEntity {
         this.active=false;
     }
 
-    @Column(name = "login", nullable = false, unique = true, length = 50)
+    @Column(name = "login", nullable = false, unique = true, length = 32)
     private String login;
 
     @Email
@@ -42,4 +42,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "confirmation_date")
     private Date confrimationDate;
+
+    @Column(name = "creator_login", length = 32)
+    private String creatorLogin;
 }

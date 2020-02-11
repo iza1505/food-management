@@ -36,7 +36,7 @@ export const Recipe = props => {
                 text="Edit recipe"
                 onClick={() => handleEditRecipe()}
               >
-                Edit recipe
+                {t("button.editRecipe")}
               </button>
             ) : (
               <>

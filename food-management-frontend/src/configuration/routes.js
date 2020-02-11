@@ -27,12 +27,12 @@ const routes = [
   {
     path: "/recipes/create",
     component: CreateRecipe,
-    canAccess: [user, admin, manager]
+    canAccess: [user, manager]
   },
   {
     path: "/recipes/my",
     component: HeadersAuthor,
-    canAccess: [user, admin, manager]
+    canAccess: [user, manager]
   },
   { path: "/", component: Home, canAccess: [user, admin, manager] },
   {
@@ -63,7 +63,7 @@ const routes = [
   {
     path: "/recipes/:recipeId/edit",
     component: EditRecipe,
-    canAccess: [user, admin, manager]
+    canAccess: [user, manager]
   },
   {
     path: "/myFridge",
@@ -73,7 +73,7 @@ const routes = [
   {
     path: "/ingredients",
     component: Ingredients,
-    canAccess: [admin, manager]
+    canAccess: [manager]
   },
   {
     path: "/users",

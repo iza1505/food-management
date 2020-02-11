@@ -16,9 +16,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -104,7 +106,7 @@ public class UserServiceImpl implements UserService {
             passwordValidator.checkBasicConditions(registrationDto.getPassword());
         }
 
-        String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
+        String hashedPassword = passwordEncoder.encode("manager");//registrationDto.getPassword()
         UserDto userDto =
                 new UserDto(null, 0L, registrationDto.getLogin(), registrationDto.getEmail(), hashedPassword, null,
                             false
@@ -237,7 +239,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Authentication authenticate(String login, String password) {
-        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+        try {
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+        }catch (BadCredentialsException e){
+            throw new IncompatibilityDataException("Invalid credentials","exception.invalidCredentials");
+        }
+
     }
 
     @Override
@@ -337,6 +344,16 @@ public class UserServiceImpl implements UserService {
         userEntity = repository.saveAndFlush(userEntity);
         dto.setActive(userEntity.getActive());
         return dto;
+    }
+
+    @Override
+    public JwtAuthenticationResponse loginUser(LoginRequest loginRequest) {
+        Authentication authenticationToSystem = authenticate(loginRequest.getLogin(), loginRequest.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
+        String loginJWT = tokenProvider.generateToken(authenticationToSystem);
+        JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
+        loginResponse.setAccessToken(loginJWT);
+        return  loginResponse;
     }
 
     @Override

@@ -11,8 +11,6 @@ import com.sobczyk.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,12 +20,10 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthController(@Lazy UserService userService, JwtTokenProvider tokenProvider) {
+    public AuthController(@Lazy UserService userService) {
         this.userService = userService;
-        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/registration")
@@ -47,13 +43,14 @@ public class AuthController {
         UserEntity userEntity = userService.findByLogin(loginReq.getLogin());
         if (userEntity != null) {
             if (userEntity.getActive()) {
-                Authentication authenticationToSystem =
-                        userService.authenticate(loginReq.getLogin(), loginReq.getPassword());
-                SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
-                String loginJWT = tokenProvider.generateToken(authenticationToSystem);
-                JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
-                loginResponse.setAccessToken(loginJWT);
-                return ResponseEntity.ok(loginResponse);
+//                ;
+//                Authentication authenticationToSystem =
+//                        userService.authenticate(loginReq.getLogin(), loginReq.getPassword());
+//                SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
+//                String loginJWT = tokenProvider.generateToken(authenticationToSystem);
+//                JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
+//                loginResponse.setAccessToken(loginJWT);
+                return ResponseEntity.ok(userService.loginUser(loginReq));
             } else {
                 throw new InactiveAccountException("Inactive account","exception.inactiveAccount");
             }

@@ -54,6 +54,7 @@ export const UsersManagement = props => {
               type="text"
               label={t("label.sortBy")}
               component={select}
+              allNeedTranslate={true}
               options={userSortByOptionsAdmin}
             />
             <Field
@@ -62,6 +63,7 @@ export const UsersManagement = props => {
               type="text"
               label={t("label.sortOptions")}
               component={select}
+              allNeedTranslate={true}
               options={ascendingSortOptions}
             />
           </div>

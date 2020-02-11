@@ -2,9 +2,9 @@ insert into role (version, name) values (0,'ADMINISTRATOR');
 insert into role (version, name) values (0,'USER');
 insert into role (version, name) values (0,'MANAGER');
 
-insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'admin','admin@admin.pl','$2a$10$0Iu3Y/URm21pcr5uW5kLuenkeNSk1aOIiEeQzZ2cgSTTGCmDb3Q6e',1, true , '2019-01-01 01:01:00.00000',null);
-insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'user','user@user.com','$2a$10$PyDUgMV3fi9bfZ/S4zBuCODOMrk5.INyOzCJLm04H30GoVm3tJJQe',2, true, '2019-01-01 01:01:00.00000',null);
-insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'adminManager','admin2@admin.pl','$2a$10$0Iu3Y/URm21pcr5uW5kLuenkeNSk1aOIiEeQzZ2cgSTTGCmDb3Q6e',3, true , '2019-01-01 01:01:00.00000',null);
+insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'admin','admin@admin.pl','$2a$10$0Iu3Y/URm21pcr5uW5kLuenkeNSk1aOIiEeQzZ2cgSTTGCmDb3Q6e',1, true , '2020-01-01 01:01:00.00000',null);
+insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'user','user@user.pl','$2a$10$PyDUgMV3fi9bfZ/S4zBuCODOMrk5.INyOzCJLm04H30GoVm3tJJQe',2, true, '2020-01-01 01:01:00.00000',null);
+insert into user_ (version, login, email, password_hash, role_id, active, confirmation_date,creator_login ) values (0,'manager','manager@manager.pl','$2a$10$m6gJ12bV5A4jaH4fyvoJv.sK3caLrjJ2XlQny6QhN3K9cwBQsVTjy',3, true , '2020-01-01 01:01:00.00000',null);
 
 insert into measure (version, measure_name) values (0, 'ml');
 insert into measure (version, measure_name) values (0, 'g');

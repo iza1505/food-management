@@ -130,7 +130,8 @@
     "active": "Active",
     "login": "Login",
     "waitingForAccept": "Waiting for accept",
-    "author": "Author"
+    "author": "Author",
+    "roleSort": "Role"
   },
   "pagination": {
     "next": "Next",
@@ -255,6 +256,8 @@
     "recipeNotExists": "Recipe not found.",
     "unknown": "Unknown error.",
     "token": "To use the site, please log in.",
-    "passwordToken":"Reset password token is expired."
+    "passwordToken": "Reset password token is expired.",
+    "invalidCredentials": "Invalid credentials.",
+    "authRequired":"Authorization required."
   }
 }

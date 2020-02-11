@@ -130,7 +130,8 @@
     "admin": "Administrator",
     "login": "Nazwa użytkownika",
     "waitingForAccept": "Oczekuje na sprawdzenie",
-    "author": "Autor"
+    "author": "Autor",
+    "roleSort": "Rola"
   },
   "pagination": {
     "next": "Następna",
@@ -255,6 +256,8 @@
     "recipeNotExists": "Nie znaleziono przepisu.",
     "unknown": "Nieznany błąd.",
     "token": "Aby móc korzystać ze strony, zaloguj się.",
-    "passwordToken": "Token resetujący hasło stracił ważność."
+    "passwordToken": "Token resetujący hasło stracił ważność.",
+    "invalidCredentials": "Niepoprawne dane uwierzytelniające.",
+    "authRequired": "Wymagana autoryzacja."
   }
 }

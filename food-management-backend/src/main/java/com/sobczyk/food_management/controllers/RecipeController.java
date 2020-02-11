@@ -72,7 +72,7 @@ public class RecipeController {
         return ResponseEntity.ok(service.findAllForAdmin(elementsOnPage, currentPage, sortBy, ascendingSort));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @GetMapping(value = "/my")// zwraca hedery przepisow uzytkownika zalogowanego
     ResponseEntity<HeadersDto> findAllForAuthor(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                                 @RequestParam(value = "currentPage") Integer currentPage,
@@ -97,7 +97,7 @@ public class RecipeController {
         return ResponseEntity.ok(service.updateStatus(id, dto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @PutMapping(value = "/{id}") // upadte robi update dla wlasciciela
     ResponseEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeUpdateDto dto) {
         if (!userSessionService.isActive()) {
@@ -108,7 +108,7 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe has been updated.");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @PostMapping
     ResponseEntity add(@RequestBody RecipeDto dto) {
         if (!userSessionService.isActive()) {
@@ -118,7 +118,7 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe has been added.");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @DeleteMapping(value = "/{id}")
     ResponseEntity delete(@PathVariable Long id) {
         if (!userSessionService.isActive()) {

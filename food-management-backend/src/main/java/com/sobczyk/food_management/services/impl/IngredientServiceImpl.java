@@ -79,7 +79,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (userEntity.getRole().getName().equals("MANAGER")) {
             ingredientEntity.setActive(true);
-        } else if (userEntity.getRole().getName().equals("USER") || userEntity.getRole().getName().equals("ADMINISTRATOR")) {
+        } else if (userEntity.getRole().getName().equals("USER")) {
             ingredientEntity.setActive(false);
         } else {
             throw new UnknowRoleException("Unknow role.","exception.unknownRole");

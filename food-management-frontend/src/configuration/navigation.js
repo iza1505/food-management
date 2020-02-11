@@ -15,17 +15,17 @@ const navigationItems = [
       {
         to: "/recipes/my",
         text: "navBar.recipes.myRecipes",
-        canAccess: [admin, user, manager]
+        canAccess: [user, manager]
       },
       {
         to: "/recipes/create",
         text: "navBar.recipes.createRecipe",
-        canAccess: [admin, user, manager]
+        canAccess: [user, manager]
       },
       {
         to: "/ingredients",
         text: "navBar.recipes.ingredients",
-        canAccess: [admin, manager]
+        canAccess: [manager]
       }
     ]
   },

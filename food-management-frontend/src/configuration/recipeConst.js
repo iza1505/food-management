@@ -34,7 +34,7 @@ const sortByOptionsAuthor = [
 
 const userSortByOptionsAdmin = [
   { label: "select.login", value: "login" },
-  { label: "select.role", value: "role" },
+  { label: "select.roleSort", value: "role" },
   { label: "select.active", value: "active" }
 ];
 

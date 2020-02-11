@@ -28,7 +28,7 @@ public class IngredientController {
         this.userSessionService = userSessionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @GetMapping(value = "/all")
     ResponseEntity<List<IngredientDto>> getAllActive() {
         if (!userSessionService.isActive()) {
@@ -38,7 +38,7 @@ public class IngredientController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     @GetMapping
     ResponseEntity<HeadersDto> findAll(@RequestParam(value = "elementsOnPage") Integer elementsOnPage,
                                        @RequestParam(value = "currentPage") Integer currentPage,
@@ -52,7 +52,7 @@ public class IngredientController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER')")
     @PostMapping
     ResponseEntity add(@RequestBody IngredientDto dto) {
         if (!userSessionService.isActive()) {

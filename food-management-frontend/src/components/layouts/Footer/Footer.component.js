@@ -21,24 +21,6 @@ const Footer = props => {
           </button>
         </div>
       </div>
-      {/* <div className="d-flex justify-content-between">
-        <div className="">2020 &copy; Food management</div>
-
-        <div className="">
-          <button
-            className="btn btn-link"
-            onClick={() => i18n.changeLanguage("pl")}
-          >
-            Polski
-          </button>
-          <button
-            className="btn btn-link"
-            onClick={() => i18n.changeLanguage("en")}
-          >
-            English
-          </button>
-        </div>
-      </div> */}
     </footer>
   );
 };

@@ -23,17 +23,20 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-
-)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Lazy
     UserService userService;
+
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -41,13 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
-    }
-
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 
     @Bean

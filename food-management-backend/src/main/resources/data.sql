@@ -10,7 +10,7 @@ insert into measure (version, measure_name) values (0, 'ml');
 insert into measure (version, measure_name) values (0, 'g');
 insert into measure (version, measure_name) values (0, '');
 
-insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'mąka', 2, true ); --1
+insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'mąka', 2, true );
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'jajko', 3, true );
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'mleko', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'sól', 2, true);
@@ -19,19 +19,16 @@ insert into ingredient (version, ingredient_name, measure_id, active) values (0,
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'cebula', 3, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'marchew', 3, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'ziemniak', 2, true);
-insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'brokuł', 1, true); --10
+insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'brokuł', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'pieczarki', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'liście pietruszki', 2, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'kwaśna śmietana 18%', 1, true);
 insert into ingredient (version, ingredient_name, measure_id, active) values (0, 'pieprz', 2, true);
 
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
-
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 1, 25);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 2, 2);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 3, 250);
 insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 4, 3);
---insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 5, 50);
 
 insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id, to_improve) values (0,'Naleśniki',30, 'Wrzuć do miski wszystkie składniki. Następnie zmieszaj na gładką masę. Smaż po obu stronach do uzyskania pożądanego koloru.',1,0,2, '');
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0,1,1,250);
@@ -46,20 +43,6 @@ insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 2, 14, 2);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 2, 6, 5);
 
---insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, , , );
-
-
 insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id, to_improve) values (0,'Jajko na twardo',13, 'Zalej jajko zimną wodą w garnku. Doprowadź wodę do wrzenia i po ok. 7 minutach wyjmij jajko z garnka i zalej zimną wodą.',1,0,2, '');
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 3, 2, 1);
 insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, 3, 4, 1);
-
---insert into recipe (version, title, preparation_mins, description, active, waiting_for_accept, user_id) values (0,'',30, '',0,0,2);
---insert into recipe_ingredient (version, recipe_id, ingredient_id, amount) values (0, , , );
-
-
---insert into user_ingredient (version, user_id, ingredient_id, amount) values (0, 2, 3, 5);
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );
--- insert into ingredient (version, ingredient_name, measure_id) values (0, '', );

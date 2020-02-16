@@ -7,7 +7,7 @@ import com.sobczyk.food_management.exceptions.ConfirmedAccountException;
 import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.IncompatibilityDataException;
-import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
+import com.sobczyk.food_management.exceptions.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.UserRepository;
 import com.sobczyk.food_management.security.*;
 import com.sobczyk.food_management.services.interfaces.RoleService;
@@ -134,37 +134,32 @@ public class UserServiceImpl implements UserService {
         SimpleMailMessage emailToSend;
         if(language.equals("pl")){
             if(hashedPassword == null){
-                emailToSend = emailProvider
-                        .constructResetPasswordEmail("", email, "", "Aktywacja konta - informacja",
-                                                     "Nie możesz aktywować konta ponieważ jest ono dezaktywowane " +
+                emailProvider.sendEmail("", email, "", "Aktywacja konta - informacja",
+                                   "Nie możesz aktywować konta ponieważ jest ono dezaktywowane " +
                                                              "przez administratora."
-                                                    );
+                                  );
             } else {
                 String hashPasswordHash = passwordEncoder.encode(hashedPassword);
                 String jwt = tokenProvider.generateActivationToken(email, hashPasswordHash);
-                emailToSend = emailProvider
-                        .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Aktywacja konta",
-                                                     "Aktywuj swoje konto używając linku:"
-                                                    );
+                emailProvider.sendEmail(jwt, email, "/auth/registration?token=", "Aktywacja konta",
+                                   "Aktywuj swoje konto używając linku:"
+                                  );
             }
         }
         else {
             if(hashedPassword == null){
-                emailToSend = emailProvider
-                        .constructResetPasswordEmail("", email, "", "Account activation information",
-                                                     "You can't active account because it is deactivated by administrator. "
-                                                    );
+                emailProvider.sendEmail("", email, "", "Account activation information",
+                                   "You can't active account because it is deactivated by administrator. "
+                                  );
             } else {
                 String hashPasswordHash = passwordEncoder.encode(hashedPassword);
                 String jwt = tokenProvider.generateActivationToken(email, hashPasswordHash);
-                emailToSend = emailProvider
-                        .constructResetPasswordEmail(jwt, email, "/auth/registration?token=", "Account activation",
-                                                     "Active your account using link:"
-                                                    );
+                emailProvider.sendEmail(jwt, email, "/auth/registration?token=", "Account activation",
+                                   "Active your account using link:"
+                                  );
             }
         }
 
-        emailProvider.sendEmail(emailToSend);
     }
 
     @Override
@@ -270,20 +265,17 @@ public class UserServiceImpl implements UserService {
             String jwt = tokenProvider.generatePasswordToken(userEntity.getEmail(), passwordHash);
             SimpleMailMessage emailToSend;
             if(dto.getLanguage().equals("pl")){
-                 emailToSend = emailProvider
-                        .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
-                                                     "Resetuj hasło",
-                                                     "Resetuj swoje hasło używając linku:"
-                                                    );
+                 emailProvider.sendEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
+                                   "Resetuj hasło",
+                                   "Resetuj swoje hasło używając linku:"
+                                  );
             } else {
-                 emailToSend = emailProvider
-                        .constructResetPasswordEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
-                                                     "Reset password",
-                                                     "Reset your password using link:"
-                                                    );
+                 emailProvider.sendEmail(jwt, userEntity.getEmail(), "/auth/forgotPassword?token=",
+                                   "Reset password",
+                                   "Reset your password using link:"
+                                  );
             }
 
-            emailProvider.sendEmail(emailToSend);
         } else {
             throw new IncompatibilityDataException("User with this login "+dto.getLogin()+" and email "+dto.getEmail()+" not " +
                     "exists.",

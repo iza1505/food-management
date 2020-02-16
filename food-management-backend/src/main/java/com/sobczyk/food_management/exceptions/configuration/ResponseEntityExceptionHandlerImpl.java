@@ -14,6 +14,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class ResponseEntityExceptionHandlerImpl extends ResponseEntityExceptionHandler {
 
+    private static final String BAD_CREDENTIAL = "exception.invalidCredentials";
+    private static final String ACCESS_DENIED = "exception.token";
+    private static final String JWT = "exception.authRequired";
+
     @ExceptionHandler(FoodManagementException.class)
     public final ResponseEntity<ExceptionResponse> handleFoodManagementException(FoodManagementException e) {
         log.error(e.getMessage(), e);
@@ -24,21 +28,21 @@ public class ResponseEntityExceptionHandlerImpl extends ResponseEntityExceptionH
     @ExceptionHandler(BadCredentialsException.class)
     public final ResponseEntity<ExceptionResponse> handleBadCredentialsException(BadCredentialsException e) {
         log.error(e.getMessage(),e);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
+        ExceptionResponse exceptionResponse = new ExceptionResponse(BAD_CREDENTIAL);
         return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public  final ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e){
         log.error(e.getMessage(), e);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ACCESS_DENIED);
         return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(JwtException.class)
     public  final ResponseEntity<ExceptionResponse> handleJwtException(JwtException e){
         log.error(e.getMessage(), e);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
+        ExceptionResponse exceptionResponse = new ExceptionResponse(JWT);
         return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
     }
 

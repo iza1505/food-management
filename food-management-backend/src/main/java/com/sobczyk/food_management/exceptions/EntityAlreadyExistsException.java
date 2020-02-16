@@ -4,12 +4,7 @@ import com.sobczyk.food_management.exceptions.configuration.FoodManagementExcept
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class EntityAlreadyExistsException extends FoodManagementException {
-
-//    public EntityAlreadyExistsException(){
-//        super();
-//    }
 
     public EntityAlreadyExistsException(String message, String messageToShow) {
         super(message,messageToShow,HttpStatus.BAD_REQUEST);

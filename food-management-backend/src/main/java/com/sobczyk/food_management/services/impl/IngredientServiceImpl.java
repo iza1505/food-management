@@ -6,7 +6,7 @@ import com.sobczyk.food_management.entities.*;
 import com.sobczyk.food_management.exceptions.EmptyFieldException;
 import com.sobczyk.food_management.exceptions.EntityAlreadyExistsException;
 import com.sobczyk.food_management.exceptions.UnknowRoleException;
-import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
+import com.sobczyk.food_management.exceptions.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.IngredientRepository;
 import com.sobczyk.food_management.security.UserSessionService;
 import com.sobczyk.food_management.services.interfaces.IngredientService;

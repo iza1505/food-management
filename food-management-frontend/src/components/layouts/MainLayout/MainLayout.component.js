@@ -11,8 +11,6 @@ const MainLayout = ({
   title,
   fullContent,
   hideTitle,
-  buttonsHide,
-  buttons
 }) => {
   return (
     <div>
@@ -26,9 +24,6 @@ const MainLayout = ({
         {title && !hideTitle ? (
           <div className={styles["page-header"]}>
             <h4 className="layout-title">{title}</h4>
-            {!buttonsHide && buttons ? (
-              <div className={styles["buttons"]}>{buttons}</div>
-            ) : null}
           </div>
         ) : null}
         <section>{children}</section>

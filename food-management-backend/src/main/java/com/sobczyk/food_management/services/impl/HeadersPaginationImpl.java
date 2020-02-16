@@ -6,10 +6,12 @@ import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class HeadersPaginationImpl implements HeadersPagination {
 
     public HeadersDto createHeaderDto(Integer elementsOnPage, Integer currentPage, List<?> headers, String sortBy,

@@ -2,7 +2,7 @@ package com.sobczyk.food_management.services.impl;
 
 import com.sobczyk.food_management.dtos.MeasureDto;
 import com.sobczyk.food_management.entities.MeasureEntity;
-import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
+import com.sobczyk.food_management.exceptions.FMEntityNotFoundException;
 import com.sobczyk.food_management.repositories.MeasureRepository;
 import com.sobczyk.food_management.services.interfaces.MeasureService;
 import org.modelmapper.ModelMapper;

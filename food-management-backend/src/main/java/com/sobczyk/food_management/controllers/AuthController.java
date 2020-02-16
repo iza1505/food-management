@@ -5,7 +5,7 @@ import com.sobczyk.food_management.dtos.NewPasswordDto;
 import com.sobczyk.food_management.dtos.RegistrationDto;
 import com.sobczyk.food_management.entities.UserEntity;
 import com.sobczyk.food_management.exceptions.InactiveAccountException;
-import com.sobczyk.food_management.exceptions.configuration.FMEntityNotFoundException;
+import com.sobczyk.food_management.exceptions.FMEntityNotFoundException;
 import com.sobczyk.food_management.security.*;
 import com.sobczyk.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

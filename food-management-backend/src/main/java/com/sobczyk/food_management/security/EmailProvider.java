@@ -1,9 +1,7 @@
 package com.sobczyk.food_management.security;
 
-import com.sobczyk.food_management.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailProvider {
     private final JavaMailSender mailSender;
-    @Value("${support.mail}")
+    @Value("${spring.mail.username}")
     private String mail;
     @Value("${custom.frontend.path}")
     private String applicationPath;
@@ -22,15 +20,15 @@ public class EmailProvider {
         this.mailSender = mailSender;
     }
 
-    public SimpleMailMessage constructResetPasswordEmail(String token, String userEmail, String address, String title,
-                                                         String message) {
+    public void sendEmail(String token, String userEmail, String address, String title,
+                          String message) {
         String url;
         if(token.equals("") && address.equals("")){
             url = "";
         } else {
             url = applicationPath + address + token;
         }
-        return emailConstructor(title, message + " \r\n " + url, userEmail);
+        mailSender.send(emailConstructor(title, message + " \r\n " + url, userEmail));
     }
 
     private SimpleMailMessage emailConstructor(String title, String emailBody, String userEmail) {
@@ -42,7 +40,4 @@ public class EmailProvider {
         return email;
     }
 
-    public void sendEmail(SimpleMailMessage emailToSend) {
-        mailSender.send(emailToSend);
-    }
 }

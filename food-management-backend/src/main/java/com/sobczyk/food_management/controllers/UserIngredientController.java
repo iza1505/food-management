@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/myIngredients")
-@Transactional
 public class UserIngredientController {
 
     private UserSessionService userSessionService;
@@ -56,7 +55,7 @@ public class UserIngredientController {
         }
 
         service.delete(id);
-        return ResponseEntity.ok("Product has been deleted.");
+        return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")

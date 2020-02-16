@@ -27,7 +27,7 @@ const userReducer = (state = initialState, action) => {
 
     case `${ACTIONS.LOGIN_USER}_${FULFILLED}`: {
       const token = prepareToken(action.payload.data.accessToken);
-      const role = token.roles[0]["authority"];
+      const role = token.role[0]["authority"];
       return {
         ...state,
         fetchingUser: false,

@@ -27,7 +27,7 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
         Claims claims = Jwts.claims().setSubject(userPrincipal.getLogin());
-        claims.put("roles", userPrincipal.getAuthorities());
+        claims.put("role", userPrincipal.getAuthorities());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())

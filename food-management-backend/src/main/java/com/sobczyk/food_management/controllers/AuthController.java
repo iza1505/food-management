@@ -43,13 +43,6 @@ public class AuthController {
         UserEntity userEntity = userService.findByLogin(loginReq.getLogin());
         if (userEntity != null) {
             if (userEntity.getActive()) {
-//                ;
-//                Authentication authenticationToSystem =
-//                        userService.authenticate(loginReq.getLogin(), loginReq.getPassword());
-//                SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
-//                String loginJWT = tokenProvider.generateToken(authenticationToSystem);
-//                JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
-//                loginResponse.setAccessToken(loginJWT);
                 return ResponseEntity.ok(userService.loginUser(loginReq));
             } else {
                 throw new InactiveAccountException("Inactive account","exception.inactiveAccount");

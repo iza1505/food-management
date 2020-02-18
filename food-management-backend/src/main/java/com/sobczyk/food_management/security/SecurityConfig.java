@@ -39,11 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JsonWebTokenAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+    public JsonWebTokenAuthenticationFilter jwtAuthenticationFilter() {
+        return new JsonWebTokenAuthenticationFilter();
     }
 
     @Bean

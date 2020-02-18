@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JwtAuthenticationResponse {
+public class JsonWebTokenAuthenticationResponse {
 
     public String accessToken;
 

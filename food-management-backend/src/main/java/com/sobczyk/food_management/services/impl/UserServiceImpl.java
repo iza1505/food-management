@@ -33,7 +33,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JsonWebTokenProvider tokenProvider;
     private UserSessionService userSessionService;
     private RoleService roleService;
     private AuthenticationManager authenticationManager;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             RoleService roleService,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            JwtTokenProvider tokenProvider,
+            JsonWebTokenProvider tokenProvider,
             EmailProvider emailProvider, ModelMapper modelMapper, HeadersPaginationImpl headersPagination,
             LoginValidator loginValidator,
             PasswordValidator passwordValidator) {
@@ -339,11 +339,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JwtAuthenticationResponse loginUser(LoginRequest loginRequest) {
+    public JsonWebTokenAuthenticationResponse loginUser(LoginRequest loginRequest) {
         Authentication authenticationToSystem = authenticate(loginRequest.getLogin(), loginRequest.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
         String loginJWT = tokenProvider.generateToken(authenticationToSystem);
-        JwtAuthenticationResponse loginResponse = new JwtAuthenticationResponse();
+        JsonWebTokenAuthenticationResponse loginResponse = new JsonWebTokenAuthenticationResponse();
         loginResponse.setAccessToken(loginJWT);
         return  loginResponse;
     }

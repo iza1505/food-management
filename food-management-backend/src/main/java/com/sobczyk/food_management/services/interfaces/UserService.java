@@ -3,7 +3,7 @@ package com.sobczyk.food_management.services.interfaces;
 import com.sobczyk.food_management.dtos.*;
 import com.sobczyk.food_management.entities.UserEntity;
 import com.sobczyk.food_management.entities.UserIngredientEntity;
-import com.sobczyk.food_management.security.JwtAuthenticationResponse;
+import com.sobczyk.food_management.security.JsonWebTokenAuthenticationResponse;
 import com.sobczyk.food_management.security.LoginRequest;
 import org.springframework.security.core.Authentication;
 
@@ -45,7 +45,7 @@ public interface UserService {
 
     ChangeActiveStatusDto updateActiveStatus(ChangeActiveStatusDto dto);
 
-    JwtAuthenticationResponse loginUser(LoginRequest loginRequest);
+    JsonWebTokenAuthenticationResponse loginUser(LoginRequest loginRequest);
 
     void resendConfirmationEmail(ForgotPasswordOrResendConfirmationEmailDto dto);
 

@@ -38,6 +38,9 @@
     "redux-thunk": "^2.3.0",
     "sass-loader": "^8.0.0"
   },
+  "scripts": {
+    "start": "react-scripts start"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",

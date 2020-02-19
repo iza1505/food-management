@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JsonWebTokenAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
-    public JsonWebTokenAuthenticationFilter jwtAuthenticationFilter() {
+    public JsonWebTokenAuthenticationFilter jsonWebTokenAuthenticationFilter() {
         return new JsonWebTokenAuthenticationFilter();
     }
 
@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http.requiresChannel().anyRequest().requiresSecure();
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jsonWebTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

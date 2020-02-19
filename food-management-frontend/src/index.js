@@ -8,11 +8,11 @@ import common_en from "./configuration/translation/en.json";
 import common_pl from "./configuration/translation/pl.json";
 
 i18next.use(detector).init({
-  interpolation: { escapeValue: false }, 
-  fallbackLng: "pl", 
+  interpolation: { escapeValue: false },
+  fallbackLng: "en",
   resources: {
     en: {
-      common: common_en 
+      common: common_en
     },
     pl: {
       common: common_pl

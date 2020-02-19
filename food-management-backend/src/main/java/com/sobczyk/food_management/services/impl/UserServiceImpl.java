@@ -342,7 +342,7 @@ public class UserServiceImpl implements UserService {
     public JsonWebTokenAuthenticationResponse loginUser(LoginRequest loginRequest) {
         Authentication authenticationToSystem = authenticate(loginRequest.getLogin(), loginRequest.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToSystem);
-        String loginJWT = tokenProvider.generateToken(authenticationToSystem);
+        String loginJWT = tokenProvider.generateJsonWebToken(authenticationToSystem);
         JsonWebTokenAuthenticationResponse loginResponse = new JsonWebTokenAuthenticationResponse();
         loginResponse.setAccessToken(loginJWT);
         return  loginResponse;

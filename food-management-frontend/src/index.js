@@ -9,7 +9,7 @@ import common_pl from "./configuration/translation/pl.json";
 
 i18next.use(detector).init({
   interpolation: { escapeValue: false },
-  fallbackLng: "en",
+  fallbackLng: "pl",
   resources: {
     en: {
       common: common_en

@@ -12,7 +12,6 @@
     <artifactId>food_management</artifactId>
     <version>1.0.0</version>
     <name>food_management</name>
-    <description></description>
 
     <properties>
         <java.version>11</java.version>
